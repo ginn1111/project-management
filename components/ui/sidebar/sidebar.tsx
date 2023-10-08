@@ -1,47 +1,11 @@
 'use client';
 
 import IconCaretsDown from '@/components/Icon/IconCaretsDown';
-import IconMenuDashboard from '@/components/Icon/Menu/IconMenuDashboard';
+import { SIDE_BARS } from '@/constants/path';
 import { themeSelectors } from '@/store/selectors/theme-selectors';
 import Link from 'next/link';
 import { useState } from 'react';
 import SidebarItem from './sidebar-item';
-
-const SIDE_BARS = [
-  {
-    id: '1',
-    title: 'Test',
-    prefixIcon: <IconMenuDashboard />,
-    children: [
-      {
-        id: '11',
-        title: 'Test 11',
-        href: 'google.com',
-      },
-      {
-        id: '22',
-        title: 'Test 11',
-        href: 'google.com',
-      },
-    ],
-  },
-  {
-    id: '2',
-    title: 'Test',
-    children: [
-      {
-        id: '11',
-        title: 'Test 11',
-        href: 'google.com',
-      },
-      {
-        id: '22',
-        title: 'Test 11',
-        href: 'google.com',
-      },
-    ],
-  },
-];
 
 export function Sidebar() {
   const [currentMenu, setCurrentMenu] = useState(SIDE_BARS[0].id);
@@ -56,13 +20,8 @@ export function Sidebar() {
       <div className="h-full bg-white dark:bg-black">
         <div className="flex items-center justify-between px-4 py-3">
           <Link href="/" className="main-logo flex shrink-0 items-center">
-            <img
-              className="ml-[5px] w-8 flex-none"
-              src="/assets/images/logo.svg"
-              alt="logo"
-            />
-            <span className="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">
-              {'VRISTO'}
+            <span className="align-middle text-xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">
+              Quản lý dự án
             </span>
           </Link>
           <button

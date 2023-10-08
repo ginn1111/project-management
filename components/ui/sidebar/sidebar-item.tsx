@@ -58,8 +58,17 @@ const SidebarItem = (props: ISidebarItem) => {
   }
 
   return (
-    <li>
-      <Link href={href ?? '#'}>{title}</Link>
+    <li className="group nav-item">
+      <button className="flex items-center nav-link !justify-start">
+        {prefixIcon ?? (
+          <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+        )}
+        <Link href={href ?? '#'}>
+          <span className="text-black pl-3 dark:group-hover:text-white-dark">
+            {title}
+          </span>
+        </Link>
+      </button>
     </li>
   );
 };
