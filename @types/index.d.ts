@@ -8,6 +8,9 @@ declare global {
     childrenMenu?: any[];
     href?: string;
   }
+  interface LayoutProps {
+    children: React.ReactNode;
+  }
 }
 
 export {};

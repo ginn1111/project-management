@@ -8,7 +8,7 @@ import { useState } from 'react';
 import SidebarItem from './sidebar-item';
 
 export function Sidebar() {
-  const [currentMenu, setCurrentMenu] = useState(SIDE_BARS[0].id);
+  const [currentMenu, setCurrentMenu] = useState('');
   const toggleSidebar = themeSelectors.use.toggleSidebar();
 
   return (
