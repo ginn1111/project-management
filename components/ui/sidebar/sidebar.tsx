@@ -1,15 +1,22 @@
 'use client';
 
 import IconCaretsDown from '@/components/Icon/IconCaretsDown';
-import { SIDE_BARS } from '@/constants/path';
+import { ACTIVE_MENUS, SIDE_BARS } from '@/constants/path';
 import { themeSelectors } from '@/store/selectors/theme-selectors';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SidebarItem from './sidebar-item';
+import { usePathname } from 'next/navigation';
 
 export function Sidebar() {
+  const pathname = usePathname();
   const [currentMenu, setCurrentMenu] = useState('');
+  console.log(currentMenu);
   const toggleSidebar = themeSelectors.use.toggleSidebar();
+
+  useEffect(() => {
+    setCurrentMenu(ACTIVE_MENUS[pathname as keyof typeof ACTIVE_MENUS]);
+  }, [pathname]);
 
   return (
     <nav

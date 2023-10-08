@@ -1,30 +1,23 @@
-import IconCalendar from '@/components/Icon/IconCalendar';
+import IconArrowLeft from '@/components/Icon/IconArrowLeft';
+import IconBellBing from '@/components/Icon/IconBellBing';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
-import IconChatNotification from '@/components/Icon/IconChatNotification';
-import IconEdit from '@/components/Icon/IconEdit';
-import IconLockDots from '@/components/Icon/IconLockDots';
+import IconInfoCircle from '@/components/Icon/IconInfoCircle';
 import IconLogout from '@/components/Icon/IconLogout';
-import IconMail from '@/components/Icon/IconMail';
+import IconMailDot from '@/components/Icon/IconMailDot';
 import IconMenu from '@/components/Icon/IconMenu';
-import IconSearch from '@/components/Icon/IconSearch';
 import IconUser from '@/components/Icon/IconUser';
 import IconXCircle from '@/components/Icon/IconXCircle';
+import IconMenuApps from '@/components/Icon/Menu/IconMenuApps';
+import IconMenuComponents from '@/components/Icon/Menu/IconMenuComponents';
 import IconMenuDashboard from '@/components/Icon/Menu/IconMenuDashboard';
+import IconMenuDatatables from '@/components/Icon/Menu/IconMenuDatatables';
+import IconMenuElements from '@/components/Icon/Menu/IconMenuElements';
+import IconMenuForms from '@/components/Icon/Menu/IconMenuForms';
 import IconMenuMore from '@/components/Icon/Menu/IconMenuMore';
 import IconMenuPages from '@/components/Icon/Menu/IconMenuPages';
 import { themeSelectors } from '@/store/selectors/theme-selectors';
 import Link from 'next/link';
-import React from 'react';
 import Dropdown from './dropdown';
-import IconMailDot from '@/components/Icon/IconMailDot';
-import IconInfoCircle from '@/components/Icon/IconInfoCircle';
-import IconBellBing from '@/components/Icon/IconBellBing';
-import IconArrowLeft from '@/components/Icon/IconArrowLeft';
-import IconMenuApps from '@/components/Icon/Menu/IconMenuApps';
-import IconMenuComponents from '@/components/Icon/Menu/IconMenuComponents';
-import IconMenuElements from '@/components/Icon/Menu/IconMenuElements';
-import IconMenuDatatables from '@/components/Icon/Menu/IconMenuDatatables';
-import IconMenuForms from '@/components/Icon/Menu/IconMenuForms';
 function createMarkup(messages: any) {
   return { __html: messages };
 }
@@ -145,7 +138,6 @@ const Header = () => {
                               <button
                                 type="button"
                                 className="text-neutral-300 hover:text-danger"
-                                // onClick={() => removeMessage(message.id)}
                               >
                                 <IconXCircle />
                               </button>

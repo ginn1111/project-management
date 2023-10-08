@@ -94,3 +94,12 @@ export const SIDE_BARS = [
     href: '/phan-quyen-tai-khoan',
   },
 ];
+
+export const ACTIVE_MENUS = {
+  '/chung-chi': 'quan-ly-nhan-vien',
+  '/bang-cap': 'quan-ly-nhan-vien',
+  '/nhan-vien': 'quan-ly-nhan-vien',
+  '/quan-ly-tai-khoan': 'quan-ly-tai-khoan',
+  '/cong-cu': 'quan-ly-nguon-luc',
+  '/vat-tu': 'quan-ly-nguon-luc',
+} as const;
