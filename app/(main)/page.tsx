@@ -1,5 +1,6 @@
 'use client';
 
+import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { themeSelectors } from '@/store/selectors/theme-selectors';
 
@@ -9,7 +10,7 @@ export default function Home() {
     <>
       <Sidebar />
       <div className="main-content flex flex-col min-h-screen">
-        <button onClick={() => toggleSidebar()}>toggle</button>
+        <Header />
       </div>
     </>
   );

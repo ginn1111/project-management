@@ -21,6 +21,7 @@
     "react-animate-height": "^3.2.2",
     "react-day-picker": "^8.8.2",
     "react-dom": "latest",
+    "react-popper": "^2.3.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.4.1"
