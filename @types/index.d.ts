@@ -1,4 +1,8 @@
 declare global {
+  interface IRouterParams<P extends object = object, S extends object = object> {
+    params: P,
+    searchParams: S
+  }
   interface ISidebarItem
     extends Omit<HTMLAttributes<HTMLButtonElement>, 'children'> {
     isMenuChild?: boolean;
