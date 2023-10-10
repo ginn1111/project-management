@@ -17,13 +17,35 @@ import ModalGiaoViec from './modal-du-an/modal-giao-viec';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
 import ModalLichSu from './modal-du-an/modal-lich-su';
+import ModalChinhSuaDauViec from './modal-du-an/modal-chinh-sua-dau-viec';
+import { useState } from 'react';
+import IconSettings from '@/components/Icon/IconSettings';
+
+interface IModalState {
+  open: boolean;
+}
 
 const BoardDuAn = () => {
-  const [openModalDV, , setOpenModalDV] = useToggle();
-  const [openModalGV, , setOpenModalGV] = useToggle();
-  const [openModalTCV, , setOpenModalTCV] = useToggle();
-  const [openModalPQ, , setOpenModalPQ] = useToggle();
-  const [openModalLS, , setOpenModalLS] = useToggle();
+  const [modalState, setModalState] = useState<{
+    modalDV: IModalState;
+    modalGV: IModalState;
+    modalTCV: IModalState;
+    modalPQ: IModalState;
+    modalLS: IModalState;
+    modalCS: IModalState;
+  }>({
+    modalCS: { open: false },
+    modalLS: { open: false },
+    modalPQ: { open: false },
+    modalTCV: { open: false },
+    modalDV: { open: false },
+    modalGV: { open: false },
+  });
+  const handleOpenModal = (name: keyof typeof modalState) =>
+    setModalState((old) => ({ ...old, [name]: { open: true } }));
+
+  const handleCloseModal = (name: keyof typeof modalState) =>
+    setModalState((old) => ({ ...old, [name]: { open: false } }));
 
   return (
     <div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
@@ -45,31 +67,27 @@ const BoardDuAn = () => {
         <div className="ml-auto">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setOpenModalDV(true)}
-              >
-                <IconEllipsis />
+              <Button variant="outline" size="sm">
+                <IconSettings />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setOpenModalDV(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
                 Chỉnh sửa
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalDV(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalDV')}>
                 Chi tiết
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalTCV(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalTCV')}>
                 Tạo công việc
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalGV(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalGV')}>
                 Giao việc
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalPQ(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
                 Phân quyền
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalLS(true)}>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalLS')}>
                 Lịch sử
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -86,34 +104,40 @@ const BoardDuAn = () => {
         ) : null}
       </ul>
       <ModalChiTietDauViec
-        open={openModalDV}
-        onClose={() => setOpenModalDV(false)}
+        open={modalState.modalDV.open}
+        onClose={() => handleCloseModal('modalDV')}
         data={{}}
         title="Khảo sát dự án Khảo sát dự án Khảo sát dự án"
       />
       <ModalGiaoViec
-        open={openModalGV}
+        open={modalState.modalGV.open}
         title="Giao việc"
         data={{}}
-        onClose={() => setOpenModalGV(false)}
+        onClose={() => handleCloseModal('modalGV')}
       />
       <ModalTaoCongViec
-        open={openModalTCV}
+        open={modalState.modalTCV.open}
         title="Tạo công việc"
         data={{}}
-        onClose={() => setOpenModalTCV(false)}
+        onClose={() => handleCloseModal('modalTCV')}
       />
       <ModalPhanQuyen
-        open={openModalPQ}
+        open={modalState.modalPQ.open}
         title="Phân quyền"
         data={{}}
-        onClose={() => setOpenModalPQ(false)}
+        onClose={() => handleCloseModal('modalPQ')}
       />
       <ModalLichSu
-        open={openModalLS}
+        open={modalState.modalLS.open}
         title="Lịch sử"
         data={{}}
-        onClose={() => setOpenModalLS(false)}
+        onClose={() => handleCloseModal('modalLS')}
+      />
+      <ModalChinhSuaDauViec
+        open={modalState.modalCS.open}
+        data={{}}
+        onClose={() => handleCloseModal('modalCS')}
+        title="Khảo sát"
       />
     </div>
   );

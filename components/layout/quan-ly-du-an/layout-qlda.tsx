@@ -2,22 +2,19 @@
 
 import IconAuthenTool from '@/components/Icon/IconAuthenTool';
 import IconRecommend from '@/components/Icon/IconRecommend';
-import IconReviewing from '@/components/Icon/IconReviewing';
 import IconWork from '@/components/Icon/IconWork';
 import { Button } from '@/components/ui/button';
 
 import { useState } from 'react';
-import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalPhanQuyenDA from './modal-tool-bar/modal-phan-quyen-da';
+import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalTaoDeXuat from './modal-tool-bar/modal-tao-de-xuat';
-import { useRouter } from 'next/navigation';
 
 interface IModalState {
   open: boolean;
 }
 
 const LayoutQLDA = () => {
-  const router = useRouter();
   const [modalState, setModalState] = useState<{
     modalTDV: IModalState;
     modalPQDA: IModalState;
@@ -56,10 +53,6 @@ const LayoutQLDA = () => {
       <Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
         <IconRecommend />
         <span className="ml-2">Tạo đề xuất</span>
-      </Button>
-      <Button variant="outline" onClick={() => router.push('/1/duyet-de-xuat')}>
-        <IconReviewing />
-        <span className="ml-2">Duyệt đề xuất</span>
       </Button>
       <ModalPhanQuyenDA
         title="Phân quyền dự án"

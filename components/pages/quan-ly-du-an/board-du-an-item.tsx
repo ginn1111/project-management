@@ -13,6 +13,9 @@ import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
 import ModalChinhSuaCongViec from './modal-du-an-item/modal-chinh-sua-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const LABEL_COLOR = {
   progress: 'bg-secondary2',
@@ -43,11 +46,13 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
     modalPQ: IModalState;
     modalCT: IModalState;
     modalCS: IModalState;
+    modalDone: IModalState;
   }>({
     modalCS: { open: false },
     modalLS: { open: false },
     modalPQ: { open: false },
     modalCT: { open: false },
+    modalDone: { open: false },
   });
   const handleOpenModal = (name: keyof typeof modalState) =>
     setModalState((old) => ({ ...old, [name]: { open: true } }));
@@ -87,8 +92,8 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
-              Mark done
+            <DropdownMenuItem onClick={() => handleOpenModal('modalDone')}>
+              Hoàn thành
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
               Chỉnh sửa
@@ -122,7 +127,7 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
       <ModalChiTietCongViec
         data={{}}
         open={modalState.modalCT.open}
-        title="Chi tiết"
+        title="Khảo sát dự án 1"
         onClose={() => handleCloseModal('modalCT')}
       />
       <ModalLichSu
@@ -130,6 +135,23 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
         open={modalState.modalLS.open}
         title="Lịch sử"
         onClose={() => handleCloseModal('modalLS')}
+      />
+      <ModalConfirm
+        variant="default"
+        msgCTA="Xác nhận hoàn thành"
+        title="Bạn chắc chắn muốn hoàn thành?"
+        message={
+          <Alert className="border-warning text-warning">
+            <AlertCircle color="#fbbf24" className="w-4 h-4" />
+            <AlertTitle>Warning</AlertTitle>
+            <AlertDescription>
+              Sau khi hoàn thành, bạn sẽ không được chỉnh sửa!
+            </AlertDescription>
+          </Alert>
+        }
+        open={modalState.modalDone.open}
+        onAccept={() => alert('Done task')}
+        onClose={() => handleCloseModal('modalDone')}
       />
     </li>
   );

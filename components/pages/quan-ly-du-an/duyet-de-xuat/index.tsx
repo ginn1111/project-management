@@ -9,10 +9,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Dropdown from '@/components/ui/header/dropdown';
 import { faker } from '@faker-js/faker';
+import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React from 'react';
 
 const DUMMY = Array(20)
   .fill(0)
@@ -25,7 +24,7 @@ const DUMMY = Array(20)
   }));
 
 const DuyetDeXuat = () => {
-  const columns = [
+  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
     {
       accessorKey: 'id',
       header: 'Id',
@@ -60,6 +59,7 @@ const DuyetDeXuat = () => {
             <DropdownMenuContent className="w-[50px] -translate-x-2">
               <DropdownMenuItem>Duyệt</DropdownMenuItem>
               <DropdownMenuItem>Từ chối</DropdownMenuItem>
+              <DropdownMenuItem>Chi tiết</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

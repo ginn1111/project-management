@@ -1,34 +1,28 @@
 import IconXCircle from '@/components/Icon/IconXCircle';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import dayjs from 'dayjs';
 
-interface IModalDuAn<T> extends Omit<IModalProps, 'children'> {
+interface IModalChinhSuaDauViec<T> extends Omit<IModalProps, 'children'> {
   data: T;
 }
 
-const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
+const ModalChinhSuaDauViec = <T,>(props: IModalChinhSuaDauViec<T>) => {
   const { ...rest } = props;
   return (
     <Modal {...rest}>
       <div className="space-y-4">
         <div>
-          <Label>Tên công việc</Label>
-          <Input placeholder="tên công việc" />
-        </div>
-        <div>
           <Label>Ngày hoàn thành dự kiến</Label>
           <DatePicker />
         </div>
-
         <div>
           <Label>Mô tả</Label>
-          <Textarea placeholder="mô tả" />
+          <Textarea placeholder="mô tả" rows={8} />
         </div>
       </div>
 
@@ -42,4 +36,4 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
   );
 };
 
-export default ModalChiTietDauViec;
+export default ModalChinhSuaDauViec;
