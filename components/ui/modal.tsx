@@ -18,8 +18,8 @@ const Modal = ({ onClose, open, title, children }: IModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
-        <DialogHeader onClick={onClose}>
-          <DialogTitle onClick={onClose}>{title}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         {children}
       </DialogContent>

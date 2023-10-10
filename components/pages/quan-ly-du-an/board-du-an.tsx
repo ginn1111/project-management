@@ -15,11 +15,15 @@ import BoardDuAnItem from './board-du-an-item';
 import ModalChiTietDauViec from './modal/model-chi-tiet-dau-viec';
 import ModalGiaoViec from './modal/modal-giao-viec';
 import ModalTaoCongViec from './modal/modal-tao-cong-viec';
+import ModalPhanQuyen from './modal/modal-phan-quyen';
+import ModalLichSu from './modal/modal-lich-su';
 
 const BoardDuAn = () => {
   const [openModalDV, , setOpenModalDV] = useToggle();
   const [openModalGV, , setOpenModalGV] = useToggle();
   const [openModalTCV, , setOpenModalTCV] = useToggle();
+  const [openModalPQ, , setOpenModalPQ] = useToggle();
+  const [openModalLS, , setOpenModalLS] = useToggle();
 
   return (
     <div className="rounded-sm p-2 flex-shrink-0 min-w-[500px] w-min">
@@ -62,10 +66,10 @@ const BoardDuAn = () => {
               <DropdownMenuItem onClick={() => setOpenModalGV(true)}>
                 Giao việc
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalGV(true)}>
+              <DropdownMenuItem onClick={() => setOpenModalPQ(true)}>
                 Phân quyền
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenModalGV(true)}>
+              <DropdownMenuItem onClick={() => setOpenModalLS(true)}>
                 Lịch sử
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -98,6 +102,18 @@ const BoardDuAn = () => {
         title="Tạo công việc"
         data={{}}
         onClose={() => setOpenModalTCV(false)}
+      />
+      <ModalPhanQuyen
+        open={openModalPQ}
+        title="Phân quyền"
+        data={{}}
+        onClose={() => setOpenModalPQ(false)}
+      />
+      <ModalLichSu
+        open={openModalLS}
+        title="Lịch sử"
+        data={{}}
+        onClose={() => setOpenModalLS(false)}
       />
     </div>
   );

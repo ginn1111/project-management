@@ -37,7 +37,9 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
         <p className="bg-primary2-light text-primary2 max-w-max px-2 py-1 rounded-md outline-offset-2 outline outline-solid outline-primary2">
           Deadline: {dayjs().format('DD/MM/YYYY')}
         </p>
-        <Button variant="outline">Đóng</Button>
+        <Button variant="outline" onClick={rest.onClose}>
+          Đóng
+        </Button>
       </div>
     </Modal>
   );
