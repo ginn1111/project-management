@@ -66,7 +66,7 @@ interface IDauViecCongViec {
   NGAY_HT_DVCV?: OrNull<string>;
   GHI_CHU_DVCV?: OrNull<string>;
 }
-interface IDauXuatCongCu {
+interface IDeXuatCongCu {
   ID_DXCC?: string;
   ID_CC?: OrNull<string>;
   ID_THDXDA?: OrNull<string>;

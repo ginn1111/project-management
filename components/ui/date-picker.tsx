@@ -34,7 +34,7 @@ export const DatePicker = React.forwardRef<Date | undefined>((_, ref) => {
           {date ? (
             dayjs(date).format('ddd - DD/MM/YYYY')
           ) : (
-            <span>Pick a date</span>
+            <span>Chọn ngày</span>
           )}
         </Button>
       </PopoverTrigger>

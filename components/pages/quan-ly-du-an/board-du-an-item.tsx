@@ -88,6 +88,9 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
+              Mark done
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
               Chỉnh sửa
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleOpenModal('modalCT')}>

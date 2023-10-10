@@ -13,30 +13,57 @@ const ModalGiaoViec = <T,>(props: IModalGiaoViec<T>) => {
   return (
     <Modal {...rest}>
       <div className="min-h-[200px] space-y-4">
-        <div>
-          <Label>Phòng ban</Label>
-          <ReactSelect
-            theme={RSTheme}
-            className="!outline-none !border-none"
-            options={[
-              {
-                value: 'fuck1',
-                label: 'Fuck label1',
-              },
-              {
-                value: 'fuck2',
-                label: 'Fuck label2',
-              },
-              {
-                value: 'fuck3',
-                label: 'Fuck label3',
-              },
-              {
-                value: 'fuck4',
-                label: 'Fuck label4',
-              },
-            ]}
-          />
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <Label>Phòng ban</Label>
+            <ReactSelect
+              theme={RSTheme}
+              className="!outline-none !border-none"
+              options={[
+                {
+                  value: 'fuck1',
+                  label: 'Fuck label1',
+                },
+                {
+                  value: 'fuck2',
+                  label: 'Fuck label2',
+                },
+                {
+                  value: 'fuck3',
+                  label: 'Fuck label3',
+                },
+                {
+                  value: 'fuck4',
+                  label: 'Fuck label4',
+                },
+              ]}
+            />
+          </div>
+          <div className="flex-1">
+            <Label>Chuyên môn</Label>
+            <ReactSelect
+              theme={RSTheme}
+              className="!outline-none !border-none"
+              options={[
+                {
+                  value: 'fuck1',
+                  label: 'Fuck label1',
+                },
+                {
+                  value: 'fuck2',
+                  label: 'Fuck label2',
+                },
+                {
+                  value: 'fuck3',
+                  label: 'Fuck label3',
+                },
+                {
+                  value: 'fuck4',
+                  label: 'Fuck label4',
+                },
+              ]}
+            />
+          </div>
         </div>
         <div>
           <Label>Nhân viên</Label>

@@ -26,8 +26,8 @@ const BoardDuAn = () => {
   const [openModalLS, , setOpenModalLS] = useToggle();
 
   return (
-    <div className="rounded-sm p-2 flex-shrink-0 min-w-[500px] w-min">
-      <div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-2px_20px_-10px] shadow-primary/50 flex-wrap max-w-full">
+    <div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
+      <div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-5px_15px_-10px] shadow-primary2/50 flex-wrap max-w-full">
         <p className="text-xl font-bold max-w-full word-wrap-wrap mr-1">
           Khảo sát dự án
         </p>
