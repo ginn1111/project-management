@@ -12,11 +12,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToggle } from 'usehooks-ts';
 import BoardDuAnItem from './board-du-an-item';
-import ModalChiTietDauViec from './modal/model-chi-tiet-dau-viec';
-import ModalGiaoViec from './modal/modal-giao-viec';
-import ModalTaoCongViec from './modal/modal-tao-cong-viec';
-import ModalPhanQuyen from './modal/modal-phan-quyen';
-import ModalLichSu from './modal/modal-lich-su';
+import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
+import ModalGiaoViec from './modal-du-an/modal-giao-viec';
+import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
+import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
+import ModalLichSu from './modal-du-an/modal-lich-su';
 
 const BoardDuAn = () => {
   const [openModalDV, , setOpenModalDV] = useToggle();

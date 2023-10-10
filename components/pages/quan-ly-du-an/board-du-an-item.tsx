@@ -1,5 +1,4 @@
 import IconClock from '@/components/Icon/IconClock';
-import IconDetail from '@/components/Icon/IconDetail';
 import IconEllipsis from '@/components/Icon/IconEllipsis';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,12 +8,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import React, { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
+import ModalChinhSuaCongViec from './modal-du-an-item/modal-chinh-sua-cong-viec';
+import ModalLichSu from './modal-du-an-item/modal-lich-su';
+import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
 
 const LABEL_COLOR = {
-  // new: 'bg-success',
-  progress: 'bg-primary',
-  done: 'bg-info',
+  progress: 'bg-secondary2',
+  done: 'bg-success',
   failed: 'bg-danger',
 } as const;
 
@@ -30,8 +32,29 @@ type BoardDuAnItemProps = {
   progress: number;
 };
 
+interface IModalState {
+  open: boolean;
+}
+
 const BoardDuAnItem = (props: BoardDuAnItemProps) => {
   const { status, title, progress } = props;
+  const [modalState, setModalState] = useState<{
+    modalLS: IModalState;
+    modalPQ: IModalState;
+    modalCT: IModalState;
+    modalCS: IModalState;
+  }>({
+    modalCS: { open: false },
+    modalLS: { open: false },
+    modalPQ: { open: false },
+    modalCT: { open: false },
+  });
+  const handleOpenModal = (name: keyof typeof modalState) =>
+    setModalState((old) => ({ ...old, [name]: { open: true } }));
+
+  const handleCloseModal = (name: keyof typeof modalState) =>
+    setModalState((old) => ({ ...old, [name]: { open: false } }));
+
   return (
     <li className="w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light p-5 justify-start">
       <div className="flex justify-between mb-5 items-center">
@@ -64,13 +87,47 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-            <DropdownMenuItem>Chi tiết</DropdownMenuItem>
-            <DropdownMenuItem>Phân quyền</DropdownMenuItem>
-            <DropdownMenuItem>Lịch sử</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
+              Chỉnh sửa
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalCT')}>
+              Chi tiết
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
+              Phân quyền
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalLS')}>
+              Lịch sử
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <ModalPhanQuyen
+        data={{}}
+        open={modalState.modalPQ.open}
+        title="Phân quyền"
+        onClose={() => handleCloseModal('modalPQ')}
+      />
+      <ModalChinhSuaCongViec
+        data={{}}
+        open={modalState.modalCS.open}
+        title="Chỉnh sửa công việc"
+        onClose={() => handleCloseModal('modalCS')}
+      />
+
+      <ModalChiTietCongViec
+        data={{}}
+        open={modalState.modalCT.open}
+        title="Chi tiết"
+        onClose={() => handleCloseModal('modalCT')}
+      />
+      <ModalLichSu
+        data={{}}
+        open={modalState.modalLS.open}
+        title="Lịch sử"
+        onClose={() => handleCloseModal('modalLS')}
+      />
     </li>
   );
 };
