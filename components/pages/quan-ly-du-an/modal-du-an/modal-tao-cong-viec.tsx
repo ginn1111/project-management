@@ -19,11 +19,15 @@ const ModalTaoCongViec = <T,>(props: IModalTaoCongViec<T>) => {
     <Modal {...rest}>
       <div>
         <Label>Tên công việc</Label>
-        <Input placeholder="Tên công việc..." />
+        <Input placeholder="tên công việc" />
       </div>
       <div>
-        <Label>Ngày kết thúc</Label>
-        <DatePicker />
+        <Label>Ngày bắt đầu</Label>
+        <Input type="datetime-local" />
+      </div>
+      <div>
+        <Label>Ngày hoàn thành dự kiến</Label>
+        <Input type="datetime-local" />
       </div>
       <div>
         <Label>Mô tả</Label>

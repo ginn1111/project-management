@@ -8,8 +8,11 @@ const QuanLyDuAn = () => {
     <>
       <Tabs defaultValue="du-an" className="w-full">
         <TabsList className="w-[100% - 1rem] flex mx-2">
-          <TabsTrigger className="flex-1" value="du-an">
-            Đầu việc dự án
+          <TabsTrigger className="flex-1" value="du-an-board">
+            Đầu việc dự án (Board)
+          </TabsTrigger>
+          <TabsTrigger className="flex-1" value="du-an-calendar">
+            Đầu việc dự án (Calendar)
           </TabsTrigger>
           <TabsTrigger className="flex-1" value="nhan-vien">
             Nhân viên dự án
@@ -18,10 +21,19 @@ const QuanLyDuAn = () => {
             Duyệt đề xuất
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="du-an" className="flex gap-2 overflow-x-auto pt-1">
+        <TabsContent
+          value="du-an-board"
+          className="flex gap-2 overflow-x-auto pt-1"
+        >
           <BoardDuAn />
           <BoardDuAn />
           <BoardDuAn />
+        </TabsContent>
+        <TabsContent
+          value="du-an-calendar"
+          className="flex gap-2 overflow-x-auto pt-1"
+        >
+          Calendar
         </TabsContent>
         <TabsContent value="nhan-vien">Nhan vien</TabsContent>
         <TabsContent value="duyet-de-xuat">

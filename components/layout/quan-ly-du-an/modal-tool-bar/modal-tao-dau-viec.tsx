@@ -17,15 +17,33 @@ const ModalTaoDauViec = <T,>(props: IModalTaoDauViec<T>) => {
       <div className="space-y-4">
         <div>
           <Label>Tên đầu việc</Label>
-          <Input placeholder="Tên đầu việc" />
+          <Input placeholder="tên đầu việc" />
+        </div>
+        <div>
+          <Label>Ngày bắt đầu</Label>
+          <input
+            type="datetime-local"
+            name="end"
+            className="form-input"
+            placeholder="Event End Date"
+            defaultValue={new Date().toISOString()}
+            min={new Date().toISOString()}
+          />
         </div>
         <div>
           <Label>Ngày hoàn thành dự kiến</Label>
-          <DatePicker />
+          <input
+            id="end"
+            type="datetime-local"
+            name="end"
+            className="form-input"
+            placeholder="Event End Date"
+            required
+          />
         </div>
         <div>
           <Label>Mô tả</Label>
-          <Textarea placeholder="Mô tả" rows={10} />
+          <Textarea placeholder="mô tả" rows={10} />
         </div>
       </div>
       <div className="items-center justify-end gap-4 flex mt-2">

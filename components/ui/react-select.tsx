@@ -31,7 +31,7 @@ const ReactSelect = <
       {title && typeof title === 'string' ? <Label>{title}</Label> : title}
       <Select
         theme={RSTheme}
-        className={cn('!outline-none !border-none', className)}
+        className={cn('!border-none', className)}
         {...rest}
       />
     </div>

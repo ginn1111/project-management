@@ -137,7 +137,7 @@ const BoardDuAn = () => {
         open={modalState.modalCS.open}
         data={{}}
         onClose={() => handleCloseModal('modalCS')}
-        title="Khảo sát"
+        title="Chỉnh sửa đầu việc"
       />
     </div>
   );

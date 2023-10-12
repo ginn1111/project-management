@@ -7,10 +7,11 @@ interface IGroupSelectNhanVien {
 const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="custom-select flex items-center gap-4">
         <ReactSelect
           containerClass="flex-1"
           title="Phòng ban"
+          placeholder="phòng ban"
           options={[
             {
               value: 'fuck1',
@@ -32,6 +33,7 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
         />
         <ReactSelect
           title="Chuyên môn"
+          placeholder="chuyên môn"
           containerClass="flex-1"
           options={[
             {
@@ -53,28 +55,31 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
           ]}
         />
       </div>
-      <ReactSelect
-        title="Nhân viên"
-        isMulti={isMulti}
-        options={[
-          {
-            value: 'fuck',
-            label: 'Fuck label',
-          },
-          {
-            value: 'fuck',
-            label: 'Fuck label',
-          },
-          {
-            value: 'fuck',
-            label: 'Fuck label',
-          },
-          {
-            value: 'fuck',
-            label: 'Fuck label',
-          },
-        ]}
-      />
+      <div className="custom-select">
+        <ReactSelect
+          title="Nhân viên"
+          placeholder="nhân viên"
+          isMulti={isMulti}
+          options={[
+            {
+              value: 'fuck',
+              label: 'Fuck label',
+            },
+            {
+              value: 'fuck1',
+              label: 'Fuck label',
+            },
+            {
+              value: 'fuck2',
+              label: 'Fuck label',
+            },
+            {
+              value: 'fuck3',
+              label: 'Fuck label',
+            },
+          ]}
+        />
+      </div>
     </>
   );
 };

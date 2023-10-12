@@ -22,13 +22,17 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
           <Input placeholder="tên công việc" />
         </div>
         <div>
+          <Label>Ngày bắt đầu</Label>
+          <Input type="datetime-local" />
+        </div>
+        <div>
           <Label>Ngày hoàn thành dự kiến</Label>
-          <DatePicker />
+          <Input type="datetime-local" />
         </div>
 
         <div>
           <Label>Mô tả</Label>
-          <Textarea placeholder="mô tả" />
+          <Textarea placeholder="mô tả" rows={8} />
         </div>
       </div>
 

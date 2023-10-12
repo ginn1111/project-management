@@ -1,5 +1,6 @@
 import IconXCircle from '@/components/Icon/IconXCircle';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
@@ -17,17 +18,28 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
   return (
     <>
       <Modal {...rest}>
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <Label>Ngày bắt đầu</Label>
+            <Input type="datetime-local" disabled />
+          </div>
+          <div className="flex-1">
+            <Label>Ngày hoàn thành</Label>
+            <Input type="datetime-local" disabled />
+          </div>
+        </div>
         <div>
           <Label>Nhân viên dự án</Label>
           <ScrollArea className="h-[200px] w-full rounded-md border p-2">
-            <div className="flex items-center justify-between hover:bg-primary2-light p-2 rounded-md">
-              <span>Nguyen Van A</span>
+            <div className="flex items-center justify-between hover:bg-muted p-2 rounded-md cursor-pointer">
+              <span className="text-sm">Nguyen Van A</span>
               <Button
+                className="hover:bg-danger"
                 variant="secondary"
                 size="icon"
                 onClick={() => setShow(true)}
               >
-                <IconXCircle className="text-danger" />
+                <IconXCircle className="text-danger hover:text-white" />
               </Button>
             </div>
           </ScrollArea>
@@ -41,10 +53,7 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
           </p>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
-          <p className="bg-primary2-light text-primary2 max-w-max px-2 py-1 rounded-md outline-offset-2 outline outline-solid outline-primary2">
-            Deadline: {dayjs().format('DD/MM/YYYY')}
-          </p>
+        <div className="mt-2 flex items-center justify-end">
           <Button variant="outline" onClick={rest.onClose}>
             Đóng
           </Button>

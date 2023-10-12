@@ -1,11 +1,8 @@
-import IconXCircle from '@/components/Icon/IconXCircle';
 import { Button } from '@/components/ui/button';
-import { DatePicker } from '@/components/ui/date-picker';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
-import dayjs from 'dayjs';
 
 interface IModalChinhSuaDauViec<T> extends Omit<IModalProps, 'children'> {
   data: T;
@@ -17,8 +14,20 @@ const ModalChinhSuaDauViec = <T,>(props: IModalChinhSuaDauViec<T>) => {
     <Modal {...rest}>
       <div className="space-y-4">
         <div>
+          <Label>Tên đầu việc</Label>
+          <Input placeholder="tên đầu việc" />
+        </div>
+        <div>
+          <Label>Ngày bắt đầu</Label>
+          <input
+            type="datetime-local"
+            className="form-input"
+            defaultValue={new Date().toISOString()}
+          />
+        </div>
+        <div>
           <Label>Ngày hoàn thành dự kiến</Label>
-          <DatePicker />
+          <Input type="datetime-local" />
         </div>
         <div>
           <Label>Mô tả</Label>
