@@ -1,7 +1,5 @@
 'use client';
-import IconEdit from '@/components/Icon/IconEdit';
 import IconEllipsis from '@/components/Icon/IconEllipsis';
-import IconXCircle from '@/components/Icon/IconXCircle';
 import DataTable from '@/components/ui/data-table';
 import { DataTableColumnHeader } from '@/components/ui/data-table/header';
 import {
@@ -10,62 +8,82 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Modal from '@/components/ui/modal';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import useModal from '@/hooks/useModal';
 import { faker } from '@faker-js/faker';
 import { ColumnDef } from '@tanstack/react-table';
+import ModalChuyenPB from './modal/modal-chuyen-pb';
+import ModalThemBangCap from './modal/modal-them-bang-cap';
+import ModalThemChungChi from './modal/modal-them-chung-chi';
+import ModalThemNhanVien from './modal/modal-them-nhan-vien';
 
 const DUMMY: INhanVien[] = Array(100)
   .fill(0)
   .map(() => ({
-    ID_NV: faker.string.alpha(),
-    HO_TEN_NV: faker.internet.displayName(),
-    DIA_CHI_NV: faker.location.country(),
-    DIEN_THOAI_NV: faker.phone.number(),
-    EMAIL_NV: faker.internet.email(),
-    GIOI_TINH_NV: Math.floor(Math.random()) < 0.5 ? 'Nam' : 'Nữ',
+    id: faker.string.alpha(),
+    hoTen: faker.internet.displayName(),
+    dienThoai: faker.location.country(),
+    diaChi: faker.phone.number(),
+    phongBan: faker.internet.email(),
+    email: faker.internet.email(),
+    gioiTinh: Math.floor(Math.random()) < 0.5 ? 'Nam' : 'Nữ',
   }));
 const TableNhanVien = () => {
+  const { modal, handleOpenModal, handleCloseModal } = useModal({
+    modalNV: { open: false },
+    modalRM: { open: false },
+    modalPB: { open: false },
+    modalBC: { open: false },
+    modalCC: { open: false },
+  });
   const columns: ColumnDef<INhanVien>[] = [
     {
-      accessorKey: 'ID_NV',
-      header: 'Id',
+      accessorKey: 'id',
     },
     {
-      accessorKey: 'HO_TEN_NV',
+      accessorKey: 'hoTen',
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Họ tên" />
       ),
     },
     {
-      accessorKey: 'DIA_CHI_NV',
-      header: 'Địa chỉ',
+      accessorKey: 'phongBan',
     },
     {
-      accessorKey: 'DIEN_THOAI_NV',
-      header: 'Điện thoại',
+      accessorKey: 'diaChi',
     },
     {
-      accessorKey: 'EMAIL_NV',
-      header: () => <div className="w-[100px]">Email</div>,
+      accessorKey: 'dienThoai',
     },
     {
-      accessorKey: 'GIOI_TINH_NV',
-      header: 'Giới tính',
+      accessorKey: 'email',
     },
     {
-      header: 'Thao tác',
+      accessorKey: 'gioiTinh',
+    },
+    {
+      id: 'action',
+      header: '',
+      size: 70,
       cell: () => (
         <DropdownMenu modal>
           <DropdownMenuTrigger>
             <IconEllipsis />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-fit-content" side="left">
-            <DropdownMenuItem className="flex items-center gap-2">
-              <IconEdit className="text-sky-500" />
+          <DropdownMenuContent className="-translate-x-[10px]">
+            <DropdownMenuItem onClick={() => handleOpenModal('modalNV')}>
               Sửa
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
-              <IconXCircle className="text-rose-500" />
+            <DropdownMenuItem onClick={() => handleOpenModal('modalPB')}>
+              Chuyển phòng ban
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalBC')}>
+              Thêm bằng cấp
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalCC')}>
+              Thêm chứng chỉ
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalRM')}>
               Xoá
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -76,6 +94,36 @@ const TableNhanVien = () => {
   return (
     <>
       <DataTable<INhanVien> data={DUMMY} columns={columns} />
+      <ModalThemNhanVien
+        open={modal.modalNV.open}
+        title="Sửa nhân viên"
+        onClose={() => handleCloseModal('modalNV')}
+        data={{}}
+        isEdit
+      />
+      <ModalConfirm
+        title="Xoá nhân viên"
+        message="Bạn có muốn xoá nhân viên này?"
+        onAccept={() => {}}
+        onClose={() => handleCloseModal('modalRM')}
+        open={modal.modalRM.open}
+      />
+      <ModalChuyenPB
+        open={modal.modalPB.open}
+        onClose={() => handleCloseModal('modalPB')}
+        title="Chuyển phòng ban nhân viên"
+        data={{}}
+      />
+      <ModalThemBangCap
+        open={modal.modalBC.open}
+        onClose={() => handleCloseModal('modalBC')}
+        title="Thêm bằng cấp"
+      />
+      <ModalThemChungChi
+        open={modal.modalCC.open}
+        onClose={() => handleCloseModal('modalCC')}
+        title="Thêm chứng chỉ"
+      />
     </>
   );
 };
