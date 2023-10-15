@@ -29,6 +29,10 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
           <Input type="number" placeholder="số điện thoại" />
         </div>
         <div>
+          <Label>Ngày sinh</Label>
+          <Input type="date" placeholder="ngày sinh" />
+        </div>
+        <div>
           <Label>CMND/ CCCD</Label>
           <Input placeholder="cmnd/ cccc" />
         </div>
@@ -36,13 +40,15 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
           <Label>Địa chỉ</Label>
           <Input placeholder="địa chỉ" />
         </div>
-        <div>
-          <Label>Tỉnh/ Thành phố</Label>
-          <Input placeholder="tỉnh / thành phố" />
-        </div>
-        <div>
-          <Label>Quận/ huyện</Label>
-          <Input placeholder="quận/ huyện" />
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <Label>Tỉnh/ Thành phố</Label>
+            <Input placeholder="tỉnh / thành phố" />
+          </div>
+          <div className="flex-1">
+            <Label>Quận/ huyện</Label>
+            <Input placeholder="quận/ huyện" />
+          </div>
         </div>
         {isEdit ? null : (
           <ReactSelect

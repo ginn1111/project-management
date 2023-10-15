@@ -54,7 +54,7 @@ const NguonLuc = () => {
     },
   ];
   return (
-    <div className="m-2 p-2">
+    <div className="mx-2">
       <DataTable data={DUMMY} columns={columns} />
       <ModalThemNguonLuc
         data={{}}

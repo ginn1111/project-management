@@ -11,7 +11,7 @@ export interface IModalProps<T = any> {
 const Modal = ({ onClose, open, title, children }: IModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-h-[98vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

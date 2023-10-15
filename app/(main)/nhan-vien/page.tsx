@@ -4,7 +4,7 @@ import React from 'react';
 
 const NhanVien = () => {
   return (
-    <div className="bg-card m-4 rounded-sm p-2">
+    <div className="m-2 rounded-sm p-2">
       <FilterNhanVien />
       <div className="mt-4">
         <TableNhanVien />

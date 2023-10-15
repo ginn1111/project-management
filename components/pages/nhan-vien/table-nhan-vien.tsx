@@ -16,8 +16,9 @@ import ModalChuyenPB from './modal/modal-chuyen-pb';
 import ModalThemBangCap from './modal/modal-them-bang-cap';
 import ModalThemChungChi from './modal/modal-them-chung-chi';
 import ModalThemNhanVien from './modal/modal-them-nhan-vien';
+import Link from 'next/link';
 
-const DUMMY: INhanVien[] = Array(100)
+const DUMMY = Array(100)
   .fill(0)
   .map(() => ({
     id: faker.string.alpha(),
@@ -36,7 +37,7 @@ const TableNhanVien = () => {
     modalBC: { open: false },
     modalCC: { open: false },
   });
-  const columns: ColumnDef<INhanVien>[] = [
+  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
     {
       accessorKey: 'id',
     },
@@ -74,6 +75,11 @@ const TableNhanVien = () => {
             <DropdownMenuItem onClick={() => handleOpenModal('modalNV')}>
               Sửa
             </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link className="w-full" href="/nhan-vien/id-nhan-vien">
+                Chi tiết
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleOpenModal('modalPB')}>
               Chuyển phòng ban
             </DropdownMenuItem>
@@ -83,7 +89,10 @@ const TableNhanVien = () => {
             <DropdownMenuItem onClick={() => handleOpenModal('modalCC')}>
               Thêm chứng chỉ
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalRM')}>
+            <DropdownMenuItem
+              onClick={() => handleOpenModal('modalRM')}
+              className="text-danger hover:!text-danger"
+            >
               Xoá
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -93,7 +102,7 @@ const TableNhanVien = () => {
   ];
   return (
     <>
-      <DataTable<INhanVien> data={DUMMY} columns={columns} />
+      <DataTable data={DUMMY} columns={columns} />
       <ModalThemNhanVien
         open={modal.modalNV.open}
         title="Sửa nhân viên"
@@ -117,12 +126,12 @@ const TableNhanVien = () => {
       <ModalThemBangCap
         open={modal.modalBC.open}
         onClose={() => handleCloseModal('modalBC')}
-        title="Thêm bằng cấp"
+        title="bằng cấp"
       />
       <ModalThemChungChi
         open={modal.modalCC.open}
         onClose={() => handleCloseModal('modalCC')}
-        title="Thêm chứng chỉ"
+        title="chứng chỉ"
       />
     </>
   );

@@ -90,7 +90,7 @@ const DuyetDeXuat = () => {
     },
   ];
   return (
-    <div className="m-2">
+    <div className="mx-2">
       <DataTable data={DUMMY} columns={columns} />
       <ReactSheet
         ref={sheetRef}

@@ -16,25 +16,8 @@ export const SIDE_BARS = [
   {
     id: 'quan-ly-nhan-vien',
     title: 'Quản lý nhân viên',
-
     prefixIcon: <IconUser />,
-    children: [
-      {
-        id: 'nhan-vien',
-        title: 'Nhân viên',
-        href: '/nhan-vien',
-      },
-      {
-        id: 'chung-chi',
-        title: 'Chứng chỉ',
-        href: '/chung-chi',
-      },
-      {
-        id: 'bang-cap',
-        title: 'Bằng cấp',
-        href: '/bang-cap',
-      },
-    ],
+    href: '/nhan-vien',
   },
   {
     id: 'quan-ly-nguon-luc',

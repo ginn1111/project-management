@@ -63,7 +63,7 @@ const SidebarItem = (props: ISidebarItem) => {
         {prefixIcon ?? (
           <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
         )}
-        <Link href={href ?? '#'}>
+        <Link className="w-full text-start" href={href ?? '#'}>
           <span className="text-black pl-3 dark:group-hover:text-white-dark">
             {title}
           </span>

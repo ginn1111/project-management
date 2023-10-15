@@ -130,7 +130,7 @@
 
   /* Panel */
   .panel {
-    @apply relative rounded-md bg-white p-5 shadow dark:bg-black;
+    @apply relative rounded-sm bg-white p-5 shadow dark:bg-black;
   }
   /* Navbar */
   .navbar-sticky header,
@@ -791,4 +791,7 @@ pre.hljs {
 }
 tbody.rdp-tbody tr td {
   padding: 0 !important;
+}
+[role='tabpanel'][data-state='inactive'] {
+  @apply mt-0;
 }

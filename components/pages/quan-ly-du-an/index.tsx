@@ -32,13 +32,10 @@ const QuanLyDuAn = () => {
           <BoardDuAn />
           <BoardDuAn />
         </TabsContent>
-        <TabsContent
-          value="calendar"
-          className="flex gap-2 overflow-x-auto mt-0"
-        >
+        <TabsContent value="calendar" className="flex gap-2 overflow-x-auto">
           <CalendarDauViec />
         </TabsContent>
-        <TabsContent value="nhan-vien" className="mt-0">
+        <TabsContent value="nhan-vien">
           <NhanVienDuAn />
         </TabsContent>
         <TabsContent value="duyet-de-xuat">

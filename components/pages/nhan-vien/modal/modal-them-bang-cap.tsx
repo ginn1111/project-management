@@ -5,10 +5,12 @@ import Modal, { IModalProps } from '@/components/ui/modal';
 import { Textarea } from '@/components/ui/textarea';
 import React from 'react';
 
-const ModalThemBangCap = (props: Omit<IModalProps, 'children'>) => {
-  const { data, ...rest } = props;
+const ModalThemBangCap = (
+  props: Omit<IModalProps, 'children'> & { isEdit?: boolean }
+) => {
+  const { isEdit, data, ...rest } = props;
   return (
-    <Modal {...rest}>
+    <Modal {...rest} title={`${isEdit ? 'Chỉnh sửa' : 'Thêm'} ${rest.title}`}>
       <div className="space-y-4">
         <div>
           <Label>Tên bằng cấp</Label>
