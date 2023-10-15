@@ -1,6 +1,6 @@
 'use client';
 
-import IconEllipsis from '@/components/Icon/IconEllipsis';
+import IconSettings from '@/components/Icon/IconSettings';
 import IconSquareCheck from '@/components/Icon/IconSquareCheck';
 import IconXSquare from '@/components/Icon/IconXSquare';
 import { Button } from '@/components/ui/button';
@@ -10,30 +10,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useToggle } from 'usehooks-ts';
+import useModal from '@/hooks/useModal';
 import BoardDuAnItem from './board-du-an-item';
-import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
-import ModalGiaoViec from './modal-du-an/modal-giao-viec';
-import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
-import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
-import ModalLichSu from './modal-du-an/modal-lich-su';
 import ModalChinhSuaDauViec from './modal-du-an/modal-chinh-sua-dau-viec';
-import { useState } from 'react';
-import IconSettings from '@/components/Icon/IconSettings';
+import ModalGiaoViec from './modal-du-an/modal-giao-viec';
+import ModalLichSu from './modal-du-an/modal-lich-su';
+import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
+import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
+import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 
 interface IModalState {
   open: boolean;
 }
 
 const BoardDuAn = () => {
-  const [modalState, setModalState] = useState<{
-    modalDV: IModalState;
-    modalGV: IModalState;
-    modalTCV: IModalState;
-    modalPQ: IModalState;
-    modalLS: IModalState;
-    modalCS: IModalState;
-  }>({
+  const {
+    modal: modalState,
+    handleCloseModal,
+    handleOpenModal,
+  } = useModal({
     modalCS: { open: false },
     modalLS: { open: false },
     modalPQ: { open: false },
@@ -41,11 +36,6 @@ const BoardDuAn = () => {
     modalDV: { open: false },
     modalGV: { open: false },
   });
-  const handleOpenModal = (name: keyof typeof modalState) =>
-    setModalState((old) => ({ ...old, [name]: { open: true } }));
-
-  const handleCloseModal = (name: keyof typeof modalState) =>
-    setModalState((old) => ({ ...old, [name]: { open: false } }));
 
   return (
     <div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">

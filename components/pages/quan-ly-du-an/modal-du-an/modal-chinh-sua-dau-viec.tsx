@@ -3,35 +3,75 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { Textarea } from '@/components/ui/textarea';
+import { datetimeLocal } from '@/utils/helpers';
+import { pick } from 'lodash';
+import { useEffect } from 'react';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
 
 interface IModalChinhSuaDauViec<T> extends Omit<IModalProps, 'children'> {
   data: T;
 }
 
-const ModalChinhSuaDauViec = <T,>(props: IModalChinhSuaDauViec<T>) => {
-  const { ...rest } = props;
+const ModalChinhSuaDauViec = <T extends FieldValues>(
+  props: IModalChinhSuaDauViec<T>
+) => {
+  const { data, ...rest } = props;
+  const { watch, control, reset, register, getValues } = useForm({
+    shouldUnregister: true,
+  });
+
+  useEffect(() => {
+    if (rest.open) {
+      reset({ ...pick(data, ['start', 'end', 'title', 'description']) });
+    }
+  }, [rest.open]);
+
   return (
     <Modal {...rest}>
       <div className="space-y-4">
         <div>
           <Label>Tên đầu việc</Label>
-          <Input placeholder="tên đầu việc" />
+          <Input {...register('title')} placeholder="tên đầu việc" />
         </div>
         <div>
           <Label>Ngày bắt đầu</Label>
-          <input
-            type="datetime-local"
-            className="form-input"
-            defaultValue={new Date().toISOString()}
+          <Controller
+            name="start"
+            control={control}
+            render={({ field }) => {
+              return (
+                <Input
+                  type="datetime-local"
+                  {...field}
+                  value={(() => {
+                    return datetimeLocal(field.value);
+                  })()}
+                />
+              );
+            }}
           />
         </div>
         <div>
           <Label>Ngày hoàn thành dự kiến</Label>
-          <Input type="datetime-local" />
+          <Controller
+            name="end"
+            control={control}
+            render={({ field }) => {
+              return (
+                <Input
+                  type="datetime-local"
+                  {...field}
+                  value={(() => {
+                    return datetimeLocal(field.value);
+                  })()}
+                />
+              );
+            }}
+          />
         </div>
         <div>
           <Label>Mô tả</Label>
-          <Textarea placeholder="mô tả" rows={8} />
+          <Textarea {...register('description')} placeholder="mô tả" rows={8} />
         </div>
       </div>
 

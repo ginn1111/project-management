@@ -9,14 +9,14 @@ const Search = () => {
       <form
         className={`${
           search && '!block'
-        } absolute inset-x-0 top-1/2 z-10 mx-4 hidden -translate-y-1/2 sm:relative sm:top-0 sm:mx-0 sm:block sm:translate-y-0`}
+        } absolute inset-x-0 top-1/2 z-10 mx-4 hidden -translate-y-1/2 sm:relative sm:top-0 sm:mx-0 sm:block sm:translate-y-0 w-full`}
         onSubmit={() => setSearch(false)}
       >
         <div className="relative">
           <input
             type="text"
             className="peer form-input bg-gray-100 placeholder:tracking-widest pl-9 pr-9 rtl:pl-9 rtl:pr-9 sm:bg-transparent sm:pr-4 rtl:sm:pl-4"
-            placeholder="Search..."
+            placeholder="tìm kiếm..."
           />
           <button
             type="button"

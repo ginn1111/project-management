@@ -27,7 +27,7 @@ const ReactSelect = <
 ) => {
   const { containerClass, className, title, ...rest } = props;
   return (
-    <div className={containerClass}>
+    <div className={cn('custom-select', containerClass)}>
       {title && typeof title === 'string' ? <Label>{title}</Label> : title}
       <Select
         theme={RSTheme}

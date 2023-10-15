@@ -24,6 +24,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        'fill-300': 'repeat(auto-fill, minmax(300px, 1fr))',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

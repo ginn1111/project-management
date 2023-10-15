@@ -1,6 +1,6 @@
 import IconAuth from '@/components/Icon/IconAuth';
-import IconAuthor from '@/components/Icon/IconAuthor';
 import IconDepartment from '@/components/Icon/IconDepartment';
+import IconLockTwoTone from '@/components/Icon/IconLockTwoTone';
 import IconPosition from '@/components/Icon/IconPosition';
 import IconProject from '@/components/Icon/IconProject';
 import IconTools from '@/components/Icon/IconTools';
@@ -8,21 +8,10 @@ import IconUser from '@/components/Icon/IconUser';
 
 export const SIDE_BARS = [
   {
-    id: 'quan-ly-du-an',
-    title: 'Quản lý dự án',
+    id: 'du-an',
+    title: 'Dự án',
     prefixIcon: <IconProject />,
-    children: [
-      {
-        id: 'du-an-1',
-        title: 'Dự án 1',
-        href: '/1',
-      },
-      {
-        id: 'du-an-2',
-        title: 'Dự án 2',
-        href: '/2',
-      },
-    ],
+    href: '/du-an',
   },
   {
     id: 'quan-ly-nhan-vien',
@@ -88,10 +77,10 @@ export const SIDE_BARS = [
     href: '/quan-ly-phong-ban',
   },
   {
-    id: 'phan-quyen-tai-khoan',
-    title: 'Phân quyền tài khoản',
-    prefixIcon: <IconAuthor />,
-    href: '/phan-quyen-tai-khoan',
+    id: 'duyet-de-xuat-nhan-vien',
+    title: 'Duyệt đề xuất nhân viên',
+    prefixIcon: <IconLockTwoTone />,
+    href: '/duyet-de-xuat-nhan-vien',
   },
 ];
 

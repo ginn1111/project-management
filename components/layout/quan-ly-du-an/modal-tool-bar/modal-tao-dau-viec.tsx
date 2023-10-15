@@ -21,25 +21,11 @@ const ModalTaoDauViec = <T,>(props: IModalTaoDauViec<T>) => {
         </div>
         <div>
           <Label>Ngày bắt đầu</Label>
-          <input
-            type="datetime-local"
-            name="end"
-            className="form-input"
-            placeholder="Event End Date"
-            defaultValue={new Date().toISOString()}
-            min={new Date().toISOString()}
-          />
+          <Input type="datetime-local" />
         </div>
         <div>
           <Label>Ngày hoàn thành dự kiến</Label>
-          <input
-            id="end"
-            type="datetime-local"
-            name="end"
-            className="form-input"
-            placeholder="Event End Date"
-            required
-          />
+          <Input type="datetime-local" />
         </div>
         <div>
           <Label>Mô tả</Label>

@@ -11,7 +11,6 @@ import { usePathname } from 'next/navigation';
 export function Sidebar() {
   const pathname = usePathname();
   const [currentMenu, setCurrentMenu] = useState('');
-  console.log(currentMenu);
   const toggleSidebar = themeSelectors.use.toggleSidebar();
 
   useEffect(() => {
