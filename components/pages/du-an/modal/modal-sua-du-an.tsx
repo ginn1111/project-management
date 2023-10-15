@@ -13,7 +13,7 @@ const ModalSuaDuAn = (props: IModalSuaDuAn) => {
     <Modal {...rest}>
       <div className="space-y-4">
         <div>
-          <Label>Tên đầu việc</Label>
+          <Label>Tên dự án</Label>
           <Input placeholder="tên dự án" />
         </div>
         <div className="flex items-center gap-4">
