@@ -33,7 +33,8 @@ const DUMMY = Array(20)
 
 const DuyetNhanVien = () => {
   const { handleOpenModal, handleCloseModal, modal } = useModal({
-    modalCF: { open: false },
+    modalDN: { open: false },
+    modalAC: { open: false },
   });
   const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
     {
@@ -49,24 +50,25 @@ const DuyetNhanVien = () => {
       accessorKey: 'role',
     },
     {
-      accessorKey: 'actions',
-      header: () => <p className="text-center">Thao tác</p>,
+      id: 'action',
+      header: '',
+      size: 70,
       cell: () => (
-        <div className="text-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" size="icon">
-                <IconEllipsis />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Duyệt</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleOpenModal('modalCF')}>
-                Từ chối
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost" size="icon">
+              <IconEllipsis />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalAC')}>
+              Duyệt
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalDN')}>
+              Từ chối
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];
@@ -79,10 +81,19 @@ const DuyetNhanVien = () => {
       <ModalConfirm
         title="Từ chối đề xuất"
         message="Bạn có muốn từ chối đề xuất này?"
-        open={modal.modalCF.open}
-        onClose={() => handleCloseModal('modalCF')}
+        open={modal.modalDN.open}
+        onClose={() => handleCloseModal('modalDN')}
         onAccept={() => {}}
         msgCTA="Từ chối"
+      />
+      <ModalConfirm
+        open={modal.modalAC.open}
+        title="Duyệt nhân viên tham gia dự án"
+        message="Bạn có muốn duyệt nhân viên này tham gia dự án?"
+        onClose={() => handleCloseModal('modalAC')}
+        onAccept={() => {}}
+        variant="default"
+        msgCTA="Duyệt"
       />
     </div>
   );

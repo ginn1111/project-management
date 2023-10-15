@@ -22,22 +22,6 @@ const Filter = () => {
           ]}
         />
       </div>
-      <div className="w-full max-w-[400px]">
-        <ReactSelect
-          placeholder="chuyên môn"
-          title={null}
-          options={[
-            {
-              label: 'Dev',
-              value: 'DEV',
-            },
-            {
-              label: 'Kế toán',
-              value: 'KET_TOAN',
-            },
-          ]}
-        />
-      </div>
       <div className="flex items-center gap-2 ml-auto">
         <Button variant="outline">
           <IconRefresh />
