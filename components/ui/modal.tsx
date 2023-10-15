@@ -1,17 +1,11 @@
-import { Button } from './button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from './dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog';
 
-export interface IModalProps {
+export interface IModalProps<T = any> {
   title: React.ReactNode;
   children: React.ReactNode;
   open: boolean;
   onClose: () => void;
+  data?: T;
 }
 
 const Modal = ({ onClose, open, title, children }: IModalProps) => {

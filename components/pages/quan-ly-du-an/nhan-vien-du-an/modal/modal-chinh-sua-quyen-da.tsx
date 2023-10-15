@@ -1,21 +1,15 @@
-import GroupSelectNhanVien from '@/components/special/group-select-nhan-vien';
 import PhanQuyen from '@/components/special/phan-quyen';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
+import React from 'react';
 
-interface IModalPhanQuyen<T> extends Omit<IModalProps, 'children'> {
-  data: T;
-}
-
-const ModalPhanQuyen = <T,>(props: IModalPhanQuyen<T>) => {
+const ModalChinhSuaQuyenDuAn = <T,>(
+  props: Omit<IModalProps<T>, 'children'>
+) => {
   const { data, ...rest } = props;
   return (
     <Modal {...rest}>
-      <GroupSelectNhanVien />
-      <Label className="mb-0">Quyền</Label>
-      <PhanQuyen />
-
+      <PhanQuyen className="h-[70vh]" />
       <div className="flex items-center justify-end gap-4 mt-4">
         <Button onClick={rest.onClose} variant="outline">
           Đóng
@@ -26,4 +20,4 @@ const ModalPhanQuyen = <T,>(props: IModalPhanQuyen<T>) => {
   );
 };
 
-export default ModalPhanQuyen;
+export default ModalChinhSuaQuyenDuAn;

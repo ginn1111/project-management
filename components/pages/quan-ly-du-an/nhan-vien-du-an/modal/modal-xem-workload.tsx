@@ -1,13 +1,9 @@
-'use client';
-
-import { now, getMonth } from '@/utils/helpers';
+import Modal, { IModalProps } from '@/components/ui/modal';
+import { getMonth, now } from '@/utils/helpers';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { isEmpty } from 'lodash';
-import { useState } from 'react';
-import ModalChinhSuaDauViec from '../modal-du-an/modal-chinh-sua-dau-viec';
 
 const DUMMY = [
   {
@@ -120,43 +116,29 @@ const DUMMY = [
   },
 ];
 
-type EventType = Partial<(typeof DUMMY)[0]>;
-
-const CalendarDauViec = () => {
-  const [editEvent, setEditEvent] = useState<EventType>({});
-
+const ModalXemWorkLoad = <T,>(props: Omit<IModalProps<T>, 'children'>) => {
+  const { ...rest } = props;
   return (
-    <div className="calendar-wrapper mx-2 p-2 rounded-sm border">
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
-        }}
-        editable={true}
-        dayMaxEvents={true}
-        selectable={true}
-        droppable={true}
-        eventDrop={() => console.log('drop')}
-        eventClick={(event: any) => {
-          setEditEvent(event.event);
-        }}
-        select={(event: any) => {
-          console.log(event);
-          setEditEvent(JSON.parse(JSON.stringify(event)));
-        }}
-        events={DUMMY}
-      />
-      <ModalChinhSuaDauViec<EventType>
-        title="Chỉnh sửa đầu việc"
-        data={editEvent}
-        open={!isEmpty(editEvent)}
-        onClose={() => setEditEvent({})}
-      />
-    </div>
+    <Modal {...rest}>
+      <div className="calendar-wrapper mx-2 p-2 rounded-sm border min-w-[65vw] min-h-[60vh]">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          }}
+          editable={true}
+          dayMaxEvents={true}
+          selectable={true}
+          droppable={true}
+          eventDrop={() => console.log('drop')}
+          events={DUMMY}
+        />
+      </div>
+    </Modal>
   );
 };
 
-export default CalendarDauViec;
+export default ModalXemWorkLoad;

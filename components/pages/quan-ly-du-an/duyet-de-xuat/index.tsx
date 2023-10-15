@@ -47,7 +47,8 @@ const DuyetDeXuat = () => {
       header: 'Employee',
     },
     {
-      header: 'Actions',
+      id: 'action',
+      header: '',
       cell: () => {
         return (
           <DropdownMenu>
@@ -56,7 +57,7 @@ const DuyetDeXuat = () => {
                 <IconEllipsis />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[50px] -translate-x-2">
+            <DropdownMenuContent>
               <DropdownMenuItem>Duyệt</DropdownMenuItem>
               <DropdownMenuItem>Từ chối</DropdownMenuItem>
               <DropdownMenuItem>Chi tiết</DropdownMenuItem>
