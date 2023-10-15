@@ -34,6 +34,22 @@ const ModalChiTietCongViec = <T,>(props: IModalDuAn<T>) => {
             facere consectetur debitis distinctio. Ab itaque deserunt sed odio?
           </p>
         </div>
+        <div>
+          <Label>Nguồn lực sử dụng</Label>
+          <ScrollArea className="px-4 py-2 border rounded-md h-[200px]">
+            {Array(10)
+              .fill(0)
+              .map((_, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-4 justify-between text-sm"
+                >
+                  <p>Tên nguồn lực</p>
+                  <span>Số lượng</span>
+                </div>
+              ))}
+          </ScrollArea>
+        </div>
       </div>
 
       <div className="mt-2 flex items-center justify-between">

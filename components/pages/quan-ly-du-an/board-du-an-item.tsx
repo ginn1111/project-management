@@ -1,5 +1,6 @@
 import IconClock from '@/components/Icon/IconClock';
 import IconEllipsis from '@/components/Icon/IconEllipsis';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -7,15 +8,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import useModal from '@/hooks/useModal';
 import { cn } from '@/lib/utils';
-import { ReactNode, useState } from 'react';
+import { AlertCircle } from 'lucide-react';
+import { ReactNode } from 'react';
 import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
 import ModalChinhSuaCongViec from './modal-du-an-item/modal-chinh-sua-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import { AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
 
 const LABEL_COLOR = {
   progress: 'bg-secondary2',
@@ -41,24 +43,18 @@ interface IModalState {
 
 const BoardDuAnItem = (props: BoardDuAnItemProps) => {
   const { status, title, progress } = props;
-  const [modalState, setModalState] = useState<{
-    modalLS: IModalState;
-    modalPQ: IModalState;
-    modalCT: IModalState;
-    modalCS: IModalState;
-    modalDone: IModalState;
-  }>({
+  const {
+    modal: modalState,
+    handleCloseModal,
+    handleOpenModal,
+  } = useModal({
     modalCS: { open: false },
     modalLS: { open: false },
     modalPQ: { open: false },
     modalCT: { open: false },
     modalDone: { open: false },
+    modalNL: { open: false },
   });
-  const handleOpenModal = (name: keyof typeof modalState) =>
-    setModalState((old) => ({ ...old, [name]: { open: true } }));
-
-  const handleCloseModal = (name: keyof typeof modalState) =>
-    setModalState((old) => ({ ...old, [name]: { open: false } }));
 
   return (
     <li className="w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light p-5 justify-start">
@@ -104,6 +100,9 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
             <DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
               Phân quyền
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOpenModal('modalNL')}>
+              Thêm nguồn lực
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleOpenModal('modalLS')}>
               Lịch sử
             </DropdownMenuItem>
@@ -123,7 +122,6 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
         title="Chỉnh sửa công việc"
         onClose={() => handleCloseModal('modalCS')}
       />
-
       <ModalChiTietCongViec
         data={{}}
         open={modalState.modalCT.open}
@@ -152,6 +150,11 @@ const BoardDuAnItem = (props: BoardDuAnItemProps) => {
         open={modalState.modalDone.open}
         onAccept={() => alert('Done task')}
         onClose={() => handleCloseModal('modalDone')}
+      />
+      <ModalThemNguonLuc
+        open={modalState.modalNL.open}
+        onClose={() => handleCloseModal('modalNL')}
+        title="Thêm nguồn lực cho công việc"
       />
     </li>
   );

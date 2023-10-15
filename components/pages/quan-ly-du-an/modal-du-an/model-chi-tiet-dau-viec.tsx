@@ -29,7 +29,7 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
           </div>
         </div>
         <div>
-          <Label>Nhân viên dự án</Label>
+          <Label>Nhân viên thuộc đầu việc</Label>
           <ScrollArea className="h-[200px] w-full rounded-md border p-2">
             <div className="flex items-center justify-between hover:bg-muted p-2 rounded-md cursor-pointer">
               <span className="text-sm">Nguyen Van A</span>

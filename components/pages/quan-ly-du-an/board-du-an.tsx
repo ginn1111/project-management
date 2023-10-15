@@ -18,10 +18,9 @@ import ModalLichSu from './modal-du-an/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
-
-interface IModalState {
-  open: boolean;
-}
+import { cn } from '@/lib/utils';
+import { ColorStatusDauViec } from '@/constants/theme';
+import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
 
 const BoardDuAn = () => {
   const {
@@ -35,30 +34,49 @@ const BoardDuAn = () => {
     modalTCV: { open: false },
     modalDV: { open: false },
     modalGV: { open: false },
+    modalDG: { open: false },
   });
 
   return (
     <div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
-      <div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-5px_15px_-10px] shadow-primary2/50 flex-wrap max-w-full">
+      <div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-5px_15px_-10px] shadow-primary2/50 flex-wrap max-w-full gap-2">
         <p className="text-xl font-bold max-w-full word-wrap-wrap mr-1">
           Khảo sát dự án
         </p>
 
-        <div className="flex items-center rounded-sm gap-1 mr-1">
+        <div className="flex items-center rounded-sm gap-1">
           <IconSquareCheck className="w-4 h-4 text-success" />
-          <div className="text-xs ltr:ml-2">5 Tasks</div>
+          <div className="text-xs">5 Tasks</div>
         </div>
 
         <div className="flex items-center rounded-sm gap-1">
           <IconXSquare className="w-4 h-4 text-danger" />
-          <div className="text-xs ltr:ml-2">5 Tasks</div>
+          <div className="text-xs">5 Tasks</div>
+        </div>
+
+        <div
+          className={cn(
+            'rounded-full shrink-0 px-2 py-1 text-[12px]',
+            ColorStatusDauViec[
+              (() => {
+                const rd = Math.floor(Math.random());
+                return rd > 0.6
+                  ? 'success'
+                  : rd > 0.3
+                  ? 'inprogress'
+                  : 'failed';
+              })()
+            ]
+          )}
+        >
+          Đang thực hiện
         </div>
 
         <div className="ml-auto">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button variant="outline" size="sm">
-                <IconSettings />
+              <Button variant="outline" size="icon">
+                <IconSettings className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -76,6 +94,9 @@ const BoardDuAn = () => {
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
                 Phân quyền
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleOpenModal('modalDG')}>
+                Đánh giá
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleOpenModal('modalLS')}>
                 Lịch sử
@@ -128,6 +149,12 @@ const BoardDuAn = () => {
         data={{}}
         onClose={() => handleCloseModal('modalCS')}
         title="Chỉnh sửa đầu việc"
+      />
+      <ModalDanhGia
+        open={modalState.modalDG.open}
+        data={{}}
+        onClose={() => handleCloseModal('modalDG')}
+        title="Đánh giá đầu việc"
       />
     </div>
   );

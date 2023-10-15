@@ -30,7 +30,7 @@ const Search = forwardRef<HTMLInputElement, ISearch>((props, ref) => {
         <div className="relative">
           <input
             type="text"
-            className="peer form-input bg-gray-100 placeholder:tracking-widest pl-9 pr-9 rtl:pl-9 rtl:pr-9 sm:bg-transparent sm:pr-4 rtl:sm:pl-4"
+            className="form-input bg-gray-100 placeholder:tracking-widest pl-9 pr-9 placeholder:text-sm placeholder:text-muted-foreground placeholder:font-normal"
             placeholder="tìm kiếm..."
             ref={ref}
             {...restInput}

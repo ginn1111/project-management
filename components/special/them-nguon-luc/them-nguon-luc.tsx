@@ -32,7 +32,10 @@ const ThemNguonLuc = (props: IThemNguonLuc) => {
 
       <Search classNameContainer="mb-2" placeholder="tên nguồn lực" />
       <ScrollArea
-        className={cn('h-[200px] w-full rounded-md border p-2', className)}
+        className={cn(
+          'h-[200px] w-full rounded-md border px-4 py-2',
+          className
+        )}
         {...restScrollAreaProps}
       >
         {Array(10)
