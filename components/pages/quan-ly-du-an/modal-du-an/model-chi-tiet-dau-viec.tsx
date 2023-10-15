@@ -34,12 +34,12 @@ const ModalChiTietDauViec = <T,>(props: IModalDuAn<T>) => {
             <div className="flex items-center justify-between hover:bg-muted p-2 rounded-md cursor-pointer">
               <span className="text-sm">Nguyen Van A</span>
               <Button
-                className="hover:bg-danger"
+                className="hover:bg-danger group"
                 variant="secondary"
                 size="icon"
                 onClick={() => setShow(true)}
               >
-                <IconXCircle className="text-danger hover:text-white" />
+                <IconXCircle className="text-danger group-hover:text-white" />
               </Button>
             </div>
           </ScrollArea>
