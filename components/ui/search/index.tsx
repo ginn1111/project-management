@@ -1,22 +1,39 @@
 import IconSearch from '@/components/Icon/IconSearch';
 import IconXCircle from '@/components/Icon/IconXCircle';
-import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { FormEvent, HTMLAttributes, forwardRef, useState } from 'react';
 
-const Search = () => {
+interface ISearch extends HTMLAttributes<HTMLInputElement> {
+  onSearch?: (e: FormEvent<HTMLFormElement>) => void;
+  classNameContainer?: string;
+}
+
+const Search = forwardRef<HTMLInputElement, ISearch>((props, ref) => {
+  const { classNameContainer, onSearch, ...restInput } = props;
   const [search, setSearch] = useState(false);
   return (
-    <div className="flex items-center space-x-1.5 ml-auto  space-x-reverse dark:text-[#d0d2d6] sm:flex-1 sm:ml-0 sm:rtl:mr-0 lg:space-x-2">
+    <div
+      className={cn(
+        'flex items-center space-x-1.5 ml-auto  space-x-reverse dark:text-[#d0d2d6] sm:flex-1 sm:ml-0 sm:rtl:mr-0 lg:space-x-2',
+        classNameContainer
+      )}
+    >
       <form
         className={`${
           search && '!block'
         } absolute inset-x-0 top-1/2 z-10 mx-4 hidden -translate-y-1/2 sm:relative sm:top-0 sm:mx-0 sm:block sm:translate-y-0 w-full`}
-        onSubmit={() => setSearch(false)}
+        onSubmit={(e) => {
+          onSearch?.(e);
+          setSearch(false);
+        }}
       >
         <div className="relative">
           <input
             type="text"
             className="peer form-input bg-gray-100 placeholder:tracking-widest pl-9 pr-9 rtl:pl-9 rtl:pr-9 sm:bg-transparent sm:pr-4 rtl:sm:pl-4"
             placeholder="tìm kiếm..."
+            ref={ref}
+            {...restInput}
           />
           <button
             type="button"
@@ -42,6 +59,8 @@ const Search = () => {
       </button>
     </div>
   );
-};
+});
+
+Search.displayName = 'Search';
 
 export default Search;

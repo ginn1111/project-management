@@ -5,6 +5,7 @@ import BoardDuAn from './board-du-an';
 import DuyetDeXuat from './duyet-de-xuat';
 import CalendarDauViec from './calendar-dau-viec/calendar-dau-viec';
 import NhanVienDuAn from './nhan-vien-du-an';
+import NguonLuc from './nguon-luc';
 const QuanLyDuAn = () => {
   return (
     <>
@@ -21,6 +22,9 @@ const QuanLyDuAn = () => {
           </TabsTrigger>
           <TabsTrigger className="flex-1" value="duyet-de-xuat">
             Duyệt đề xuất
+          </TabsTrigger>
+          <TabsTrigger className="flex-1" value="nguon-luc">
+            Nguồn lực
           </TabsTrigger>
         </TabsList>
         <TabsContent value="board" className="flex gap-2 overflow-x-auto pt-1">
@@ -39,6 +43,9 @@ const QuanLyDuAn = () => {
         </TabsContent>
         <TabsContent value="duyet-de-xuat">
           <DuyetDeXuat />
+        </TabsContent>
+        <TabsContent value="nguon-luc">
+          <NguonLuc />
         </TabsContent>
       </Tabs>
     </>
