@@ -8,7 +8,7 @@ const Providers = ({ children }: LayoutProps) => {
   return (
     <>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-      <Toaster closeButton richColors />
+      <Toaster duration={2000} closeButton richColors position="top-right" />
     </>
   );
 };

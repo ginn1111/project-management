@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 import type { GroupBase, default as SelectProps, Props } from 'react-select';
 import Select from 'react-select';
-import { Label } from './label';
+import Label, { IMyLabel } from '@/components/ui/my-label';
 import { Control, Controller } from 'react-hook-form';
 
 interface IReactSelect<
@@ -18,6 +18,7 @@ interface IReactSelect<
   className?: string;
   containerClass?: string;
   control?: Control;
+  labelProps?: IMyLabel;
 }
 
 const ReactSelect = <
@@ -27,7 +28,8 @@ const ReactSelect = <
 >(
   props: IReactSelect<Option, IsMulti, Group>
 ) => {
-  const { control, containerClass, className, title, ...rest } = props;
+  const { labelProps, control, containerClass, className, title, ...rest } =
+    props;
   // fallback for dummy UI
   if (!control) {
     return (
@@ -49,7 +51,7 @@ const ReactSelect = <
         return (
           <div className={cn('custom-select', containerClass)}>
             {title && typeof title === 'string' ? (
-              <Label>{title}</Label>
+              <Label {...labelProps}>{title}</Label>
             ) : (
               title
             )}

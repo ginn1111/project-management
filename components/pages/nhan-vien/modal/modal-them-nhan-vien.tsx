@@ -1,19 +1,20 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Label from '@/components/ui/my-label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import ReactSelect from '@/components/ui/react-select';
 import { generateOptions } from '@/constants/generate-options';
 import { GenderIndex } from '@/constants/indexes';
-import { genderOptions } from '@/constants/static-options';
 import * as EmployeeServices from '@/lib/employee';
 import { getDistricts, getWards } from '@/lib/utils/address';
-import { identity, omit, omitBy, pickBy } from 'lodash';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { identity, isEmpty, omit, pickBy } from 'lodash';
+import { ReactNode, useEffect, useState } from 'react';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 import { useToggle } from 'usehooks-ts';
+import { EmployeeSchema } from '@/yup-schema/employee';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface IModalThemNhanVien<T> extends Omit<IModalProps<T>, 'children'> {
   isEdit?: boolean;
@@ -35,7 +36,15 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
     },
   });
 
-  const { setValue, control, register, getValues, reset } = useForm<
+  const {
+    setValue,
+    handleSubmit,
+    control,
+    register,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm<
     Partial<
       IEmployee & { idDistrict: OrNull<string>; idProvince: OrNull<string> }
     >
@@ -44,13 +53,13 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
       address: '',
       birthday: '',
       email: '',
-      fullName: '',
       gender: 'NAM',
       note: '',
       phone: '',
       identifyNumber: '',
       idWard: '',
     },
+    resolver: yupResolver(EmployeeSchema) as any,
   });
 
   useEffect(() => {
@@ -90,21 +99,50 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
     mutate(payload);
   };
 
+  const handleError: SubmitErrorHandler<Partial<IEmployee>> = (errors) => {
+    const keys = Object.keys(errors) as (keyof IEmployee)[];
+    toast.error(errors[keys[0]]?.message as ReactNode);
+  };
+
   return (
     <Modal {...rest} loading={isLoading}>
-      <div className="space-y-4">
+      <form
+        className="space-y-4"
+        onSubmit={handleSubmit(handleCreateEmployee, handleError)}
+      >
         <div>
-          <Label>Tên nhân viên</Label>
+          <Label required>Tên nhân viên</Label>
           <Input {...register('fullName')} placeholder="tên nhân viên" />
+        </div>
+        <div className="flex items-center gap-4">
+          <ReactSelect
+            containerClass="flex-1"
+            control={control}
+            name="gender"
+            title="Giới tính"
+            options={generateOptions(GenderIndex)}
+            placeholder="giới tính"
+          />
+
+          <div className="flex-1">
+            <Label>Ngày sinh</Label>
+            <Input
+              {...register('birthday')}
+              type="date"
+              placeholder="ngày sinh"
+            />
+          </div>
         </div>
         <div>
           <Label>Địa chỉ</Label>
           <Input {...register('address')} placeholder="địa chỉ" />
         </div>
+
         <ReactSelect
           name="idProvince"
           control={control}
-          title="Tỉnh/ Thành phố"
+          title="Tỉnh/ thành phố"
+          placeholder="tỉnh/ thành phố"
           options={provinceData?.map((p) => ({
             value: p.id,
             label: p.name,
@@ -122,6 +160,7 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
               control={control}
               isLoading={fetching}
               title="Quận/ huyện"
+              placeholder="quận/ huyện"
               options={districts?.map((p) => ({
                 value: p.id,
                 label: p.name,
@@ -137,7 +176,8 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
               name="idWard"
               isLoading={fetching}
               control={control}
-              title="Xã/phường/ thị trấn"
+              title="Xã/ phường/ thị trấn"
+              placeholder="xã/ phường/ thị trấn"
               options={wards?.map((p) => ({
                 value: p.id,
                 label: p.name,
@@ -145,30 +185,17 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
             />
           </div>
         </div>
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <Label>Email</Label>
+            <Input {...register('email')} placeholder="email" />
+          </div>
+          <div className="flex-1">
+            <Label required>Số điện thoại</Label>
+            <Input {...register('phone')} placeholder="số điện thoại" />
+          </div>
+        </div>
 
-        <ReactSelect
-          control={control}
-          name="gender"
-          title="Giới tính"
-          options={generateOptions(GenderIndex)}
-          placeholder="giới tính"
-        />
-        <div>
-          <Label>Số điện thoại</Label>
-          <Input
-            {...register('phone')}
-            type="number"
-            placeholder="số điện thoại"
-          />
-        </div>
-        <div>
-          <Label>Ngày sinh</Label>
-          <Input
-            {...register('birthday')}
-            type="date"
-            placeholder="ngày sinh"
-          />
-        </div>
         <div>
           <Label>CMND/ CCCD</Label>
           <Input {...register('identifyNumber')} placeholder="cmnd/ cccc" />
@@ -186,13 +213,14 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
             ]}
           />
         )}
-      </div>
-      <div className="flex items-center justify-end gap-4 mt-4">
-        <Button onClick={rest.onClose} variant="outline">
-          Đóng
-        </Button>
-        <Button onClick={handleCreateEmployee}>Xác nhận</Button>
-      </div>
+
+        <div className="flex items-center justify-end gap-4 mt-4">
+          <Button type="button" onClick={rest.onClose} variant="outline">
+            Đóng
+          </Button>
+          <Button>Xác nhận</Button>
+        </div>
+      </form>
     </Modal>
   );
 };
