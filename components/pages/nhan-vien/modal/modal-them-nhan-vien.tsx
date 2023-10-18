@@ -69,6 +69,12 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
             ? dayjs(data?.birthday).format('YYYY-MM-DD')
             : undefined,
         });
+        if (initialValue.idDistrict) {
+          handleGetWards(initialValue.idDistrict);
+        }
+        if (initialValue.idProvince) {
+          handleGetDistricts(initialValue.idProvince);
+        }
       }
     }
   }, [rest.open]);
@@ -95,11 +101,8 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
     }
   };
 
-  const handleCreateEmployee = () => {
-    const payload = pickBy(
-      omit(getValues(), ['idProvince', 'idDistrict']),
-      identity
-    );
+  const handleSuccess = () => {
+    const payload = pickBy(getValues(), identity);
     mutate(payload);
   };
 
@@ -112,7 +115,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
     <Modal {...rest} loading={isLoading}>
       <form
         className="space-y-4"
-        onSubmit={handleSubmit(handleCreateEmployee, handleError)}
+        onSubmit={handleSubmit(handleSuccess, handleError)}
       >
         <div>
           <Label required>Tên nhân viên</Label>

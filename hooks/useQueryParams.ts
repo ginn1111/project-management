@@ -1,8 +1,6 @@
 import { isEmpty } from 'lodash';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { useIsMounted } from 'usehooks-ts';
 
 interface IUseQueryParams {
   initSearchParams: Record<string, any>;
@@ -24,30 +22,25 @@ const useQueryParams = ({ initSearchParams }: IUseQueryParams) => {
     },
     {} as Record<string, any>
   );
-  const isMounted = useIsMounted();
 
   useEffect(() => {
-    if (isMounted()) {
-      const searchParams = new URLSearchParams(initialSearchParams);
-      window.history.pushState(
-        '',
-        '',
-        `${pathname}?${searchParams.toString()}`
-      );
-    }
-  }, []);
+    const searchParams = new URLSearchParams(initialSearchParams);
+    window.history.pushState('', '', `${pathname}?${searchParams.toString()}`);
+  }, [pathname]);
 
   const handlePush = (obj: Record<string, any>) => {
     if (isEmpty(obj)) {
-      router.push(pathname);
-      return;
+      router.push(
+        `${pathname}?${new URLSearchParams(initSearchParams).toString()}`
+      );
+    } else {
+      const newSearchParams = Object.assign(initialSearchParams, {
+        ...obj,
+      });
+      router.push(
+        `${pathname}?${new URLSearchParams(newSearchParams).toString()}`
+      );
     }
-    const newSearchParams = Object.assign(initialSearchParams, {
-      ...obj,
-    });
-    router.push(
-      `${pathname}?${new URLSearchParams(newSearchParams).toString()}`
-    );
   };
 
   const handleReplace = (key: string, value: any) => {

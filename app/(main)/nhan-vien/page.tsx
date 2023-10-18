@@ -4,6 +4,9 @@ import { getList } from '@/lib/employee';
 import { getProvinces } from '@/lib/utils/address';
 import React from 'react';
 
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 const NhanVien = async ({ searchParams }: { searchParams: ISearchParams }) => {
   const employeeData = await getList(
     `page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${

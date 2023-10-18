@@ -20,15 +20,16 @@ const FilterNhanVien = () => {
   const [searchValue, setSearchValue] = useState(searchParams.search);
 
   useEffect(() => {
-    if (!searchValue) return;
+    setSearchValue(searchParams.search);
+  }, [searchParams.search]);
+
+  useEffect(() => {
     const timerId = setTimeout(() => {
       handlePush({ search: searchValue ?? '', page: 1 });
     }, 300);
 
     return () => clearTimeout(timerId);
   }, [searchValue]);
-
-  console.log(searchValue, searchParams.search);
 
   return (
     <div className="flex items-center gap-4">

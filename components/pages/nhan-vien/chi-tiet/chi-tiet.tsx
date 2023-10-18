@@ -4,7 +4,9 @@ import ThongTin from './thong-tin';
 import BangCapChungChi from './bang-cap-chung-chi';
 import Workload from './workload';
 
-const ChiTietNhanVien = () => {
+const ChiTietNhanVien = ({ detail }: { detail: any }) => {
+  console.log(detail);
+  const { certificates, qualitifications } = detail;
   return (
     <div className="m-2 p-2">
       <Tabs defaultValue="thong-tin">

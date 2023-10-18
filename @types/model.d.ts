@@ -1,6 +1,8 @@
 interface IEmployee {
   id: string;
   idWard: OrNull<string>;
+  idProvince: OrNull<string>;
+  idDistrict: OrNull<string>;
   identifyNumber: OrNull<string>;
   fullName: string;
   address: string;
