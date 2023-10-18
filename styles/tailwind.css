@@ -795,3 +795,17 @@ tbody.rdp-tbody tr td {
 [role='tabpanel'][data-state='inactive'] {
   @apply mt-0;
 }
+.mantine-wxitg4 {
+  @apply outline-offset-2 outline-primary;
+}
+.mantine-wxitg4[data-active] {
+  @apply bg-primary hover:bg-accent;
+}
+.mantine-wxitg4[data-active]:not([data-disabled]):hover {
+  @apply hover:bg-primary;
+}
+button,
+div,
+p {
+  @apply outline-primary outline-offset-2;
+}

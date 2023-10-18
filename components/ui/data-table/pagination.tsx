@@ -14,6 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -22,6 +25,8 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  const pathname = usePathname();
+  const router = useRouter();
   return (
     <div className="flex items-center justify-between px-2">
       {/* <div className="flex-1 text-sm text-muted-foreground">
@@ -35,6 +40,7 @@ export function DataTablePagination<TData>({
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
+              router.push(`${pathname}?limit=${value}`);
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -66,20 +72,39 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
+            onClick={() =>
+              table.setPageIndex(table.getState().pagination.pageIndex - 1)
+            }
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon className="h-4 w-4" />
+            <Link
+              className="w-full h-full grid place-items-center"
+              href={`${pathname}?page=${
+                table.getState().pagination.pageIndex - 1
+              }`}
+            >
+              <ChevronLeftIcon className="h-4 w-4" />
+            </Link>
           </Button>
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
+            onClick={() =>
+              table.setPageIndex(table.getState().pagination.pageIndex + 1)
+            }
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
-            <ChevronRightIcon className="h-4 w-4" />
+
+            <Link
+              className="w-full h-full grid place-items-center"
+              href={`${pathname}?page=${
+                table.getState().pagination.pageIndex + 1
+              }`}
+            >
+              <ChevronRightIcon className="h-4 w-4" />
+            </Link>
           </Button>
           <Button
             variant="outline"

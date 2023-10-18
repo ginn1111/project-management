@@ -1,35 +1,33 @@
 'use client';
-import IconEllipsis from '@/components/Icon/IconEllipsis';
-import DataTable from '@/components/ui/data-table';
-import { DataTableColumnHeader } from '@/components/ui/data-table/header';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
-import { faker } from '@faker-js/faker';
-import { ColumnDef } from '@tanstack/react-table';
+import useQueryParams from '@/hooks/useQueryParams';
+import { DataTable } from 'mantine-datatable';
+import { useQueryClient } from 'react-query';
 import ModalChuyenPB from './modal/modal-chuyen-pb';
 import ModalThemBangCap from './modal/modal-them-bang-cap';
 import ModalThemChungChi from './modal/modal-them-chung-chi';
 import ModalThemNhanVien from './modal/modal-them-nhan-vien';
-import Link from 'next/link';
 
-const DUMMY = Array(100)
-  .fill(0)
-  .map(() => ({
-    id: faker.string.alpha(),
-    hoTen: faker.internet.displayName(),
-    dienThoai: faker.location.country(),
-    diaChi: faker.phone.number(),
-    phongBan: faker.internet.email(),
-    email: faker.internet.email(),
-    gioiTinh: Math.floor(Math.random()) < 0.5 ? 'Nam' : 'Nữ',
-  }));
-const TableNhanVien = () => {
+interface ITableNhanVien {
+  provinces: {
+    id: string;
+    code: number;
+    name: string;
+  };
+  data: { employees: IEmployee[]; totalItems: number };
+}
+
+const TableNhanVien = (props: ITableNhanVien) => {
+  const { provinces, data } = props;
+  const { handlePush, searchParams } = useQueryParams({
+    initSearchParams: { page: 1, limit: 10, search: '' },
+  });
+  console.log(searchParams);
+  const queryClient = useQueryClient();
+  queryClient.setQueryData('provinces', provinces);
+
   const { modal, handleOpenModal, handleCloseModal } = useModal({
     modalNV: { open: false },
     modalRM: { open: false },
@@ -37,72 +35,37 @@ const TableNhanVien = () => {
     modalBC: { open: false },
     modalCC: { open: false },
   });
-  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
-    {
-      accessorKey: 'id',
-    },
-    {
-      accessorKey: 'hoTen',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Họ tên" />
-      ),
-    },
-    {
-      accessorKey: 'phongBan',
-    },
-    {
-      accessorKey: 'diaChi',
-    },
-    {
-      accessorKey: 'dienThoai',
-    },
-    {
-      accessorKey: 'email',
-    },
-    {
-      accessorKey: 'gioiTinh',
-    },
-    {
-      id: 'action',
-      header: '',
-      size: 70,
-      cell: () => (
-        <DropdownMenu modal>
-          <DropdownMenuTrigger>
-            <IconEllipsis />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="-translate-x-[10px]">
-            <DropdownMenuItem onClick={() => handleOpenModal('modalNV')}>
-              Sửa
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link className="w-full" href="/nhan-vien/id-nhan-vien">
-                Chi tiết
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalPB')}>
-              Chuyển phòng ban
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalBC')}>
-              Thêm bằng cấp
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalCC')}>
-              Thêm chứng chỉ
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleOpenModal('modalRM')}
-              className="text-danger hover:!text-danger"
-            >
-              Xoá
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
-  ];
+
   return (
     <>
-      <DataTable data={DUMMY} columns={columns} />
+      <div className="datatables">
+        <DataTable
+          noRecordsText="No results match your search query"
+          highlightOnHover
+          className="table-hover whitespace-nowrap"
+          records={data.employees}
+          columns={[
+            { accessor: 'id', title: 'ID' },
+            { accessor: 'fullName', title: 'First Name' },
+            { accessor: 'email' },
+            { accessor: 'phone' },
+          ]}
+          totalRecords={data.totalItems}
+          recordsPerPage={parseInt(searchParams.limit)}
+          page={parseInt(searchParams.page)}
+          onPageChange={(p) => {
+            handlePush({ page: p });
+          }}
+          recordsPerPageOptions={[10, 20, 30, 50, 100]}
+          onRecordsPerPageChange={(limit) => {
+            handlePush({ limit: limit });
+          }}
+          minHeight={200}
+          paginationText={({ from, to, totalRecords }) =>
+            `Showing  ${from} to ${to} of ${totalRecords} entries`
+          }
+        />
+      </div>
       <ModalThemNhanVien
         open={modal.modalNV.open}
         title="Sửa nhân viên"

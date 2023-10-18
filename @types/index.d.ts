@@ -1,7 +1,10 @@
 declare global {
-  interface IRouterParams<P extends object = object, S extends object = object> {
-    params: P,
-    searchParams: S
+  interface IRouterParams<
+    P extends object = object,
+    S extends object = object
+  > {
+    params: P;
+    searchParams: S;
   }
   interface ISidebarItem
     extends Omit<HTMLAttributes<HTMLButtonElement>, 'children'> {
@@ -14,6 +17,15 @@ declare global {
   }
   interface LayoutProps {
     children: React.ReactNode;
+  }
+
+  type OrUndefined<T> = T | undefined;
+  type OrNull<T> = T | null;
+
+  interface ISearchParams {
+    page: number;
+    limit: number;
+    search?: string;
   }
 }
 

@@ -1,4 +1,5 @@
 import MainLayout from '@/layout/main-layout';
+import Providers from '@/providers/query-client';
 import '@/styles/tailwind.css';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <MainLayout>{children}</MainLayout>
+        <Providers>
+          <MainLayout>{children}</MainLayout>
+        </Providers>
       </body>
     </html>
   );

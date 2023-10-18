@@ -10,7 +10,6 @@ import {
 } from '@tanstack/react-table';
 import type { Table as TableProps } from '@tanstack/table-core';
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react';
-import { Button } from '../button';
 import {
   Table,
   TableBody,
@@ -20,7 +19,6 @@ import {
   TableRow,
 } from '../table';
 import { DataTablePagination } from './pagination';
-import { DataTableViewOptions } from './columns-toggle';
 
 interface IDataTableProps<T extends RowData>
   extends Omit<TableOptions<T>, 'getCoreRowModel'> {}
@@ -34,6 +32,7 @@ const DataTable = forwardRef(
     const table = useReactTable<T>({
       data,
       columns,
+      pageCount: -1,
       getCoreRowModel: getCoreRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
       getSortedRowModel: getSortedRowModel(),

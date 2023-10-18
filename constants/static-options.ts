@@ -1,10 +1,10 @@
 export const genderOptions = [
   {
-    value: 'MALE',
+    value: 'NAM',
     label: 'Nam',
   },
   {
-    value: 'FE_MALE',
+    value: 'NAM',
     label: 'Nữ',
   },
   {

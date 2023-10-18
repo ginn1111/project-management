@@ -1,3 +1,35 @@
+interface IEmployee {
+  id: string;
+  idWard: OrNull<string>;
+  identifyNumber: OrNull<string>;
+  fullName: string;
+  address: string;
+  phone: string;
+  birthday: any;
+  note: any;
+  gender: string;
+  email: string;
+  isActive: boolean;
+}
+
+interface IProvince {
+  code: number;
+  name: string;
+  id: string;
+}
+
+interface IDistrict {
+  code: number;
+  name: string;
+  id: string;
+}
+
+interface IWard {
+  code: number;
+  name: string;
+  id: string;
+}
+
 interface IBangCap {
   ID_BC?: string;
   TEN_BC?: string;

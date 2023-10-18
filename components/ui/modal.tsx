@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog';
+import LoadingInline from './loading/loading-inline';
 
 export interface IModalProps<T = any> {
   title: React.ReactNode;
@@ -6,16 +7,26 @@ export interface IModalProps<T = any> {
   open: boolean;
   onClose: () => void;
   data?: T;
+  loading?: boolean;
 }
 
-const Modal = ({ onClose, open, title, children }: IModalProps) => {
+const Modal = ({
+  onClose,
+  loading = false,
+  open,
+  title,
+  children,
+}: IModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-h-[98vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        {children}
+        <div className="relative">
+          {loading ? <LoadingInline /> : null}
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );
