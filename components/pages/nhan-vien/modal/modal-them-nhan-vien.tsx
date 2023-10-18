@@ -1,27 +1,28 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Label from '@/components/ui/my-label';
 import Modal, { IModalProps } from '@/components/ui/modal';
+import Label from '@/components/ui/my-label';
 import ReactSelect from '@/components/ui/react-select';
 import { generateOptions } from '@/constants/generate-options';
 import { GenderIndex } from '@/constants/indexes';
 import * as EmployeeServices from '@/lib/employee';
 import { getDistricts, getWards } from '@/lib/utils/address';
-import { identity, isEmpty, omit, pickBy } from 'lodash';
+import { EmployeeSchema } from '@/yup-schema/employee';
+import { yupResolver } from '@hookform/resolvers/yup';
+import dayjs from 'dayjs';
+import { identity, omit, pickBy } from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
 import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 import { useToggle } from 'usehooks-ts';
-import { EmployeeSchema } from '@/yup-schema/employee';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 interface IModalThemNhanVien<T> extends Omit<IModalProps<T>, 'children'> {
   isEdit?: boolean;
 }
 
-const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
-  const { data, isEdit = false, ...rest } = props;
+const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
+  const { data, onRefresh, isEdit = false, ...rest } = props;
   const queryClient = useQueryClient();
   const provinceData: IProvince[] = queryClient.getQueryData('provinces') ?? [];
   const [fetching, , setFetching] = useToggle();
@@ -29,43 +30,46 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
   const [wards, setWards] = useState<IWard[]>([]);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: EmployeeServices.create,
+    mutationFn: !isEdit ? EmployeeServices.create : EmployeeServices.update,
     onSuccess: () => {
-      toast.success('Thêm nhân viên thành công');
+      toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} nhân viên thành công`);
+      onRefresh?.();
       rest.onClose();
     },
   });
 
-  const {
-    setValue,
-    handleSubmit,
-    control,
-    register,
-    getValues,
-    reset,
-    formState: { errors },
-  } = useForm<
-    Partial<
-      IEmployee & { idDistrict: OrNull<string>; idProvince: OrNull<string> }
-    >
-  >({
-    defaultValues: {
-      address: '',
-      birthday: '',
-      email: '',
-      gender: 'NAM',
-      note: '',
-      phone: '',
-      identifyNumber: '',
-      idWard: '',
-    },
-    resolver: yupResolver(EmployeeSchema) as any,
-  });
+  const { setValue, handleSubmit, control, register, getValues, reset } =
+    useForm<
+      Partial<
+        IEmployee & { idDistrict: OrNull<string>; idProvince: OrNull<string> }
+      >
+    >({
+      defaultValues: {
+        address: '',
+        birthday: '',
+        email: '',
+        gender: 'NAM',
+        note: '',
+        phone: '',
+        identifyNumber: '',
+        idWard: '',
+      },
+      resolver: yupResolver(EmployeeSchema) as any,
+    });
 
   useEffect(() => {
     if (!rest.open) {
       reset();
     } else {
+      if (isEdit) {
+        const initialValue = omit(data, ['isActive']);
+        reset({
+          ...initialValue,
+          birthday: data?.birthday
+            ? dayjs(data?.birthday).format('YYYY-MM-DD')
+            : undefined,
+        });
+      }
     }
   }, [rest.open]);
 
@@ -116,6 +120,7 @@ const ModalThemNhanVien = <T,>(props: IModalThemNhanVien<T>) => {
         </div>
         <div className="flex items-center gap-4">
           <ReactSelect
+            labelProps={{ required: true }}
             containerClass="flex-1"
             control={control}
             name="gender"

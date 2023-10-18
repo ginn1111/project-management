@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import Search from '@/components/ui/search';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
-import { debounce } from 'lodash';
+import { useEffect, useState } from 'react';
 import ModalThemNhanVien from './modal/modal-them-nhan-vien';
 
 const FilterNhanVien = () => {
@@ -17,6 +17,19 @@ const FilterNhanVien = () => {
     modalNV: { open: false },
   });
 
+  const [searchValue, setSearchValue] = useState(searchParams.search);
+
+  useEffect(() => {
+    if (!searchValue) return;
+    const timerId = setTimeout(() => {
+      handlePush({ search: searchValue ?? '', page: 1 });
+    }, 300);
+
+    return () => clearTimeout(timerId);
+  }, [searchValue]);
+
+  console.log(searchValue, searchParams.search);
+
   return (
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-4 flex-1">
@@ -26,23 +39,28 @@ const FilterNhanVien = () => {
         <Search
           placeholder="họ tên, số điện thoại, cmnd/ ccccd"
           classNameContainer="w-full"
-          defaultValue={searchParams.search}
+          value={searchValue}
           onChange={(e) => {
-            debounce(
-              () =>
-                handlePush({ search: (e.target as any).value ?? '', page: 1 }),
-              300
-            )();
+            setSearchValue(e.target.value);
           }}
         />
       </div>
-      <Button variant="outline" onClick={handleReset}>
+      <Button
+        variant="outline"
+        onClick={() => {
+          handleReset();
+          setSearchValue('');
+        }}
+      >
         <IconRefresh />
       </Button>
       <ModalThemNhanVien
         title="Thêm nhân viên mới"
         onClose={() => handleCloseModal('modalNV')}
         open={modal.modalNV.open}
+        onRefresh={() => {
+          handlePush({});
+        }}
       />
     </div>
   );

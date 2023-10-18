@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -37,6 +38,10 @@ const useQueryParams = ({ initSearchParams }: IUseQueryParams) => {
   }, []);
 
   const handlePush = (obj: Record<string, any>) => {
+    if (isEmpty(obj)) {
+      router.push(pathname);
+      return;
+    }
     const newSearchParams = Object.assign(initialSearchParams, {
       ...obj,
     });

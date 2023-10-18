@@ -5,9 +5,10 @@ export interface IModalProps<T = any> {
   title: React.ReactNode;
   children: React.ReactNode;
   open: boolean;
-  onClose: () => void;
   data?: T;
   loading?: boolean;
+  onClose: () => void;
+  onRefresh?: () => void;
 }
 
 const Modal = ({
@@ -23,10 +24,8 @@ const Modal = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="relative">
-          {loading ? <LoadingInline /> : null}
-          {children}
-        </div>
+        {loading ? <LoadingInline /> : null}
+        {children}
       </DialogContent>
     </Dialog>
   );

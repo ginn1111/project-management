@@ -1,9 +1,9 @@
 import IconSearch from '@/components/Icon/IconSearch';
 import IconXCircle from '@/components/Icon/IconXCircle';
 import { cn } from '@/lib/utils';
-import { FormEvent, HTMLAttributes, forwardRef, useState } from 'react';
+import { FormEvent, InputHTMLAttributes, forwardRef, useState } from 'react';
 
-interface ISearch extends HTMLAttributes<HTMLInputElement> {
+interface ISearch extends InputHTMLAttributes<HTMLInputElement> {
   onSearch?: (e: FormEvent<HTMLFormElement>) => void;
   classNameContainer?: string;
 }
