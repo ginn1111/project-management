@@ -18,7 +18,7 @@ const BangCapChungChi = ({
         <BangCap qualifications={qualifications} idEmp={idEmp} />
       </div>
       <div className="panel">
-        <ChungChi certificates={certificates} />
+        <ChungChi certifications={certificates} idEmp={idEmp} />
       </div>
     </div>
   );

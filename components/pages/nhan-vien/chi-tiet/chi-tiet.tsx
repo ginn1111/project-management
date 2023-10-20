@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import React from 'react';
-import ThongTin from './thong-tin';
 import BangCapChungChi from './bang-cap-chung-chi';
+import ThongTin from './thong-tin';
 import Workload from './workload';
 
 const ChiTietNhanVien = ({ detail }: { detail: any }) => {

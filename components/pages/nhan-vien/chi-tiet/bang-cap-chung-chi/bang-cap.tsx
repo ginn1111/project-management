@@ -29,7 +29,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
     AxiosResponse<QualificationEmployee[]>
   >({
     queryFn: () => QualificationServices.getList(idEmp),
-    queryKey: [idEmp],
+    queryKey: ['qualification', idEmp],
     enabled: false,
   });
 
@@ -38,6 +38,8 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
   const _qualifications = useMemo(() => {
     return isMounted() ? data?.data : qualifications;
   }, [data]);
+
+  console.log(_qualifications);
 
   const { modal, handleCloseModal, handleOpenModal } = useModal({
     modalCM: { open: false },
@@ -48,7 +50,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
       accessor: '',
       title: 'Tên',
       render: (row: QualificationEmployee) => {
-        return <p>{row.qualification.name}</p>;
+        return <p>{row.qualification?.name}</p>;
       },
     },
     {

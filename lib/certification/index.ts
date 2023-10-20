@@ -1,10 +1,10 @@
 import { privateRequest } from '../axios';
 
-const PREFIX_URL = '/qualification';
+const PREFIX_URL = '/certificate';
 
-export const create = (qualification: Partial<QualificationEmployee>) =>
+export const create = (certificate: Partial<CertsEmployee>) =>
   privateRequest.post(`${PREFIX_URL}/add`, {
-    ...qualification,
+    ...certificate,
   });
 
 export const getList = (idEmp: string) => {
@@ -14,7 +14,7 @@ export const getList = (idEmp: string) => {
 export const update = ({
   id,
   ...rest
-}: Partial<QualificationEmployee & Qualification>) =>
+}: Partial<CertsEmployee & Certification>) =>
   privateRequest.patch(`${PREFIX_URL}/${id}/update`, { ...rest });
 
 export const getDetail = (id: string) =>

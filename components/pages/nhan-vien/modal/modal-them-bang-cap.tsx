@@ -37,7 +37,7 @@ const ModalThemBangCap = (
   });
 
   useEffect(() => {
-    if (rest.open) {
+    if (rest.open && isEdit) {
       const { date, note, qualification } = pick(data, [
         'date',
         'note',
@@ -51,7 +51,7 @@ const ModalThemBangCap = (
         note,
       });
     } else {
-      reset();
+      reset({ name: '', date: null, note: '' });
     }
   }, [rest.open]);
 
@@ -102,7 +102,7 @@ const ModalThemBangCap = (
           <Textarea {...register('note')} placeholder="ghi chú" />
         </div>
         <div className="flex items-center justify-end gap-4 mt-4">
-          <Button onClick={rest.onClose} variant="outline">
+          <Button type="button" onClick={rest.onClose} variant="outline">
             Đóng
           </Button>
           <Button>Xác nhận</Button>

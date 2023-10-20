@@ -9,17 +9,39 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import useModal from '@/hooks/useModal';
+import { CertificationServices } from '@/lib';
+import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
 import { DataTable } from 'mantine-datatable';
+import { useMemo } from 'react';
+import { useQuery } from 'react-query';
+import { useIsMounted } from 'usehooks-ts';
 import ModalThemChungChi from '../../modal/modal-them-chung-chi';
 
 interface IChungChi {
-  certificates?: CertsEmployee[];
+  certifications?: CertsEmployee[];
+  idEmp: string;
 }
 
-const ChungChi = ({ certificates }: IChungChi) => {
+const ChungChi = ({ certifications, idEmp }: IChungChi) => {
+  const { data, isLoading, refetch } = useQuery<AxiosResponse<CertsEmployee[]>>(
+    {
+      queryFn: () => CertificationServices.getList(idEmp),
+      queryKey: ['certificate', idEmp],
+      enabled: false,
+    }
+  );
+
+  const isMounted = useIsMounted();
+
+  const _certifications = useMemo(() => {
+    return isMounted() ? data?.data : certifications;
+  }, [data]);
+
+  console.log(_certifications);
+
   const { modal, handleCloseModal, handleOpenModal } = useModal({
-    modalCC: { open: false, isEdit: false },
+    modalCC: { open: false, isEdit: false, certification: {} },
   });
   const columns = [
     {
@@ -56,14 +78,19 @@ const ChungChi = ({ certificates }: IChungChi) => {
     },
     {
       accessor: '',
-      render: () => (
+      render: (row: CertsEmployee) => (
         <DropdownMenu>
           <DropdownMenuTrigger>
             <IconEllipsis />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem
-              onClick={() => handleOpenModal('modalCC', { isEdit: true })}
+              onClick={() =>
+                handleOpenModal('modalCC', {
+                  isEdit: true,
+                  certification: { ...row },
+                })
+              }
             >
               Sửa
             </DropdownMenuItem>
@@ -76,7 +103,14 @@ const ChungChi = ({ certificates }: IChungChi) => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold mb-1">Chứng chỉ</p>
-        <Button onClick={() => handleOpenModal('modalCC', { isEdit: false })}>
+        <Button
+          onClick={() =>
+            handleOpenModal('modalCC', {
+              isEdit: false,
+              certification: { idEmployee: idEmp },
+            })
+          }
+        >
           <IconPlus />
         </Button>
       </div>
@@ -85,17 +119,19 @@ const ChungChi = ({ certificates }: IChungChi) => {
           noRecordsText="No results match your search query"
           highlightOnHover
           className="table-hover whitespace-nowrap"
-          records={certificates ?? []}
-          totalRecords={certificates?.length}
+          records={_certifications ?? []}
           columns={columns}
           minHeight={200}
+          fetching={isLoading}
         />
       </div>
       <ModalThemChungChi
         isEdit={modal.modalCC.isEdit}
         open={modal.modalCC.open}
+        data={modal.modalCC.certification}
         onClose={() => handleCloseModal('modalCC')}
         title="chứng chỉ"
+        onRefresh={() => refetch()}
       />
     </div>
   );
