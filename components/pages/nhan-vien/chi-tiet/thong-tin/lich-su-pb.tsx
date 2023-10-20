@@ -1,40 +1,51 @@
 'use client';
-import DataTable from '@/components/ui/data-table';
-import { faker } from '@faker-js/faker';
-import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React from 'react';
+import { DataTable } from 'mantine-datatable';
 
-const DUMMY = Array(10)
-  .fill(0)
-  .map(() => ({
-    phongBan: faker.string.sample(),
-    start: faker.date.anytime(),
-    end: faker.date.anytime(),
-  }));
+interface ILichSuPB {
+  departments?: EmployeesOfDepartment[];
+}
 
-const LichSuPB = () => {
-  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
+const LichSuPB = ({ departments }: ILichSuPB) => {
+  const columns = [
     {
-      accessorKey: 'phongBan',
+      accessor: '',
+      title: 'Tên phòng ban',
+      render: (row: EmployeesOfDepartment) => {
+        return <p>{row.department.name}</p>;
+      },
     },
     {
-      accessorKey: 'start',
-      cell: ({ row }) => (
-        <p>{dayjs(row.getValue('start')).format('DD/MM/YYYY')}</p>
-      ),
+      accessor: 'startDate',
+      title: 'Ngày bắt đầu',
+      render: ({ startDate }: EmployeesOfDepartment) => {
+        return (
+          <p>{startDate ? dayjs(startDate).format('DD/MM/YYYY') : 'N/A'}</p>
+        );
+      },
     },
     {
-      accessorKey: 'end',
-      cell: ({ row }) => (
-        <p>{dayjs(row.getValue('end')).format('DD/MM/YYYY')}</p>
-      ),
+      accessor: 'endDate',
+      title: 'Ngày kết thúc',
+      render: ({ endDate }: EmployeesOfDepartment) => {
+        return <p>{endDate ? dayjs(endDate).format('DD/MM/YYYY') : 'N/A'}</p>;
+      },
     },
   ];
   return (
     <div>
       <p className="mb-1 text-lg font-bold">Lịch sử phòng ban</p>
-      <DataTable data={DUMMY} columns={columns} />
+      <div className="datatables">
+        <DataTable
+          noRecordsText="No results match your search query"
+          highlightOnHover
+          className="table-hover whitespace-nowrap"
+          records={departments}
+          totalRecords={departments?.length}
+          columns={columns}
+          minHeight={200}
+        />
+      </div>
     </div>
   );
 };

@@ -2,7 +2,14 @@
 import { Toaster, toast } from 'sonner';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
 
 const Providers = ({ children }: LayoutProps) => {
   return (

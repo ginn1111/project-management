@@ -1,3 +1,53 @@
+interface IDepartment {
+  id: string;
+  name: string;
+  phone: string;
+  note: string;
+  isActive: boolean;
+  employeesOfDepartment?: EmployeesOfDepartment[];
+}
+
+interface EmployeesOfDepartment {
+  id: string;
+  idEmployee: string;
+  idDepartment: string;
+  startDate: string;
+  endDate: string;
+  note: any;
+  department?: Department;
+}
+
+interface QualificationEmployee {
+  id: string;
+  idQualification: string;
+  idEmployee: string;
+  date: string;
+  note: string;
+  qualification: Qualification;
+}
+
+interface Qualification {
+  id: string;
+  name: string;
+  url: any;
+}
+
+interface CertsEmployee {
+  id: string;
+  idEmployee: string;
+  idCertification: string;
+  date: string;
+  expiredDate: string;
+  note: string;
+  certification: Certification;
+}
+
+interface Certification {
+  id: string;
+  name: string;
+  url: any;
+}
+
 interface IEmployee {
   id: string;
   idWard: OrNull<string>;
@@ -12,6 +62,10 @@ interface IEmployee {
   gender: string;
   email: string;
   isActive: boolean;
+  ward: any;
+  certificates?: CertsEmployee[];
+  qualifications?: QualificationEmployee[];
+  departments?: EmployeesOfDepartment[];
 }
 
 interface IProvince {

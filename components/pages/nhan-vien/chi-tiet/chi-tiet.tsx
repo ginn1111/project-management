@@ -5,8 +5,7 @@ import BangCapChungChi from './bang-cap-chung-chi';
 import Workload from './workload';
 
 const ChiTietNhanVien = ({ detail }: { detail: any }) => {
-  console.log(detail);
-  const { certificates, qualitifications } = detail;
+  const { certificates, qualifications, ...employee } = detail.data;
   return (
     <div className="m-2 p-2">
       <Tabs defaultValue="thong-tin">
@@ -22,10 +21,14 @@ const ChiTietNhanVien = ({ detail }: { detail: any }) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="thong-tin">
-          <ThongTin />
+          <ThongTin employee={employee} />
         </TabsContent>
         <TabsContent value="bc-cc">
-          <BangCapChungChi />
+          <BangCapChungChi
+            idEmp={employee.id}
+            certificates={certificates}
+            qualifications={qualifications}
+          />
         </TabsContent>
         <TabsContent value="workload">
           <Workload />

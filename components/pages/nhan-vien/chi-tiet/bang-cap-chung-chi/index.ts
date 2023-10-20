@@ -1,2 +1,2 @@
-import BangCapChungChi from './bang-cap-chung-chi';
-export default BangCapChungChi;
+import QualificationAndCertification from './bang-cap-chung-chi';
+export default QualificationAndCertification;

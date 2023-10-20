@@ -1,6 +1,7 @@
 'use client';
 import IconEllipsis from '@/components/Icon/IconEllipsis';
-import DataTable from '@/components/ui/data-table';
+import IconPlus from '@/components/Icon/IconPlus';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,50 +9,65 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import useModal from '@/hooks/useModal';
-import { faker } from '@faker-js/faker';
-import { ColumnDef } from '@tanstack/react-table';
+import { QualificationServices } from '@/lib';
+import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
-import React from 'react';
-import ModalChuyenMon from './modal/modal-chuyen-mon';
+import { DataTable } from 'mantine-datatable';
+import { useMemo } from 'react';
+import { useQuery } from 'react-query';
+import { useIsMounted } from 'usehooks-ts';
 import ModalThemBangCap from '../../modal/modal-them-bang-cap';
-import { Button } from '@/components/ui/button';
-import IconPlus from '@/components/Icon/IconPlus';
+import ModalChuyenMon from './modal/modal-chuyen-mon';
 
-const DUMMY = Array(10)
-  .fill(0)
-  .map(() => ({
-    ten: faker.internet.displayName(),
-    ngayCap: faker.date.anytime(),
-    chuyenMon: faker.string.alphanumeric(),
-    ghiChu: faker.string.uuid(),
-  }));
+interface IBangCap {
+  qualifications: QualificationEmployee[];
+  idEmp: string;
+}
 
-const BangCap = () => {
+const BangCap = ({ qualifications, idEmp }: IBangCap) => {
+  const { data, isLoading, refetch } = useQuery<
+    AxiosResponse<QualificationEmployee[]>
+  >({
+    queryFn: () => QualificationServices.getList(idEmp),
+    queryKey: [idEmp],
+    enabled: false,
+  });
+
+  const isMounted = useIsMounted();
+
+  const _qualifications = useMemo(() => {
+    return isMounted() ? data?.data : qualifications;
+  }, [data]);
+
   const { modal, handleCloseModal, handleOpenModal } = useModal({
     modalCM: { open: false },
-    modalCS: { open: false, isEdit: false },
+    modalCS: { open: false, isEdit: false, qualification: {} },
   });
-  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
+  const columns = [
     {
-      accessorKey: 'ten',
+      accessor: '',
+      title: 'Tên',
+      render: (row: QualificationEmployee) => {
+        return <p>{row.qualification.name}</p>;
+      },
     },
     {
-      accessorKey: 'ngayCap',
-      cell: ({ row }) => (
-        <p>{dayjs(row.getValue('ngayCap')).format('DD/MM/YYYY')}</p>
+      title: 'Ngày cấp',
+      accessor: 'date',
+      render: ({ date }: { date: string }) => (
+        <p>
+          {dayjs(date).isValid() ? dayjs(date).format('DD/MM/YYYY') : 'N/A'}
+        </p>
       ),
     },
     {
-      accessorKey: 'chuyenMon',
+      title: 'Ghi chú',
+      accessor: 'note',
+      render: ({ note }: { note: string }) => <p>{note ?? 'N/A'}</p>,
     },
     {
-      accessorKey: 'ghiChu',
-    },
-    {
-      id: 'action',
-      size: 70,
-      header: '',
-      cell: () => (
+      accessor: '',
+      render: (row: QualificationEmployee) => (
         <DropdownMenu>
           <DropdownMenuTrigger>
             <IconEllipsis />
@@ -61,7 +77,12 @@ const BangCap = () => {
               Chuyên môn
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => handleOpenModal('modalCS', { isEdit: true })}
+              onClick={() =>
+                handleOpenModal('modalCS', {
+                  isEdit: true,
+                  qualification: { ...row },
+                })
+              }
             >
               Sửa
             </DropdownMenuItem>
@@ -74,11 +95,28 @@ const BangCap = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold mb-1">Bằng cấp</p>
-        <Button onClick={() => handleOpenModal('modalCS', { isEdit: false })}>
+        <Button
+          onClick={() =>
+            handleOpenModal('modalCS', {
+              isEdit: false,
+              qualification: { idEmployee: idEmp },
+            })
+          }
+        >
           <IconPlus />
         </Button>
       </div>
-      <DataTable data={DUMMY} columns={columns} />
+      <div className="datatables">
+        <DataTable
+          noRecordsText="No results match your search query"
+          highlightOnHover
+          className="table-hover whitespace-nowrap"
+          records={_qualifications ?? []}
+          columns={columns}
+          minHeight={200}
+          fetching={isLoading}
+        />
+      </div>
       <ModalChuyenMon
         open={modal.modalCM.open}
         onClose={() => handleCloseModal('modalCM')}
@@ -86,9 +124,11 @@ const BangCap = () => {
       />
       <ModalThemBangCap
         isEdit={modal.modalCS.isEdit}
+        data={modal.modalCS.qualification}
         open={modal.modalCS.open}
         onClose={() => handleCloseModal('modalCS')}
         title="bằng cấp"
+        onRefresh={() => refetch()}
       />
     </div>
   );

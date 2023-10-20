@@ -1,15 +1,24 @@
-import React from 'react';
 import BangCap from './bang-cap';
 import ChungChi from './chung-chi';
 
-const BangCapChungChi = () => {
+interface IBangCapChungChi {
+  certificates: CertsEmployee[];
+  qualifications: QualificationEmployee[];
+  idEmp: string;
+}
+
+const BangCapChungChi = ({
+  certificates,
+  qualifications,
+  idEmp,
+}: IBangCapChungChi) => {
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="panel">
-        <BangCap />
+        <BangCap qualifications={qualifications} idEmp={idEmp} />
       </div>
       <div className="panel">
-        <ChungChi />
+        <ChungChi certificates={certificates} />
       </div>
     </div>
   );

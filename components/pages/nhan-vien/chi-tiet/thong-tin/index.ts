@@ -1,2 +1,2 @@
-import ThongTin from './thong-tin';
-export default ThongTin;
+import Information from './thong-tin';
+export default Information;

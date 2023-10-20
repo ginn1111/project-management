@@ -120,3 +120,9 @@ table tr .mantine-Checkbox-root {
 .mantine-ScrollArea-viewport > div:first-child > div {
   @apply bg-none;
 }
+.mantine-1avyp1d g {
+  stroke: hsl(222.2 47.4% 11.2%);
+}
+.mantine-1avyp1d circle {
+  stroke: hsl(215.4 16.3% 46.9%);
+}

@@ -4,49 +4,65 @@ import IconMail from '@/components/Icon/IconMail';
 import IconMapPin from '@/components/Icon/IconMapPin';
 import IconPhone from '@/components/Icon/IconPhone';
 import LichSuPB from './lich-su-pb';
+import dayjs from 'dayjs';
 
-const ThongTin = () => {
+interface IThongTin {
+  employee: Partial<IEmployee>;
+}
+
+const ThongTin = ({ employee }: IThongTin) => {
+  const ward = employee.ward;
+  const district = ward?.district;
+  const province = district?.province;
+
   return (
     <div className="mb-5 grid gap-2 grid-cols-3">
       <div className="panel">
-        <div className="mb-5">
-          <div className="flex flex-col items-center justify-center">
-            <img
-              src="/assets/images/profile-34.jpeg"
-              alt="img"
-              className="mb-5 h-24 w-24 rounded-full  object-cover"
-            />
-            <p className="text-xl font-semibold text-primary">Jimmy Turner</p>
-          </div>
-          <ul className="m-auto mt-5 flex max-w-[160px] flex-col space-y-4 font-semibold text-white-dark">
-            <li className="flex items-center gap-2">
-              <IconCoffee className="shrink-0" /> Web Developer
-            </li>
+        <ul className="m-auto mt-5 flex flex-col space-y-4 font-semibold text-white-dark h-full">
+          <p className="text-xl font-semibold text-primary">
+            {employee.fullName}
+          </p>
+          <li className="flex items-center gap-2">
+            <IconCoffee className="shrink-0" /> Web Developer
+          </li>
+          {employee.birthday ? (
             <li className="flex items-center gap-2">
               <IconCalendar className="shrink-0" />
-              Jan 20, 1989
+              {dayjs(employee.birthday).format('MMM D, YYYY')}
             </li>
+          ) : null}
+          {employee?.address ||
+          ward?.name ||
+          district?.name ||
+          province?.name ? (
             <li className="flex items-center gap-2">
               <IconMapPin className="shrink-0" />
-              New York, USA
+              {employee?.address} {ward?.name} {district?.name} {province?.name}
             </li>
+          ) : null}
+          {employee?.email ? (
             <li>
-              <button className="flex items-center gap-2">
+              <a
+                href={`mailto:${employee?.email}`}
+                className="flex items-center gap-2"
+              >
                 <IconMail className="w-5 h-5 shrink-0" />
-                <span className="truncate text-primary">jimmy@gmail.com</span>
-              </button>
+                <span className="truncate text-primary">{employee?.email}</span>
+              </a>
             </li>
+          ) : null}
+          {employee?.phone ? (
             <li className="flex items-center gap-2">
               <IconPhone />
               <span className="whitespace-nowrap" dir="ltr">
-                +1 (530) 555-12121
+                {employee?.phone}
               </span>
             </li>
-          </ul>
-        </div>
+          ) : null}
+        </ul>
       </div>
       <div className="panel col-span-2">
-        <LichSuPB />
+        <LichSuPB departments={employee.departments} />
       </div>
     </div>
   );

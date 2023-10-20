@@ -1,6 +1,7 @@
 'use client';
 import IconEllipsis from '@/components/Icon/IconEllipsis';
-import DataTable from '@/components/ui/data-table';
+import IconPlus from '@/components/Icon/IconPlus';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,51 +9,54 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import useModal from '@/hooks/useModal';
-import { faker } from '@faker-js/faker';
-import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React from 'react';
+import { DataTable } from 'mantine-datatable';
 import ModalThemChungChi from '../../modal/modal-them-chung-chi';
-import { Button } from '@/components/ui/button';
-import IconPlus from '@/components/Icon/IconPlus';
 
-const DUMMY = Array(10)
-  .fill(0)
-  .map(() => ({
-    ten: faker.internet.displayName(),
-    ngayCap: faker.date.anytime(),
-    ngayHetHan: faker.date.anytime(),
-    ghiChu: faker.string.uuid(),
-  }));
+interface IChungChi {
+  certificates?: CertsEmployee[];
+}
 
-const ChungChi = () => {
+const ChungChi = ({ certificates }: IChungChi) => {
   const { modal, handleCloseModal, handleOpenModal } = useModal({
     modalCC: { open: false, isEdit: false },
   });
-  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
+  const columns = [
     {
-      accessorKey: 'ten',
+      accessor: '',
+      title: 'Tên',
+      render: (row: CertsEmployee) => {
+        return <p>{row.certification.name}</p>;
+      },
     },
     {
-      accessorKey: 'ngayCap',
-      cell: ({ row }) => (
-        <p>{dayjs(row.getValue('ngayCap')).format('DD/MM/YYYY')}</p>
+      title: 'Ngày cấp',
+      accessor: 'date',
+      render: ({ date }: CertsEmployee) => (
+        <p>
+          {dayjs(date).isValid() ? dayjs(date).format('DD/MM/YYYY') : 'N/A'}
+        </p>
       ),
     },
     {
-      accessorKey: 'ngayHetHan',
-      cell: ({ row }) => (
-        <p>{dayjs(row.getValue('ngayCap')).format('DD/MM/YYYY')}</p>
+      title: 'Ngày hết hạn',
+      accessor: 'expiredDate',
+      render: ({ expiredDate }: CertsEmployee) => (
+        <p>
+          {dayjs(expiredDate).isValid()
+            ? dayjs(expiredDate).format('DD/MM/YYYY')
+            : 'N/A'}
+        </p>
       ),
     },
     {
-      accessorKey: 'ghiChu',
+      title: 'Ghi chú',
+      accessor: 'note',
+      render: ({ note }: CertsEmployee) => <p>{note ?? 'N/A'}</p>,
     },
     {
-      id: 'action',
-      size: 70,
-      header: '',
-      cell: () => (
+      accessor: '',
+      render: () => (
         <DropdownMenu>
           <DropdownMenuTrigger>
             <IconEllipsis />
@@ -76,7 +80,17 @@ const ChungChi = () => {
           <IconPlus />
         </Button>
       </div>
-      <DataTable data={DUMMY} columns={columns} />
+      <div className="datatables">
+        <DataTable
+          noRecordsText="No results match your search query"
+          highlightOnHover
+          className="table-hover whitespace-nowrap"
+          records={certificates ?? []}
+          totalRecords={certificates?.length}
+          columns={columns}
+          minHeight={200}
+        />
+      </div>
       <ModalThemChungChi
         isEdit={modal.modalCC.isEdit}
         open={modal.modalCC.open}
