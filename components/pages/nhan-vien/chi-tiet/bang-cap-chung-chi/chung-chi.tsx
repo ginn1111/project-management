@@ -78,6 +78,7 @@ const ChungChi = ({ certifications, idEmp }: IChungChi) => {
     },
     {
       accessor: '',
+      width: 70,
       render: (row: CertsEmployee) => (
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -116,7 +117,7 @@ const ChungChi = ({ certifications, idEmp }: IChungChi) => {
       </div>
       <div className="datatables">
         <DataTable
-          noRecordsText="No results match your search query"
+          noRecordsText="Không có dữ liệu"
           highlightOnHover
           className="table-hover whitespace-nowrap"
           records={_certifications ?? []}

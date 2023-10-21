@@ -14,7 +14,7 @@ export const getList = (idEmp: string) => {
 export const update = ({
   id,
   ...rest
-}: Partial<QualificationEmployee & Qualification>) =>
+}: Partial<QualificationEmployee & IQualification>) =>
   privateRequest.patch(`${PREFIX_URL}/${id}/update`, { ...rest });
 
 export const getDetail = (id: string) =>

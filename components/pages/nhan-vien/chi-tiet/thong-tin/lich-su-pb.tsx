@@ -37,7 +37,7 @@ const LichSuPB = ({ departments }: ILichSuPB) => {
       <p className="mb-1 text-lg font-bold">Lịch sử phòng ban</p>
       <div className="datatables">
         <DataTable
-          noRecordsText="No results match your search query"
+          noRecordsText="Không có dữ liệu"
           highlightOnHover
           className="table-hover whitespace-nowrap"
           records={departments}

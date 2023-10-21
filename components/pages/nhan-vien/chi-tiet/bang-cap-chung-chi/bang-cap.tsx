@@ -69,6 +69,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
     },
     {
       accessor: '',
+      width: 70,
       render: (row: QualificationEmployee) => (
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -110,7 +111,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
       </div>
       <div className="datatables">
         <DataTable
-          noRecordsText="No results match your search query"
+          noRecordsText="Không có dữ liệu"
           highlightOnHover
           className="table-hover whitespace-nowrap"
           records={_qualifications ?? []}

@@ -21,6 +21,7 @@ import {
 import IconEllipsis from '@/components/Icon/IconEllipsis';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface ITableNhanVien {
   provinces: {
@@ -32,8 +33,9 @@ interface ITableNhanVien {
 }
 
 const TableNhanVien = (props: ITableNhanVien) => {
+  const router = useRouter();
   const { provinces, data } = props;
-  const { handlePush, handleReset, searchParams } = useQueryParams({
+  const { handlePush, searchParams } = useQueryParams({
     initSearchParams: { page: 1, limit: 10, search: '' },
   });
   const queryClient = useQueryClient();
@@ -125,7 +127,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
     <>
       <div className="datatables">
         <DataTable
-          noRecordsText="No results match your search query"
+          noRecordsText="Không có dữ liệu"
           highlightOnHover
           className="table-hover whitespace-nowrap"
           records={data.employees}
@@ -138,11 +140,11 @@ const TableNhanVien = (props: ITableNhanVien) => {
           }}
           recordsPerPageOptions={[10, 20, 30, 50, 100]}
           onRecordsPerPageChange={(limit) => {
-            handlePush({ limit: limit });
+            handlePush({ limit, page: 1 });
           }}
           minHeight={200}
           paginationText={({ from, to, totalRecords }) =>
-            `Showing  ${from} to ${to} of ${totalRecords} entries`
+            `Từ  ${from} đến ${to} của ${totalRecords}`
           }
         />
       </div>
@@ -152,7 +154,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
         onClose={() => handleCloseModal('modalNV')}
         data={modal.modalNV.employee}
         onRefresh={() => {
-          handlePush({});
+          router.refresh();
         }}
         isEdit
       />
@@ -162,9 +164,9 @@ const TableNhanVien = (props: ITableNhanVien) => {
         message="Bạn có muốn xoá nhân viên này?"
         onAccept={() => {
           mutate(modal.modalRM.id);
-          handlePush({});
           handleCloseModal('modalRM');
           toast.success('Xoá nhân viên thành công');
+          router.refresh();
         }}
         onClose={() => handleCloseModal('modalRM')}
         open={modal.modalRM.open}

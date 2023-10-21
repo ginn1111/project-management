@@ -1,22 +1,22 @@
 'use client';
 
+import IconPlus from '@/components/Icon/IconPlus';
 import IconRefresh from '@/components/Icon/IconRefresh';
-import IconUserPlus from '@/components/Icon/IconUserPlus';
 import { Button } from '@/components/ui/button';
 import Search from '@/components/ui/search';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
 import { useEffect, useState } from 'react';
-import ModalThemNhanVien from './modal/modal-them-nhan-vien';
+import ModalThemChucVu from './modal/modal-them-chuc-vu';
 import { useRouter } from 'next/navigation';
 
-const FilterNhanVien = () => {
+const FilterChucVu = () => {
   const router = useRouter();
   const { handlePush, handleReset, searchParams } = useQueryParams({
     initSearchParams: { search: '', page: 1, limit: 10 },
   });
   const { modal, handleOpenModal, handleCloseModal } = useModal({
-    modalNV: { open: false },
+    modalCHV: { open: false },
   });
 
   const [searchValue, setSearchValue] = useState(searchParams.search);
@@ -36,11 +36,11 @@ const FilterNhanVien = () => {
   return (
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-4 flex-1">
-        <Button size="icon" onClick={() => handleOpenModal('modalNV')}>
-          <IconUserPlus />
+        <Button size="icon" onClick={() => handleOpenModal('modalCHV')}>
+          <IconPlus />
         </Button>
         <Search
-          placeholder="họ tên, số điện thoại, cmnd/ ccccd"
+          placeholder="tên chức vụ"
           classNameContainer="w-full"
           value={searchValue}
           onChange={(e) => {
@@ -57,10 +57,10 @@ const FilterNhanVien = () => {
       >
         <IconRefresh />
       </Button>
-      <ModalThemNhanVien
-        title="Thêm nhân viên mới"
-        onClose={() => handleCloseModal('modalNV')}
-        open={modal.modalNV.open}
+      <ModalThemChucVu
+        title="Thêm chức vụ mới"
+        onClose={() => handleCloseModal('modalCHV')}
+        open={modal.modalCHV.open}
         onRefresh={() => {
           router.refresh();
         }}
@@ -69,4 +69,4 @@ const FilterNhanVien = () => {
   );
 };
 
-export default FilterNhanVien;
+export default FilterChucVu;

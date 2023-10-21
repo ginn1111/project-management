@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 
 const ModalThemBangCap = (
   props: Omit<
-    IModalProps<Partial<QualificationEmployee & Qualification>>,
+    IModalProps<Partial<QualificationEmployee & IQualification>>,
     'children'
   > & {
     isEdit?: boolean;

@@ -1,3 +1,20 @@
+interface PositionsEmployee {
+  id: string;
+  idEmployee: string;
+  idPosition: string;
+  startDate: string;
+  endDate: string;
+  note: string;
+  position?: Position;
+}
+
+interface IPosition {
+  id: string;
+  name: string;
+  note: string;
+  isActive: boolean;
+}
+
 interface IDepartment {
   id: string;
   name: string;
@@ -26,7 +43,7 @@ interface QualificationEmployee {
   qualification: Qualification;
 }
 
-interface Qualification {
+interface IQualification {
   id: string;
   name: string;
   url: any;
@@ -66,6 +83,7 @@ interface IEmployee {
   certificates?: CertsEmployee[];
   qualifications?: QualificationEmployee[];
   departments?: EmployeesOfDepartment[];
+  positions?: PositionsEmployee[];
 }
 
 interface IProvince {
