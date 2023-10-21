@@ -1,7 +1,24 @@
-import React from 'react';
+import FilterPhongBan from '@/components/pages/quan-ly-phong-ban/filter-phong-ban';
+import TablePhongBan from '@/components/pages/quan-ly-phong-ban/table-phong-ban';
+import { DepartmentServices } from '@/lib';
 
-const QuanLyPhongBan = () => {
-  return <div>QuanLyPhongBan</div>;
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
+const PhongBan = async ({ searchParams }: { searchParams: ISearchParams }) => {
+  const positionData = await DepartmentServices.getList(
+    `page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${
+      parseInt(searchParams.limit as any) || 10
+    }&search=${searchParams.search ?? ''}`
+  );
+  return (
+    <div className="m-2 rounded-sm p-2">
+      <FilterPhongBan />
+      <div className="mt-4">
+        <TablePhongBan data={positionData.data} />
+      </div>
+    </div>
+  );
 };
 
-export default QuanLyPhongBan;
+export default PhongBan;

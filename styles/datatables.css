@@ -126,3 +126,6 @@ table tr .mantine-Checkbox-root {
 .mantine-1avyp1d circle {
   stroke: hsl(215.4 16.3% 46.9%);
 }
+.mantine-8k3bl3 {
+  @apply mr-auto;
+}
