@@ -8,15 +8,15 @@ import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import ModalThemChucVu from './modal/modal-them-chuc-vu';
+import ModalThemTaiKhoan from './modal/modal-them-tai-khoan';
 
-const FilterChucVu = () => {
+const FilterPhongBan = () => {
   const router = useRouter();
   const { handlePush, handleReset, searchParams } = useQueryParams({
     initSearchParams: { search: '', page: 1, limit: 10 },
   });
   const { modal, handleOpenModal, handleCloseModal } = useModal({
-    modalCHV: { open: false },
+    modalTK: { open: false },
   });
 
   const [searchValue, setSearchValue] = useState(searchParams.search);
@@ -36,11 +36,11 @@ const FilterChucVu = () => {
   return (
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-4 flex-1">
-        <Button size="icon" onClick={() => handleOpenModal('modalCHV')}>
+        <Button size="icon" onClick={() => handleOpenModal('modalTK')}>
           <IconPlus />
         </Button>
         <Search
-          placeholder="tên chức vụ"
+          placeholder="tên tài khoản"
           classNameContainer="w-full"
           value={searchValue}
           onChange={(e) => {
@@ -57,10 +57,10 @@ const FilterChucVu = () => {
       >
         <IconRefresh />
       </Button>
-      <ModalThemChucVu
-        title="Thêm chức vụ"
-        onClose={() => handleCloseModal('modalCHV')}
-        open={modal.modalCHV.open}
+      <ModalThemTaiKhoan
+        title="Thêm tài khoản"
+        onClose={() => handleCloseModal('modalTK')}
+        open={modal.modalTK.open}
         onRefresh={() => {
           router.refresh();
         }}
@@ -69,4 +69,4 @@ const FilterChucVu = () => {
   );
 };
 
-export default FilterChucVu;
+export default FilterPhongBan;

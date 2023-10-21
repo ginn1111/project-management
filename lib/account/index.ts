@@ -7,11 +7,10 @@ export const create = (account: Partial<IAccount>) =>
     ...account,
   });
 
-export const getList = (searchParams: string) => {
-  return privateRequest.get(`${PREFIX_URL}/employee?${searchParams}`);
-};
+export const getList = (searchParams: string) =>
+  privateRequest.get(`${PREFIX_URL}?${searchParams}`);
 
-export const changPwd = (payload: Partial<IAccount> & { oldPwd: string }) =>
+export const update = (payload: Partial<IAccount>) =>
   privateRequest.patch(`${PREFIX_URL}/update`, { ...payload });
 
 export const getDetail = (username: string) =>

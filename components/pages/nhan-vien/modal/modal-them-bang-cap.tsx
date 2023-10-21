@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { Textarea } from '@/components/ui/textarea';
 import { QualificationServices } from '@/lib';
-import { DepartmentSchema } from '@/yup-schema/qualification';
+import { QualificationSchema } from '@/yup-schema/qualification';
 import { yupResolver } from '@hookform/resolvers/yup';
 import dayjs from 'dayjs';
 import { identity, pick, pickBy } from 'lodash';
@@ -33,7 +33,7 @@ const ModalThemBangCap = (
     },
   });
   const { reset, getValues, register, handleSubmit } = useForm({
-    resolver: yupResolver(DepartmentSchema) as any,
+    resolver: yupResolver(QualificationSchema) as any,
   });
 
   useEffect(() => {

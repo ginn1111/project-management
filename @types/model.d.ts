@@ -1,3 +1,19 @@
+interface IAccount {
+  username: string;
+  isActive: boolean;
+  note: string;
+  accountsOfEmployee?: AccountsOfEmployee[];
+}
+
+interface AccountsOfEmployee {
+  id: string;
+  idEmployee: string;
+  username: string;
+  createdDate: string;
+  account?: IAccount;
+  employee?: IEmployee;
+}
+
 interface PositionsEmployee {
   id: string;
   idEmployee: string;
