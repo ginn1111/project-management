@@ -10,7 +10,7 @@ export const create = (department: Partial<IDepartment>) =>
 export const addToEmployee = (
   idDepartment: string,
   idEmployee: string,
-  data: Partial<Omit<EmployeesOfDepartment, 'department'>>
+  data: Partial<Omit<EmployeesOfDepartment, 'department'> & { idOld: string }>
 ) =>
   privateRequest.post(
     `${PREFIX_URL}/add/${idDepartment}/${idEmployee}/employee`,

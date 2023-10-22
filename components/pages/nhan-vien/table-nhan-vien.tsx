@@ -1,27 +1,29 @@
 'use client';
 
-import * as EmployeeServices from '@/lib/employee';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import useModal from '@/hooks/useModal';
-import useQueryParams from '@/hooks/useQueryParams';
-import { DataTable } from 'mantine-datatable';
-import { useMutation, useQueryClient } from 'react-query';
-import ModalChuyenPB from './modal/modal-chuyen-pb';
-import ModalThemBangCap from './modal/modal-them-bang-cap';
-import ModalThemChungChi from './modal/modal-them-chung-chi';
-import ModalThemNhanVien from './modal/modal-them-nhan-vien';
-import { GenderIndex } from '@/constants/indexes';
-import dayjs from 'dayjs';
+import IconEllipsis from '@/components/Icon/IconEllipsis';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import IconEllipsis from '@/components/Icon/IconEllipsis';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import { GenderIndex } from '@/constants/indexes';
+import useModal from '@/hooks/useModal';
+import useQueryParams from '@/hooks/useQueryParams';
+import * as EmployeeServices from '@/lib/employee';
+import dayjs from 'dayjs';
+import { DataTable } from 'mantine-datatable';
 import Link from 'next/link';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQueryClient } from 'react-query';
+import { toast } from 'sonner';
+import ModalChuyenPB from './modal/modal-chuyen-pb';
+import ModalThemNhanVien from './modal/modal-them-nhan-vien';
+
+import vi from 'dayjs/locale/vi';
+
+dayjs.locale(vi);
 
 interface ITableNhanVien {
   provinces: {
@@ -48,9 +50,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
   const { modal, handleOpenModal, handleCloseModal } = useModal({
     modalNV: { open: false, employee: {} },
     modalRM: { open: false, id: '' },
-    modalPB: { open: false },
-    modalBC: { open: false },
-    modalCC: { open: false },
+    modalPB: { open: false, employee: { departments: [] } },
+    modalTK: { open: false },
   });
 
   const columns = [
@@ -102,14 +103,14 @@ const TableNhanVien = (props: ITableNhanVien) => {
                 Chi tiết
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalPB')}>
+            <DropdownMenuItem
+              onClick={() =>
+                handleOpenModal('modalPB', {
+                  employee: { departments: row.departments, id: row.id },
+                })
+              }
+            >
               Chuyển phòng ban
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalBC')}>
-              Thêm bằng cấp
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalCC')}>
-              Thêm chứng chỉ
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleOpenModal('modalRM', { id: row?.id })}
@@ -146,6 +147,46 @@ const TableNhanVien = (props: ITableNhanVien) => {
           paginationText={({ from, to, totalRecords }) =>
             `Từ  ${from} đến ${to} của ${totalRecords}`
           }
+          rowExpansion={{
+            allowMultiple: true,
+            content: ({ record }) => {
+              return (
+                <>
+                  {(record?.accounts?.length ?? 0) > 0 ? (
+                    <DataTable
+                      className="min-h-[150px]"
+                      records={record.accounts}
+                      columns={[
+                        {
+                          accessor: 'username',
+                          title: 'Tên tài khoản',
+                        },
+                        {
+                          title: 'Ngày tạo tài khoản',
+                          accessor: 'createdDate',
+                          render: (row: AccountsOfEmployee) => {
+                            return (
+                              <p>
+                                {dayjs(row.createdDate).isValid()
+                                  ? dayjs(row.createdDate).format(
+                                      'ddd, DD/MM/YYYY hh:mm'
+                                    )
+                                  : 'N/A'}
+                              </p>
+                            );
+                          },
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <p className="text-muted-foreground font-medium text-md text-center">
+                      Không có tài khoản
+                    </p>
+                  )}
+                </>
+              );
+            },
+          }}
         />
       </div>
       <ModalThemNhanVien
@@ -175,17 +216,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
         open={modal.modalPB.open}
         onClose={() => handleCloseModal('modalPB')}
         title="Chuyển phòng ban nhân viên"
-        data={{}}
-      />
-      <ModalThemBangCap
-        open={modal.modalBC.open}
-        onClose={() => handleCloseModal('modalBC')}
-        title="bằng cấp"
-      />
-      <ModalThemChungChi
-        open={modal.modalCC.open}
-        onClose={() => handleCloseModal('modalCC')}
-        title="chứng chỉ"
+        data={modal.modalPB.employee}
+        onRefresh={() => router.refresh()}
       />
     </>
   );

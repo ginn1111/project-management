@@ -63,8 +63,8 @@ const ModalThemPhongBan = (props: IModalThemPhongBan<Partial<IDepartment>>) => {
         onSubmit={handleSubmit(handleSuccess, handleError)}
       >
         <div>
-          <Label required>Tên chức vụ</Label>
-          <Input {...register('name')} placeholder="tên chức vụ" />
+          <Label required>Tên phòng ban</Label>
+          <Input {...register('name')} placeholder="tên phòng ban" />
         </div>
 
         <div>

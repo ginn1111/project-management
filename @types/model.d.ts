@@ -100,6 +100,7 @@ interface IEmployee {
   qualifications?: QualificationEmployee[];
   departments?: EmployeesOfDepartment[];
   positions?: PositionsEmployee[];
+  accounts?: AccountsOfEmployee[];
 }
 
 interface IProvince {

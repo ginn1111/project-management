@@ -33,7 +33,7 @@ const TablePhongBan = (props: ITablePhongBan) => {
   });
 
   const { modal, handleOpenModal, handleCloseModal } = useModal({
-    modalCHV: { open: false, position: {} },
+    modalDP: { open: false, department: {} },
     modalRM: { open: false, id: '' },
   });
 
@@ -56,7 +56,7 @@ const TablePhongBan = (props: ITablePhongBan) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-[10px]">
             <DropdownMenuItem
-              onClick={() => handleOpenModal('modalCHV', { position: row })}
+              onClick={() => handleOpenModal('modalDP', { department: row })}
             >
               Sửa
             </DropdownMenuItem>
@@ -111,9 +111,9 @@ const TablePhongBan = (props: ITablePhongBan) => {
         open={modal.modalRM.open}
       />
       <ModalThemPhongBan
-        open={modal.modalCHV.open}
-        data={modal.modalCHV.position}
-        onClose={() => handleCloseModal('modalCHV')}
+        open={modal.modalDP.open}
+        data={modal.modalDP.department}
+        onClose={() => handleCloseModal('modalDP')}
         title="Sửa phòng ban"
         onRefresh={() => router.refresh()}
         isEdit

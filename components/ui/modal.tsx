@@ -20,7 +20,7 @@ const Modal = ({
 }: IModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-h-[98vh] overflow-y-auto">
+      <DialogContent className="max-h-[98vh]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

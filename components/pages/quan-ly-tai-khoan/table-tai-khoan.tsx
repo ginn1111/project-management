@@ -108,39 +108,6 @@ const TablePhongBan = (props: ITableTaiKhoan) => {
             `Từ ${from} đến ${to} của ${totalRecords}`
           }
           idAccessor="username"
-          // rowExpansion={{
-          //   allowMultiple: true,
-          //   content: ({ record }) => {
-          //     return (
-          //       <DataTable
-          //         noHeader
-          //         records={record.accountsOfEmployee}
-          //         columns={[
-          //           {
-          //             accessor: '',
-          //             render: (row: AccountsOfEmployee) => {
-          //               return <p>{row.employee?.fullName}</p>;
-          //             },
-          //           },
-          //           {
-          //             accessor: 'createdDate',
-          //             render: (row: AccountsOfEmployee) => {
-          //               return (
-          //                 <p>
-          //                   {dayjs(row.createdDate).isValid()
-          //                     ? dayjs(row.createdDate).format(
-          //                         'ddd, DD/MM/YYYY hh:mm'
-          //                       )
-          //                     : 'N/A'}
-          //                 </p>
-          //               );
-          //             },
-          //           },
-          //         ]}
-          //       />
-          //     );
-          //   },
-          // }}
         />
       </div>
       <ModalConfirm
