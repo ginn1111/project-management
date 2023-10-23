@@ -42,7 +42,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
   console.log(_qualifications);
 
   const { modal, handleCloseModal, handleOpenModal } = useModal({
-    modalCM: { open: false },
+    modalCM: { open: false, isEdit: false, role: {} },
     modalCS: { open: false, isEdit: false, qualification: {} },
   });
   const columns = [
@@ -76,7 +76,14 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
             <IconEllipsis />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => handleOpenModal('modalCM')}>
+            <DropdownMenuItem
+              onClick={() =>
+                handleOpenModal('modalCM', {
+                  isEdit: false,
+                  role: { idEmp, id: row.qualification.id },
+                })
+              }
+            >
               Chuyên môn
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -118,12 +125,56 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
           columns={columns}
           minHeight={200}
           fetching={isLoading}
+          rowExpansion={{
+            allowMultiple: true,
+            content: ({ record }) => {
+              return (
+                <DataTable
+                  noRecordsText="Không có dữ liệu"
+                  highlightOnHover
+                  className="min-h-[150px]"
+                  records={record.qualification.rolesOfEmployee}
+                  columns={[
+                    { accessor: 'roleName', title: 'Tên chuyên môn' },
+                    {
+                      accessor: 'startDate',
+                      title: 'Ngày bắt đầu',
+                      render: (row: IRole) => {
+                        return (
+                          <p>
+                            {dayjs(row.startDate).isValid()
+                              ? dayjs(row.startDate).format('ddd, DD/MM/YYYY')
+                              : 'N/A'}
+                          </p>
+                        );
+                      },
+                    },
+                    {
+                      accessor: 'endDate',
+                      title: 'Ngày kết thúc',
+                      render: (row: IRole) => {
+                        return (
+                          <p>
+                            {dayjs(row.endDate).isValid()
+                              ? dayjs(row.endDate).format('ddd, DD/MM/YYYY')
+                              : 'N/A'}
+                          </p>
+                        );
+                      },
+                    },
+                  ]}
+                />
+              );
+            },
+          }}
         />
       </div>
       <ModalChuyenMon
         open={modal.modalCM.open}
+        data={modal.modalCM.role}
         onClose={() => handleCloseModal('modalCM')}
         title="Chuyên môn"
+        onRefresh={() => refetch()}
       />
       <ModalThemBangCap
         isEdit={modal.modalCS.isEdit}

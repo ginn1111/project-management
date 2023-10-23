@@ -19,3 +19,12 @@ export const update = ({
 
 export const getDetail = (id: string) =>
   privateRequest.get(`${PREFIX_URL}/${id}`);
+
+export const addRole = ({
+  idQualification,
+  idEmp,
+  ...rest
+}: Partial<IRole & { idEmp: string }>) =>
+  privateRequest.post(`${PREFIX_URL}/${idQualification}/role/${idEmp}`, {
+    ...rest,
+  });

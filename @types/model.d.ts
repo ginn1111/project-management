@@ -1,3 +1,13 @@
+interface IRole {
+  id: string;
+  idDepartmentEmp: string;
+  idQualification: string;
+  roleName: string;
+  startDate: string;
+  endDate: string;
+  note: string;
+}
+
 interface IAccount {
   username: string;
   isActive: boolean;

@@ -19,7 +19,7 @@ const ModalDoiMK = (props: IModalDoiMK<Partial<IAccount>>) => {
   const { mutate, isLoading } = useMutation({
     mutationFn: AccountServices.update,
     onSuccess: () => {
-      toast.success('Đổi mật khẩu thành công');
+      toast.success('Chỉnh sửa thành công');
       onRefresh?.();
       rest.onClose();
     },

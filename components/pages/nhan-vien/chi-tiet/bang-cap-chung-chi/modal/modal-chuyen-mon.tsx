@@ -1,37 +1,93 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Label from '@/components/ui/my-label';
 import Modal, { IModalProps } from '@/components/ui/modal';
-import ReactSelect from '@/components/ui/react-select';
 import { Textarea } from '@/components/ui/textarea';
-import React from 'react';
+import { QualificationServices } from '@/lib';
+import { RoleSchema } from '@/yup-schema/qualification';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { pick } from 'lodash';
+import { AlertCircleIcon } from 'lucide-react';
+import { ReactNode, useEffect } from 'react';
+import { SubmitErrorHandler, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
 
-const ModalChuyenMon = (props: Omit<IModalProps, 'children'>) => {
-  const { data, ...rest } = props;
+const ModalChuyenMon = (
+  props: Omit<IModalProps<Partial<IRole & { idEmp: string }>>, 'children'> & {
+    isEdit?: boolean;
+  }
+) => {
+  const { onRefresh, isEdit, data, ...rest } = props;
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: QualificationServices.addRole,
+    onSuccess: () => {
+      toast.success('Thêm chuyên môn thành công');
+      rest.onClose();
+      onRefresh?.();
+    },
+  });
+  const { reset, getValues, register, handleSubmit } = useForm({
+    resolver: yupResolver(RoleSchema) as any,
+  });
+
+  useEffect(() => {
+    if (rest.open && isEdit) {
+      reset({ ...pick(data, ['roleName', 'note']) });
+    } else {
+      reset({ roleName: '', note: '' });
+    }
+  }, [rest.open]);
+
+  const handleSuccess = () => {
+    if (!data?.id) {
+      toast.error('Id bằng cấp không hợp lệ!');
+      return;
+    }
+    const payload = {
+      idQualification: data.id!,
+      idEmp: data.idEmp!,
+      ...getValues(),
+    };
+    mutate(payload);
+  };
+
+  const handleError: SubmitErrorHandler<IRole> = (errors) => {
+    const keys = Object.keys(errors) as (keyof IRole)[];
+    toast.error(errors[keys[0]]?.message as ReactNode);
+  };
+
   return (
-    <Modal {...rest}>
-      <div className="space-y-4">
-        <ReactSelect
-          title="Phòng ban"
-          options={[{ value: 'PB', label: 'PB1' }]}
-          isDisabled
-        />
+    <Modal {...rest} loading={isLoading}>
+      <form
+        className="space-y-4"
+        onSubmit={handleSubmit(handleSuccess, handleError)}
+      >
+        <Alert className="text-warning border-warning bg-warning-light">
+          <AlertCircleIcon className="w-5 h-5" stroke="#fbbf24" />
+          <AlertTitle>Warning</AlertTitle>
+          <AlertDescription>
+            Chuyên môn của nhân viên sẽ được áp dụng vào phòng ban hiện tại
+          </AlertDescription>
+        </Alert>
         <div>
-          <Label>Tên chuyên môn</Label>
-          <Input placeholder="tên chuyên môn" />
+          <Label required>Tên chuyên môn</Label>
+          <Input {...register('roleName')} placeholder="tên chuyên môn" />
         </div>
         <div>
           <Label>Ghi chú</Label>
-          <Textarea placeholder="ghi chú" rows={10} />
+          <Textarea {...register('note')} placeholder="ghi chú" rows={10} />
         </div>
-      </div>
 
-      <div className="flex items-center justify-end gap-4 mt-4">
-        <Button onClick={rest.onClose} variant="outline">
-          Đóng
-        </Button>
-        <Button>Xác nhận</Button>
-      </div>
+        <div className="flex items-center justify-end gap-4 mt-4">
+          <Button type="button" onClick={rest.onClose} variant="outline">
+            Đóng
+          </Button>
+          <Button>Xác nhận</Button>
+        </div>
+      </form>
     </Modal>
   );
 };

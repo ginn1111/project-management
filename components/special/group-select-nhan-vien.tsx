@@ -14,20 +14,20 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
           placeholder="phòng ban"
           options={[
             {
-              value: 'fuck1',
-              label: 'Fuck label1',
+              value: 'Test1',
+              label: 'Test label1',
             },
             {
-              value: 'fuck2',
-              label: 'Fuck label2',
+              value: 'Test2',
+              label: 'Test label2',
             },
             {
-              value: 'fuck3',
-              label: 'Fuck label3',
+              value: 'Test3',
+              label: 'Test label3',
             },
             {
-              value: 'fuck4',
-              label: 'Fuck label4',
+              value: 'Test4',
+              label: 'Test label4',
             },
           ]}
         />
@@ -37,20 +37,20 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
           containerClass="flex-1"
           options={[
             {
-              value: 'fuck1',
-              label: 'Fuck label1',
+              value: 'Test1',
+              label: 'Test label1',
             },
             {
-              value: 'fuck2',
-              label: 'Fuck label2',
+              value: 'Test2',
+              label: 'Test label2',
             },
             {
-              value: 'fuck3',
-              label: 'Fuck label3',
+              value: 'Test3',
+              label: 'Test label3',
             },
             {
-              value: 'fuck4',
-              label: 'Fuck label4',
+              value: 'Test4',
+              label: 'Test label4',
             },
           ]}
         />
@@ -62,20 +62,20 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
           isMulti={isMulti}
           options={[
             {
-              value: 'fuck',
-              label: 'Fuck label',
+              value: 'Test',
+              label: 'Test label',
             },
             {
-              value: 'fuck1',
-              label: 'Fuck label',
+              value: 'Test1',
+              label: 'Test label',
             },
             {
-              value: 'fuck2',
-              label: 'Fuck label',
+              value: 'Test2',
+              label: 'Test label',
             },
             {
-              value: 'fuck3',
-              label: 'Fuck label',
+              value: 'Test3',
+              label: 'Test label',
             },
           ]}
         />

@@ -58,7 +58,7 @@ const FilterPhongBan = () => {
         <IconRefresh />
       </Button>
       <ModalThemPhongBan
-        title="Thêm chức vụ mới"
+        title="Thêm phòng ban"
         onClose={() => handleCloseModal('modalCHV')}
         open={modal.modalCHV.open}
         onRefresh={() => {
