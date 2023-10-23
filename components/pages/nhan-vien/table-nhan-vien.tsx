@@ -22,6 +22,7 @@ import ModalChuyenPB from './modal/modal-chuyen-pb';
 import ModalThemNhanVien from './modal/modal-them-nhan-vien';
 
 import vi from 'dayjs/locale/vi';
+import ModalChucVu from './modal/modal-chuc-vu';
 
 dayjs.locale(vi);
 
@@ -51,8 +52,11 @@ const TableNhanVien = (props: ITableNhanVien) => {
     modalNV: { open: false, employee: {} },
     modalRM: { open: false, id: '' },
     modalPB: { open: false, employee: { departments: [] } },
+    modalCV: { open: false, employee: { positions: [] } },
     modalTK: { open: false },
   });
+
+  console.log(data.employees);
 
   const columns = [
     {
@@ -79,7 +83,17 @@ const TableNhanVien = (props: ITableNhanVien) => {
     },
     {
       accessor: 'email',
-      title: 'Họ tên',
+      title: 'Email',
+    },
+    {
+      accessor: 'address',
+      title: 'Địa chỉ',
+      render: (row: IEmployee) => (
+        <p>
+          {row.address} {row.ward?.name} {row.district?.name}{' '}
+          {row.province?.name}
+        </p>
+      ),
     },
     {
       accessor: 'identifyNumber',
@@ -102,6 +116,15 @@ const TableNhanVien = (props: ITableNhanVien) => {
               <Link className="w-full" href={`/nhan-vien/${row.id}`}>
                 Chi tiết
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                handleOpenModal('modalCV', {
+                  employee: { positions: row.positions, id: row.id },
+                })
+              }
+            >
+              Chức vụ mới
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -152,35 +175,52 @@ const TableNhanVien = (props: ITableNhanVien) => {
             content: ({ record }) => {
               return (
                 <>
-                  {(record?.accounts?.length ?? 0) > 0 ? (
+                  {(record?.positions?.length ?? 0) > 0 ? (
                     <DataTable
                       className="min-h-[150px]"
-                      records={record.accounts}
+                      records={record.positions ?? []}
                       columns={[
                         {
-                          accessor: 'username',
-                          title: 'Tên tài khoản',
+                          accessor: 'position',
+                          title: 'Tên chức vụ',
+                          width: 200,
+                          render: (row: PositionsEmployee) => (
+                            <p>{row.position.name}</p>
+                          ),
                         },
                         {
-                          title: 'Ngày tạo tài khoản',
-                          accessor: 'createdDate',
-                          render: (row: AccountsOfEmployee) => {
-                            return (
-                              <p>
-                                {dayjs(row.createdDate).isValid()
-                                  ? dayjs(row.createdDate).format(
-                                      'ddd, DD/MM/YYYY hh:mm'
-                                    )
-                                  : 'N/A'}
-                              </p>
-                            );
-                          },
+                          title: 'Ngày bắt đầu',
+                          width: 150,
+                          accessor: 'startDate',
+                          render: (row: PositionsEmployee) => (
+                            <p>
+                              {dayjs(row.startDate).isValid()
+                                ? dayjs(row.startDate).format('DD/MM/YYYY')
+                                : 'N/A'}
+                            </p>
+                          ),
+                        },
+                        {
+                          title: 'Ngày kết thúc',
+                          accessor: 'endDate',
+                          width: 150,
+                          render: (row: PositionsEmployee) => (
+                            <p>
+                              {dayjs(row.endDate).isValid()
+                                ? dayjs(row.endDate).format('DD/MM/YYYY')
+                                : 'N/A'}
+                            </p>
+                          ),
+                        },
+                        {
+                          accessor: 'dummy',
+                          title: '',
                         },
                       ]}
                     />
                   ) : (
                     <p className="text-muted-foreground font-medium text-md text-center">
-                      Không có tài khoản
+                      Chưa có chức vụ nào
                     </p>
                   )}
                 </>
@@ -217,6 +257,13 @@ const TableNhanVien = (props: ITableNhanVien) => {
         onClose={() => handleCloseModal('modalPB')}
         title="Chuyển phòng ban nhân viên"
         data={modal.modalPB.employee}
+        onRefresh={() => router.refresh()}
+      />
+      <ModalChucVu
+        open={modal.modalCV.open}
+        onClose={() => handleCloseModal('modalCV')}
+        title="Đổi chức vụ cho nhân viên"
+        data={modal.modalCV.employee}
         onRefresh={() => router.refresh()}
       />
     </>

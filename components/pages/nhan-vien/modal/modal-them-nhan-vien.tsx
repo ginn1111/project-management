@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import dayjs from 'dayjs';
 import { identity, omit, pickBy } from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 import { useToggle } from 'usehooks-ts';
@@ -39,11 +39,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
   });
 
   const { setValue, handleSubmit, control, register, getValues, reset } =
-    useForm<
-      Partial<
-        IEmployee & { idDistrict: OrNull<string>; idProvince: OrNull<string> }
-      >
-    >({
+    useForm<Partial<IEmployee>>({
       defaultValues: {
         address: '',
         birthday: '',
@@ -101,8 +97,17 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
     }
   };
 
-  const handleSuccess = () => {
-    const payload = pickBy(getValues(), identity);
+  const handleSuccess: SubmitHandler<Partial<IEmployee>> = (values) => {
+    const payload = pickBy(
+      omit(values, [
+        'departments',
+        'district',
+        'positions',
+        'province',
+        'ward',
+      ]),
+      identity
+    );
     mutate(payload);
   };
 
@@ -208,19 +213,6 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
           <Label>CMND/ CCCD</Label>
           <Input {...register('identifyNumber')} placeholder="cmnd/ cccc" />
         </div>
-
-        {isEdit ? null : (
-          <ReactSelect
-            title="Phòng ban"
-            placeholder="phòng ban"
-            options={[
-              {
-                value: 'PB1',
-                label: 'PB1',
-              },
-            ]}
-          />
-        )}
 
         <div className="flex items-center justify-end gap-4 mt-4">
           <Button type="button" onClick={rest.onClose} variant="outline">

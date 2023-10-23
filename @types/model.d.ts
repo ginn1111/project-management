@@ -1,3 +1,23 @@
+interface IWard {
+  id: string;
+  code: number;
+  name: string;
+  idDistrict: string;
+}
+
+interface IDistrict {
+  id: string;
+  idProvince: string;
+  code: number;
+  name: string;
+}
+
+interface IProvince {
+  id: string;
+  code: number;
+  name: string;
+}
+
 interface IRole {
   id: string;
   idDepartmentEmp: string;
@@ -105,7 +125,9 @@ interface IEmployee {
   gender: string;
   email: string;
   isActive: boolean;
-  ward: any;
+  ward: IWard;
+  district: IDistrict;
+  province: IProvince;
   certificates?: CertsEmployee[];
   qualifications?: QualificationEmployee[];
   departments?: EmployeesOfDepartment[];
