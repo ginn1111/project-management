@@ -32,15 +32,7 @@ interface IAccount {
   username: string;
   isActive: boolean;
   note: string;
-  accountsOfEmployee?: AccountsOfEmployee[];
-}
-
-interface AccountsOfEmployee {
-  id: string;
-  idEmployee: string;
-  username: string;
-  createdDate: string;
-  account?: IAccount;
+  idEmployee?: string;
   employee?: IEmployee;
 }
 
@@ -132,7 +124,7 @@ interface IEmployee {
   qualifications?: QualificationEmployee[];
   departments?: EmployeesOfDepartment[];
   positions?: PositionsEmployee[];
-  accounts?: AccountsOfEmployee[];
+  account?: account;
 }
 
 interface IProvince {

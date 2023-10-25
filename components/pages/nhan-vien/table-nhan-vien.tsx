@@ -23,6 +23,8 @@ import ModalThemNhanVien from './modal/modal-them-nhan-vien';
 
 import vi from 'dayjs/locale/vi';
 import ModalChucVu from './modal/modal-chuc-vu';
+import ModalThemTaiKhoan from './modal/modal-them-tai-khoan';
+import { isEmpty } from 'lodash';
 
 dayjs.locale(vi);
 
@@ -53,10 +55,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
     modalRM: { open: false, id: '' },
     modalPB: { open: false, employee: { departments: [] } },
     modalCV: { open: false, employee: { positions: [] } },
-    modalTK: { open: false },
+    modalTK: { open: false, employee: {} },
   });
-
-  console.log(data.employees);
 
   const columns = [
     {
@@ -134,6 +134,16 @@ const TableNhanVien = (props: ITableNhanVien) => {
               }
             >
               Chuyển phòng ban
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={!isEmpty(row.account)}
+              onClick={() =>
+                handleOpenModal('modalTK', {
+                  employee: row,
+                })
+              }
+            >
+              Thêm tài khoản
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleOpenModal('modalRM', { id: row?.id })}
@@ -264,6 +274,13 @@ const TableNhanVien = (props: ITableNhanVien) => {
         onClose={() => handleCloseModal('modalCV')}
         title="Đổi chức vụ cho nhân viên"
         data={modal.modalCV.employee}
+        onRefresh={() => router.refresh()}
+      />
+      <ModalThemTaiKhoan
+        open={modal.modalTK.open}
+        onClose={() => handleCloseModal('modalTK')}
+        title="Thêm tài khoản cho nhân viên"
+        data={modal.modalTK.employee}
         onRefresh={() => router.refresh()}
       />
     </>

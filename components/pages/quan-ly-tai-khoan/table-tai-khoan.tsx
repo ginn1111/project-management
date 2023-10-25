@@ -44,6 +44,13 @@ const TablePhongBan = (props: ITableTaiKhoan) => {
       title: 'Tài khoản',
     },
     {
+      accessor: '',
+      title: 'Nhân viên sử dụng',
+      render: (row: IAccount) => {
+        return <p>{row.employee?.fullName ?? 'N/A'}</p>;
+      },
+    },
+    {
       accessor: 'note',
       title: 'Ghi chú',
     },

@@ -16,13 +16,10 @@ export const update = (payload: Partial<IAccount>) =>
 export const getDetail = (username: string) =>
   privateRequest.post(`${PREFIX_URL}/detail`, { username });
 
-export const addToEmployee = ({
-  idEmployee,
-  ...rest
-}: Partial<AccountsOfEmployee>) =>
+export const addToEmployee = ({ idEmployee, ...rest }: Partial<IAccount>) =>
   privateRequest.post(`${PREFIX_URL}/${idEmployee}`, {
     ...rest,
   });
 
-export const active = (payload: Partial<AccountsOfEmployee>) =>
+export const active = (payload: Partial<IAccount>) =>
   privateRequest.post(`${PREFIX_URL}/active`, { ...payload });
