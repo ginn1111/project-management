@@ -1,4 +1,5 @@
 declare global {
+  type ValueOf<T> = T[keyof T];
   interface IRouterParams<
     P extends object = object,
     S extends object = object
@@ -26,6 +27,7 @@ declare global {
     page: number;
     limit: number;
     search?: string;
+    idProject?: string;
   }
 }
 

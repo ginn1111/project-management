@@ -1,3 +1,38 @@
+interface ReviewingProposeProject {
+  id: string;
+  idProposeProject: string;
+  idState: string;
+  reviewingDate: string;
+  note: string;
+  statePropose: IStatePropose;
+  proposeProject: IProposeProject;
+  employeesOfDepartment: EmployeesOfDepartment;
+}
+interface IStatePropose {
+  id: string;
+  name: string;
+  note: string;
+}
+
+interface IProposeProject {
+  id: string;
+  idProject: string;
+  idDeEmp: string;
+  createdDate: string;
+  content: string;
+  project?: Project;
+}
+
+interface IProject {
+  id: string;
+  name: string;
+  createdDate: string;
+  startDate: string;
+  finishDateET: string;
+  finishDate: any;
+  note: string;
+}
+
 interface IWard {
   id: string;
   code: number;
