@@ -40,7 +40,7 @@ export function Sidebar() {
         </div>
 
         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
-          {SIDE_BARS.map(({ id, children, ...sidebar }) => {
+          {SIDE_BARS.map(({ id, ...sidebar }) => {
             return (
               <SidebarItem
                 {...sidebar}
@@ -51,7 +51,6 @@ export function Sidebar() {
                     return id;
                   })
                 }
-                childrenMenu={children}
                 isActive={id === currentMenu}
               />
             );

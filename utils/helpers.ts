@@ -18,7 +18,7 @@ export const getMonth = (dt: Date, add: number = 0) => {
 export const getFromLocal = (key: string) => {
   if (IS_BROWSER) {
     try {
-      return JSON.parse(localStorage.getItem(key) ?? '');
+      return JSON.parse(localStorage.getItem(key) ?? '""');
     } catch (error) {
       console.log('error from getFromLocal', error);
       return '';
@@ -48,4 +48,13 @@ export const clearLocal = (callback?: () => void) => {
     localStorage.clear();
     callback?.();
   }
+};
+
+export const getValueFromId = <T extends { name: string; id: string }>(
+  idProject: string,
+  dataList: T[]
+) => {
+  const dfValue = dataList.find(({ id }) => id === idProject);
+
+  return dfValue ? { label: dfValue.name, value: dfValue.id } : null;
 };

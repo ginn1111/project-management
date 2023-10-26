@@ -1,3 +1,18 @@
+interface IResource {
+  id: string;
+  idResourceType: string;
+  name: string;
+  amount: number;
+  note: any;
+  resourceType?: IResourceType;
+}
+
+interface IResourceType {
+  id: string;
+  name: string;
+  note: any;
+}
+
 interface ReviewingProposeProject {
   id: string;
   idProposeProject: string;

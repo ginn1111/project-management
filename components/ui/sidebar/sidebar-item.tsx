@@ -1,5 +1,6 @@
 import IconCaretDown from '@/components/Icon/IconCaretDown';
 import IconMenuDashboard from '@/components/Icon/Menu/IconMenuDashboard';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import AnimateHeight from 'react-animate-height';
 
@@ -59,7 +60,11 @@ const SidebarItem = (props: ISidebarItem) => {
 
   return (
     <li className="group nav-item">
-      <button className="flex items-center nav-link !justify-start">
+      <button
+        className={cn('flex items-center nav-link !justify-start', {
+          active: isActive,
+        })}
+      >
         {prefixIcon ?? (
           <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
         )}

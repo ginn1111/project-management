@@ -4,13 +4,8 @@ import IconRefresh from '@/components/Icon/IconRefresh';
 import { Button } from '@/components/ui/button';
 import ReactSelect from '@/components/ui/react-select';
 import useQueryParams from '@/hooks/useQueryParams';
+import { getValueFromId } from '@/utils/helpers';
 import { useEffect, useState } from 'react';
-
-function getValueFromId(idProject: string, dataList: IProject[]) {
-  const dfValue = dataList.find(({ id }) => id === idProject);
-
-  return dfValue ? { label: dfValue.name, value: dfValue.id } : null;
-}
 
 interface IFilterDuyetDXND {
   projects: IProject[];
@@ -22,7 +17,7 @@ const FilterDuyetDXNV = ({ projects }: IFilterDuyetDXND) => {
   });
 
   const [selectValue, setSelectValue] = useState(
-    getValueFromId(searchParams.idProject, projects)
+    getValueFromId<IProject>(searchParams.idProject, projects)
   );
 
   useEffect(() => {
@@ -42,7 +37,7 @@ const FilterDuyetDXNV = ({ projects }: IFilterDuyetDXND) => {
             label: name,
           }))}
           onChange={(newValue) => {
-            handlePush({ idProject: (newValue as any).value });
+            handlePush({ idProject: (newValue as any).value, page: 1 });
           }}
         />
       </div>

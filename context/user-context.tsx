@@ -69,7 +69,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user.accessToken && pathname !== '/authen') {
-      router.replace('/authen');
+      location.replace('/authen');
       pathNameRef.current = pathname;
     } else if (user.accessToken) {
       router.replace(pathname === '/authen' ? '/nhan-vien' : pathname);

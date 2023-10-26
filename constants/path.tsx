@@ -23,23 +23,7 @@ export const SIDE_BARS = [
     id: 'quan-ly-nguon-luc',
     title: 'Quản lý nguồn lực',
     prefixIcon: <IconTools />,
-    children: [
-      {
-        id: 'cong-cu',
-        title: 'Công cụ',
-        href: '/cong-cu',
-      },
-      {
-        id: 'vat-tu',
-        title: 'Vật tư',
-        href: '/vat-tu',
-      },
-      {
-        id: 'nguyen-lieu',
-        title: 'Nguyên liệu',
-        href: '/nguyen-lieu',
-      },
-    ],
+    href: '/quan-ly-nguon-luc',
   },
   {
     id: 'quan-ly-tai-khoan',
@@ -68,10 +52,11 @@ export const SIDE_BARS = [
 ];
 
 export const ACTIVE_MENUS = {
-  '/chung-chi': 'quan-ly-nhan-vien',
-  '/bang-cap': 'quan-ly-nhan-vien',
   '/nhan-vien': 'quan-ly-nhan-vien',
   '/quan-ly-tai-khoan': 'quan-ly-tai-khoan',
-  '/cong-cu': 'quan-ly-nguon-luc',
-  '/vat-tu': 'quan-ly-nguon-luc',
+  '/quan-ly-chuc-vu': 'quan-ly-chuc-vu',
+  '/quan-ly-nguon-luc': 'quan-ly-nguon-luc',
+  '/quan-ly-phong-ban': 'quan-ly-phong-ban',
+  '/duyet-de-xuat-nhan-vien': 'duyet-de-xuat-nhan-vien',
+  '/du-an': 'du-an',
 } as const;

@@ -7,3 +7,4 @@ export * as AccountServices from './account';
 export * as ReviewProjectServices from './review-project';
 export * as ProjectServices from './project';
 export * as AuthenticationServices from './authentication';
+export * as ResourceServices from './resource';
