@@ -1,6 +1,7 @@
 'use client';
-import { Toaster, toast } from 'sonner';
+import UserProvider from '@/context/user-context';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,7 +15,9 @@ const queryClient = new QueryClient({
 const Providers = ({ children }: LayoutProps) => {
   return (
     <>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider>{children}</UserProvider>
+      </QueryClientProvider>
       <Toaster duration={2000} closeButton richColors position="top-right" />
     </>
   );

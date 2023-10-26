@@ -1,3 +1,4 @@
+'use client';
 import IconArrowLeft from '@/components/Icon/IconArrowLeft';
 import IconBellBing from '@/components/Icon/IconBellBing';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
@@ -315,12 +316,9 @@ const Header = () => {
                     </Link>
                   </li>
                   <li className="border-t border-white-light dark:border-white-light/10">
-                    <Link
-                      href="/auth/boxed-signin"
-                      className="!py-3 text-danger"
-                    >
+                    <Link href="/authen/logout" className="!py-3 text-danger">
                       <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 mr-2" />
-                      Sign Out
+                      Đăng xuất
                     </Link>
                   </li>
                 </ul>
@@ -756,7 +754,7 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/auth/boxed-signin" target="_blank">
+                    <Link href="/authen/logout" target="_blank">
                       login_boxed
                     </Link>
                   </li>

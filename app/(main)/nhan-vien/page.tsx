@@ -2,7 +2,6 @@ import FilterNhanVien from '@/components/pages/nhan-vien/filter-nhan-vien';
 import TableNhanVien from '@/components/pages/nhan-vien/table-nhan-vien';
 import { getList } from '@/lib/employee';
 import { getProvinces } from '@/lib/utils/address';
-import React from 'react';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';

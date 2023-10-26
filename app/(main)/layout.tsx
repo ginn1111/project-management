@@ -1,8 +1,5 @@
-'use client';
-
 import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
-import React from 'react';
 
 const MainLayout = ({ children }: LayoutProps) => {
   return (
