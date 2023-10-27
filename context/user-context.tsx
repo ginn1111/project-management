@@ -68,11 +68,13 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const pathNameRef = useRef('/nhan-vien');
 
   useEffect(() => {
+    const oldPath = location.href.split('/').at(-1) ?? pathname;
+
     if (!user.accessToken && pathname !== '/authen') {
       location.replace('/authen');
       pathNameRef.current = pathname;
     } else if (user.accessToken) {
-      router.replace(pathname === '/authen' ? '/nhan-vien' : pathname);
+      router.replace(pathname === '/authen' ? '/nhan-vien' : oldPath);
       initialPrivateRequest(user.accessToken);
     }
     setIsInitial(false);

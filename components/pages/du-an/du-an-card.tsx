@@ -5,18 +5,15 @@ import IconEyeTwoTone from '@/components/Icon/IconEyeTwoTone';
 import IconSendTwoTone from '@/components/Icon/IconSendTwoTone';
 import { Label } from '@/components/ui/label';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import { Textarea } from '@/components/ui/textarea';
+import useModal from '@/hooks/useModal';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import Link from 'next/link';
-import { useState } from 'react';
 import ModalSuaDuAn from './modal/modal-sua-du-an';
 import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 dayjs.extend(duration);
-
-const end = new Date(2023, 11, 1);
 
 const roleColors = [
   ['text-secondary2', 'bg-secondary2-light'],
@@ -27,53 +24,70 @@ const roleColors = [
   ['text-info', 'bg-info-light'],
 ];
 
-const DuAnCard = () => {
-  const [modal, setModal] = useState({
+interface IDuAnCard extends IProject {}
+
+const DuAnCard = ({
+  name,
+  startDate,
+  finishDateET,
+  departments,
+}: IDuAnCard) => {
+  const { handleCloseModal, handleOpenModal, modal } = useModal({
     modalNL: { open: false },
     modalCS: { open: false },
     modalCF: { open: false },
   });
 
-  const handleOpenModal = (name: 'modalNL' | 'modalCS') =>
-    setModal((old) => ({ ...old, [name]: { open: true } }));
-  const handleCloseModal = (name: 'modalNL' | 'modalCS') =>
-    setModal((old) => ({ ...old, [name]: { open: false } }));
-
   return (
-    <div className="rounded-sm p-2 bg-gradient-from-tl bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-2 hover:border-ring border-transparent hover:from-primary2-light hover:to-accent">
-      <div className="border-b border-primary pb-1 mb-1 flex items-start justify-between gap-4">
-        <h2 className="text-xl font-medium ">Dự án</h2>
+    <div className="rounded-sm p-2 bg-gradient-from-tl bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-2 hover:border-ring border-transparent hover:from-primary2-light hover:to-accent flex flex-col gap-2">
+      <div className="border-b border-primary pb-1 flex items-start justify-between gap-4">
+        <h2 className="text-xl font-medium ">{name}</h2>
         <p className="border-primary bg-accent rounded-md text-primary border p-1 flex-shrink-0 flex items-center gap-2">
           <IconCalendar className="text-sm" />
           <span className="bg-primary rounded-sm text-accent px-1 text-[12px]">
-            {dayjs
-              .duration(
-                dayjs(end).diff(new Date(2023, 10, 1), 'months'),
-                'months'
-              )
-              .months()}{' '}
-            tháng
+            {dayjs(finishDateET).isValid() && dayjs(startDate).isValid()
+              ? dayjs
+                  .duration(
+                    dayjs(new Date(finishDateET)).diff(
+                      new Date(startDate),
+                      'months'
+                    ),
+                    'months'
+                  )
+                  .months() + ' tháng'
+              : 'N/A'}{' '}
           </span>
         </p>
       </div>
       <div className="flex items-center gap-4 justify-between">
-        <Label className="text-md">Ngày bắt đầu</Label>
-        <p>{dayjs().format('DD/MM/YYYY')}</p>
+        <Label className="text-md mb-0">Ngày bắt đầu</Label>
+        <p>
+          {dayjs(startDate).isValid() ? (
+            dayjs(startDate).format('DD/MM/YYYY')
+          ) : (
+            <span className="text-danger font-medium">N/A</span>
+          )}
+        </p>
       </div>
-      <div className="flex items-center gap-4 justify-between mb-2">
-        <Label className="text-md">Ngày kết thúc</Label>
-        <p>{dayjs().format('DD/MM/YYYY')}</p>
+      <div className="flex items-center gap-4 justify-between">
+        <Label className="text-md mb-0">Ngày kết thúc</Label>
+        <p>
+          {dayjs(finishDateET).isValid() ? (
+            dayjs(finishDateET).format('DD/MM/YYYY')
+          ) : (
+            <span className="text-danger font-medium">N/A</span>
+          )}
+        </p>
       </div>
-      <div className="flex items-center gap-4 justify-between mb-2">
-        <Label className="text-md">Khách hàng</Label>
+      <div className="flex items-center gap-4 justify-between">
+        <Label className="text-md mb-0">Khách hàng</Label>
         <p>Tên khách hàng</p>
       </div>
-      <div>
-        <Label className="text-md">Phòng ban</Label>
-        <ul className="flex flex-wrap gap-2">
-          {Array(10)
-            .fill(0)
-            .map((_, index) => (
+      {departments?.length ? (
+        <div>
+          <Label className="text-md">Phòng ban</Label>
+          <ul className="grid grid-cols-fit-10 gap-2">
+            {departments?.map(({ department }, index) => (
               <li
                 key={index}
                 className={cn(
@@ -81,12 +95,15 @@ const DuAnCard = () => {
                   ...roleColors[Math.floor(Math.random() * roleColors.length)]
                 )}
               >
-                Kỹ thuật
+                {department?.name}
               </li>
             ))}
-        </ul>
-      </div>
-      <div className="flex items-center my-2 gap-2 justify-end cursor-pointer">
+          </ul>
+        </div>
+      ) : (
+        <p className="text-danger font-medium">Chưa có phòng ban</p>
+      )}
+      <div className="flex items-center gap-2 justify-end cursor-pointer mt-auto">
         <span
           className="group"
           role="button"

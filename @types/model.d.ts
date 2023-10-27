@@ -38,6 +38,16 @@ interface IProposeProject {
   project?: Project;
 }
 
+interface IDepartmentProject {
+  id: string;
+  idProject: string;
+  idDepartment: string;
+  createdDate: string;
+  endDate: OrNull<string>;
+  note: OrNull<string>;
+  department?: IDepartment;
+}
+
 interface IProject {
   id: string;
   name: string;
@@ -46,6 +56,7 @@ interface IProject {
   finishDateET: string;
   finishDate: any;
   note: string;
+  departments?: IDepartmentProject[];
 }
 
 interface IWard {
