@@ -11,18 +11,8 @@ import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import Link from 'next/link';
-import ModalSuaDuAn from './modal/modal-sua-du-an';
 import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
 dayjs.extend(duration);
-
-const roleColors = [
-  ['text-secondary2', 'bg-secondary2-light'],
-  ['text-primary2', 'bg-primary2-light'],
-  ['text-success', 'bg-success-light'],
-  ['text-danger', 'bg-danger-light'],
-  ['text-warning', 'bg-warning-light'],
-  ['text-info', 'bg-info-light'],
-];
 
 interface IDuAnCard extends IProject {
   onUpdate: () => void;

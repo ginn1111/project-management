@@ -4,6 +4,15 @@ import ItemNguonLuc from './item-nguon-luc';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import { cn } from '@/lib/utils';
 import Search from '@/components/ui/search';
+import { useQuery } from 'react-query';
+import { QueryKeys } from '@/constants/query-key';
+import { getResourceTypeList } from '@/lib/utils/resource-type';
+import { AxiosResponse } from 'axios';
+import LoadingInline from '@/components/ui/loading/loading-inline';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { ResourceServices } from '@/lib';
+import { debounce } from 'lodash';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface IThemNguonLuc {
   scrollAreaProps?: React.ComponentPropsWithoutRef<
@@ -11,26 +20,63 @@ interface IThemNguonLuc {
   >;
 }
 
-const ThemNguonLuc = (props: IThemNguonLuc) => {
+const ThemNguonLuc = forwardRef((props: IThemNguonLuc, ref) => {
   const { scrollAreaProps } = props;
   const { className, ...restScrollAreaProps } = scrollAreaProps ?? {};
+
+  const form = useForm();
+
+  useImperativeHandle(ref, () => form);
+
+  const { data: resourceTypeData, isFetching } = useQuery<
+    AxiosResponse<IResourceType[]>
+  >({
+    queryKey: QueryKeys.getResourceType(),
+    queryFn: getResourceTypeList,
+  });
+
+  const [selectedTab, setSelectedTab] = useState<IResourceType['id']>('');
+  const [search, setSearch] = useState('');
+
+  const { data: resourceData, isFetching: fetchingResource } = useQuery<
+    AxiosResponse<{ resource: IResource[]; totalItems: number }>
+  >({
+    queryKey: QueryKeys.getResource(selectedTab, search),
+    queryFn: ({ queryKey }) => {
+      return ResourceServices.getList(
+        `idResourceType=${queryKey[1]}&search=${queryKey[2]}`
+      );
+    },
+    enabled: !!selectedTab,
+  });
+
+  useEffect(() => {
+    setSelectedTab(resourceTypeData?.data?.[0]?.id ?? '');
+  }, [resourceTypeData?.data]);
+
   return (
     <div>
-      <Tabs className="mb-2">
+      <Tabs className="mb-2 relative" value={selectedTab}>
+        {isFetching ? <LoadingInline /> : null}
         <TabsList className="w-full">
-          <TabsTrigger className="flex-1" value="vat-tu">
-            Vật tư
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="cong-cu">
-            Công cụ
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="nguyen-lieu">
-            Nguyên liệu
-          </TabsTrigger>
+          {resourceTypeData?.data?.map(({ id, name }) => (
+            <TabsTrigger
+              onClick={() => setSelectedTab(id)}
+              key={id}
+              className="flex-1"
+              value={id}
+            >
+              {name}
+            </TabsTrigger>
+          ))}
         </TabsList>
       </Tabs>
 
-      <Search classNameContainer="mb-2" placeholder="tên nguồn lực" />
+      <Search
+        onChange={debounce((e) => setSearch(e.target.value), 300)}
+        classNameContainer="mb-2 text-sm"
+        placeholder="tên nguồn lực"
+      />
       <ScrollArea
         className={cn(
           'h-[200px] w-full rounded-md border px-4 py-2',
@@ -38,14 +84,17 @@ const ThemNguonLuc = (props: IThemNguonLuc) => {
         )}
         {...restScrollAreaProps}
       >
-        {Array(10)
-          .fill(0)
-          .map((_, idx) => (
-            <ItemNguonLuc key={idx} />
+        {fetchingResource ? <LoadingInline /> : null}
+        <FormProvider {...form}>
+          {resourceData?.data?.resource.map((resource, idx) => (
+            <ItemNguonLuc {...resource} key={resource.id} />
           ))}
+        </FormProvider>
       </ScrollArea>
     </div>
   );
-};
+});
+
+ThemNguonLuc.displayName = 'ThemNguonLuc';
 
 export default ThemNguonLuc;

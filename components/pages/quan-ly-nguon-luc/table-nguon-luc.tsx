@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
 import * as EmployeeServices from '@/lib/employee';
@@ -15,7 +14,6 @@ import dayjs from 'dayjs';
 import { DataTable } from 'mantine-datatable';
 import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
-import { toast } from 'sonner';
 
 import vi from 'dayjs/locale/vi';
 import ModalThemNguonLuc from './modal/modal-them-nguon-luc';

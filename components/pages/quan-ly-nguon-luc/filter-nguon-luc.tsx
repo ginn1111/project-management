@@ -38,7 +38,7 @@ const FilterNguonLuc = ({ resourceTypeList }: IFilterNguonLuc) => {
     setSelectValue(
       getValueFromId(searchParams.idResourceType, resourceTypeList)
     );
-  }, [searchParams.idResourceType]);
+  }, [resourceTypeList, searchParams.idResourceType]);
 
   useEffect(() => {
     setSearchValue(searchParams.search);
@@ -50,7 +50,7 @@ const FilterNguonLuc = ({ resourceTypeList }: IFilterNguonLuc) => {
     }, 300);
 
     return () => clearTimeout(timerId);
-  }, [searchValue]);
+  }, [handlePush, searchValue]);
 
   return (
     <div className="flex items-center gap-4">
