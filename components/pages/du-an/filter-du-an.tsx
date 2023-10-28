@@ -10,6 +10,7 @@ import useQueryParams from '@/hooks/useQueryParams';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import ModalThemDuAn from './modal/modal-them-du-an';
+import { useRouter } from 'next/navigation';
 
 const FilterDuAn = () => {
   const { handlePush, handleReset, searchParams } = useQueryParams({
@@ -19,6 +20,7 @@ const FilterDuAn = () => {
       search: '',
     },
   });
+  const router = useRouter();
 
   const [filter, setFilter] = useState({ ...searchParams });
 
@@ -102,6 +104,7 @@ const FilterDuAn = () => {
         open={modal.modalPJ.open}
         onClose={() => handleCloseModal('modalPJ')}
         title="Thêm dự án mới"
+        onRefresh={() => router.refresh()}
       />
     </div>
   );

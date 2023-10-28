@@ -1,10 +1,10 @@
+import Label, { IMyLabel } from '@/components/ui/my-label';
 import { RSTheme } from '@/constants/theme';
 import { cn } from '@/lib/utils';
-import { ReactNode } from 'react';
-import type { GroupBase, default as SelectProps, Props } from 'react-select';
-import Select from 'react-select';
-import Label, { IMyLabel } from '@/components/ui/my-label';
+import { ReactNode, useMemo } from 'react';
 import { Control, Controller } from 'react-hook-form';
+import type { GroupBase, Props } from 'react-select';
+import Select from 'react-select';
 
 interface IReactSelect<
   Option,
@@ -19,17 +19,36 @@ interface IReactSelect<
   containerClass?: string;
   control?: Control;
   labelProps?: IMyLabel;
+  allowChange?: (oldSnapshot: any, newSnapshot: any) => boolean;
 }
 
 const ReactSelect = <
-  Option,
+  Option extends { value: string; label: string },
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
   props: IReactSelect<Option, IsMulti, Group>
 ) => {
-  const { labelProps, control, containerClass, className, title, ...rest } =
-    props;
+  const {
+    allowChange,
+    labelProps,
+    control,
+    containerClass,
+    className,
+    title,
+    ...rest
+  } = props;
+
+  const optionIndex = useMemo(() => {
+    if (!rest.isMulti) return {};
+    return (
+      rest.options?.reduce((acc, option) => {
+        acc[option.value] = option;
+        return acc;
+      }, {} as Record<string, Option>) ?? {}
+    );
+  }, [rest.isMulti]);
+
   // fallback for dummy UI
   if (!control) {
     return (
@@ -60,12 +79,26 @@ const ReactSelect = <
               className={cn('!border-none', className)}
               {...rest}
               onChange={(e: any) => {
-                field.onChange(e.value);
+                const value = rest.isMulti
+                  ? e.map(({ value }: { value: string }) => value)
+                  : e.value;
+                if (!allowChange || allowChange?.(field.value, value))
+                  field.onChange(value);
                 rest?.onChange?.(e, {} as any);
               }}
-              value={
-                rest.options.find((o: any) => o.value === field.value) ?? null
-              }
+              value={(() => {
+                if (rest.isMulti) {
+                  return (
+                    field.value?.map((value: string) => optionIndex[value]) ??
+                    null
+                  );
+                } else {
+                  return (
+                    rest.options.find((o: any) => o.value === field.value) ??
+                    null
+                  );
+                }
+              })()}
             />
           </div>
         );

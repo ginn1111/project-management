@@ -24,17 +24,19 @@ const roleColors = [
   ['text-info', 'bg-info-light'],
 ];
 
-interface IDuAnCard extends IProject {}
+interface IDuAnCard extends IProject {
+  onUpdate: () => void;
+}
 
 const DuAnCard = ({
   name,
   startDate,
   finishDateET,
   departments,
+  onUpdate,
 }: IDuAnCard) => {
   const { handleCloseModal, handleOpenModal, modal } = useModal({
     modalNL: { open: false },
-    modalCS: { open: false },
     modalCF: { open: false },
   });
 
@@ -86,13 +88,12 @@ const DuAnCard = ({
       {departments?.length ? (
         <div>
           <Label className="text-md">Phòng ban</Label>
-          <ul className="grid grid-cols-fit-10 gap-2">
+          <ul className="grid grid-cols-fill-80 gap-2">
             {departments?.map(({ department }, index) => (
               <li
                 key={index}
                 className={cn(
-                  'px-3 py-1 rounded-full bg-primary2 text-accent flex-1 whitespace-nowrap text-center',
-                  ...roleColors[Math.floor(Math.random() * roleColors.length)]
+                  'px-3 py-1 rounded-md bg-primary text-muted flex-1 whitespace-nowrap text-center'
                 )}
               >
                 {department?.name}
@@ -104,11 +105,7 @@ const DuAnCard = ({
         <p className="text-danger font-medium">Chưa có phòng ban</p>
       )}
       <div className="flex items-center gap-2 justify-end cursor-pointer mt-auto">
-        <span
-          className="group"
-          role="button"
-          onClick={() => handleOpenModal('modalCS')}
-        >
+        <span className="group" role="button" onClick={onUpdate}>
           <IconEditTwoTone className="group-hover:text-warning " />
         </span>
         <span role="button" onClick={() => handleOpenModal('modalCF')}>
@@ -130,11 +127,6 @@ const DuAnCard = ({
         open={modal.modalNL.open}
         data={{}}
         onClose={() => handleCloseModal('modalNL')}
-      />
-      <ModalSuaDuAn
-        title="Sửa dự án"
-        open={modal.modalCS.open}
-        onClose={() => handleCloseModal('modalCS')}
       />
       <ModalConfirm
         open={modal.modalCF.open}
