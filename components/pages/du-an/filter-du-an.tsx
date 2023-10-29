@@ -18,6 +18,7 @@ const FilterDuAn = () => {
       finishDateET: '',
       startDate: '',
       search: '',
+      idDepartment: '',
     },
   });
   const router = useRouter();
@@ -43,7 +44,7 @@ const FilterDuAn = () => {
     });
 
     return () => clearTimeout(timerId);
-  }, [JSON.stringify(filter)]);
+  }, [filter, handlePush]);
 
   return (
     <div className="flex items-center justify-end gap-4 mt-2 mx-2">
