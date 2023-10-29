@@ -4,18 +4,17 @@ import IconEditTwoTone from '@/components/Icon/IconEditTwoTone';
 import IconEyeTwoTone from '@/components/Icon/IconEyeTwoTone';
 import IconSendTwoTone from '@/components/Icon/IconSendTwoTone';
 import { Label } from '@/components/ui/label';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import { Textarea } from '@/components/ui/textarea';
 import useModal from '@/hooks/useModal';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import Link from 'next/link';
-import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
 dayjs.extend(duration);
 
 interface IDuAnCard extends IProject {
   onUpdate: () => void;
+  onAddResource: () => void;
+  onPropose: () => void;
 }
 
 const DuAnCard = ({
@@ -24,12 +23,9 @@ const DuAnCard = ({
   finishDateET,
   departments,
   onUpdate,
+  onAddResource,
+  onPropose,
 }: IDuAnCard) => {
-  const { handleCloseModal, handleOpenModal, modal } = useModal({
-    modalNL: { open: false },
-    modalCF: { open: false },
-  });
-
   return (
     <div className="rounded-sm p-2 bg-gradient-from-tl bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-2 hover:border-ring border-transparent hover:from-primary2-light hover:to-accent flex flex-col gap-2">
       <div className="border-b border-primary pb-1 flex items-start justify-between gap-4">
@@ -98,43 +94,16 @@ const DuAnCard = ({
         <span className="group" role="button" onClick={onUpdate}>
           <IconEditTwoTone className="group-hover:text-warning " />
         </span>
-        <span role="button" onClick={() => handleOpenModal('modalCF')}>
+        <span role="button" onClick={onPropose}>
           <IconSendTwoTone />
         </span>
-        <span
-          className="group"
-          role="button"
-          onClick={() => handleOpenModal('modalNL')}
-        >
+        <span className="group" role="button" onClick={onAddResource}>
           <IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
         </span>
         <Link href="/du-an/1">
           <IconEyeTwoTone />
         </Link>
       </div>
-      <ModalThemNguonLuc
-        title="Thêm nguồn lực"
-        open={modal.modalNL.open}
-        data={{}}
-        onClose={() => handleCloseModal('modalNL')}
-      />
-      <ModalConfirm
-        open={modal.modalCF.open}
-        title="Đề xuất tham gia dự án"
-        message={
-          <>
-            <p className="text-md mb-2">
-              Bạn có chắc chắn muốn đề xuất tham gia vào dự án này?
-            </p>
-            <Label>Lời nhắn</Label>
-            <Textarea placeholder="lời nhắn" />
-          </>
-        }
-        onAccept={() => alert('')}
-        onClose={() => handleCloseModal('modalCF')}
-        variant="default"
-        msgCTA="Xác nhận"
-      />
     </div>
   );
 };

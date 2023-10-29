@@ -95,6 +95,7 @@ const FilterDuAn = () => {
             search: '',
             startDate: '',
             finishDateET: '',
+            idDepartment: '',
           });
         }}
       >

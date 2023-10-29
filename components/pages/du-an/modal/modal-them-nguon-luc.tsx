@@ -1,23 +1,49 @@
 import ThemNguonLuc from '@/components/special/them-nguon-luc';
 import { Button } from '@/components/ui/button';
 import Modal, { IModalProps } from '@/components/ui/modal';
-import { useRef } from 'react';
+import { ProjectServices } from '@/lib';
+import { AxiosError } from 'axios';
+import { isEmpty } from 'lodash';
+import { ReactNode, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
 
-interface IModalThemNguonLuc<T> extends Omit<IModalProps, 'children'> {
-  data: T;
-}
-
-const ModalThemNguonLuc = <T,>(props: IModalThemNguonLuc<T>) => {
-  const { data, ...rest } = props;
+const ModalThemNguonLuc = (
+  props: Omit<IModalProps<Partial<IProject>>, 'children'>
+) => {
+  const { data, onRefresh, ...rest } = props;
   const themNLRef = useRef<UseFormReturn>();
 
+  const { mutate: addResource, isLoading } = useMutation({
+    mutationFn: ProjectServices.addResource,
+    onSuccess: () => {
+      toast.success('Thêm nguồn lực thành công!');
+      onRefresh?.();
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.response?.data as ReactNode);
+    },
+    onSettled: () => {
+      rest.onClose();
+    },
+  });
+
   const handleThemNL = () => {
-    console.log(themNLRef.current?.getValues());
+    const payload = {
+      id: data?.id!,
+      resource: formatPayload(
+        themNLRef.current?.getValues() as Record<
+          string,
+          { active?: boolean; number?: number }
+        >
+      ),
+    };
+    addResource(payload);
   };
 
   return (
-    <Modal {...rest}>
+    <Modal {...rest} loading={isLoading}>
       <ThemNguonLuc
         ref={themNLRef}
         scrollAreaProps={{ className: 'h-[65vh]' }}
@@ -29,6 +55,24 @@ const ModalThemNguonLuc = <T,>(props: IModalThemNguonLuc<T>) => {
         <Button onClick={handleThemNL}>Xác nhận</Button>
       </div>
     </Modal>
+  );
+};
+
+const formatPayload = (
+  payload: Record<string, { active?: boolean; number?: number }>
+) => {
+  if (isEmpty(payload)) return [];
+  return Object.entries(payload).reduce(
+    (acc, [idResource, { active, number }]) => {
+      if (active && number) {
+        acc.push({
+          id: idResource,
+          amount: number,
+        });
+      }
+      return acc;
+    },
+    [] as { id: string; amount: number }[]
   );
 };
 
