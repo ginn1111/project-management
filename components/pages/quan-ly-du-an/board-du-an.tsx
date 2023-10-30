@@ -65,7 +65,7 @@ const BoardDuAn = (props: IBoardDuAn) => {
           Đang thực hiện
         </div>
 
-        <div className="ml-auto">
+        <div className="ml-2">
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Button variant="outline" size="icon">
@@ -98,7 +98,7 @@ const BoardDuAn = (props: IBoardDuAn) => {
           </DropdownMenu>
         </div>
 
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center w-full">
           <div className="flex items-center rounded-sm gap-1">
             <IconSquareCheck className="w-4 h-4 text-success" />
             <div className="text-xs">5 Tasks</div>

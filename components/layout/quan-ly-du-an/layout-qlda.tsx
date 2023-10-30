@@ -6,12 +6,13 @@ import IconWork from '@/components/Icon/IconWork';
 import { Button } from '@/components/ui/button';
 
 import useModal from '@/hooks/useModal';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ModalPhanQuyenDA from './modal-tool-bar/modal-phan-quyen-da';
 import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalTaoDeXuat from './modal-tool-bar/modal-tao-de-xuat';
 
 const LayoutQLDA = () => {
+  const router = useRouter();
   const { id } = useParams();
   const { modal, handleCloseModal, handleOpenModal } = useModal({
     modalTDV: { open: false, idProject: '' },
@@ -58,6 +59,7 @@ const LayoutQLDA = () => {
         open={modal.modalTDV.open}
         data={modal.modalTDV}
         onClose={() => handleCloseModal('modalTDV')}
+        onRefresh={() => router.refresh()}
       />
     </div>
   );

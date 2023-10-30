@@ -1,3 +1,13 @@
+interface IEmployeeProject {
+  id: string;
+  idHead: any;
+  idProject: string;
+  idProposeProject: string;
+  startDate: string;
+  endDate: string;
+  note: any;
+  proposeProject: IProposeProject;
+}
 interface ITask {
   id: string;
   name: string;
@@ -77,6 +87,7 @@ interface IProposeProject {
   createdDate: string;
   content: string;
   project?: Project;
+  employeesOfDepartment?: EmployeesOfDepartment;
 }
 
 interface IDepartmentProject {
@@ -172,6 +183,7 @@ interface EmployeesOfDepartment {
   endDate: string;
   note: any;
   department?: Department;
+  employee?: IEmployee;
 }
 
 interface QualificationEmployee {

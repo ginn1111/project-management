@@ -69,7 +69,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
     },
     {
       accessor: 'gender',
-      title: 'Họ tên',
+      title: 'Giới tính',
       render: ({ gender }: { gender: string }) => (
         <p>{GenderIndex[gender as keyof typeof GenderIndex]}</p>
       ),

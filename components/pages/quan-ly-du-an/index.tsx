@@ -22,6 +22,14 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 
   console.log(data);
 
+  const tabs = {
+    isWorkBoard: searchParams.tab === 'works-board',
+    isWorkCalendar: searchParams.tab === 'works-calendar',
+    isEmployee: searchParams.tab === 'employee',
+    isPropose: searchParams.tab === 'propose',
+    isResource: searchParams.tab === 'resource',
+  };
+
   return (
     <>
       <Tabs className="w-full" defaultValue={searchParams.tab}>
@@ -62,29 +70,39 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
             Nguồn lực
           </TabsTrigger>
         </TabsList>
-        <TabsContent
-          value="works-board"
-          className="flex gap-2 overflow-x-auto pt-1"
-        >
-          {(data as IWorkProject[])?.map((workPj) => (
-            <BoardDuAn {...workPj} key={workPj.idWork} />
-          ))}
-        </TabsContent>
-        <TabsContent
-          value="works-calendar"
-          className="flex gap-2 overflow-x-auto"
-        >
-          <CalendarDauViec />
-        </TabsContent>
-        <TabsContent value="employee">
-          <NhanVienDuAn />
-        </TabsContent>
-        <TabsContent value="propose">
-          <DuyetDeXuat />
-        </TabsContent>
-        <TabsContent value="resource">
-          <NguonLuc />
-        </TabsContent>
+        {tabs.isWorkBoard ? (
+          <TabsContent
+            value="works-board"
+            className="flex gap-2 overflow-x-auto pt-1"
+          >
+            {(data as IWorkProject[])?.map((workPj) => (
+              <BoardDuAn {...workPj} key={workPj.idWork} />
+            ))}
+          </TabsContent>
+        ) : null}
+        {tabs.isWorkCalendar ? (
+          <TabsContent
+            value="works-calendar"
+            className="flex gap-2 overflow-x-auto"
+          >
+            <CalendarDauViec />
+          </TabsContent>
+        ) : null}
+        {tabs.isEmployee ? (
+          <TabsContent value="employee">
+            <NhanVienDuAn data={data as any} />
+          </TabsContent>
+        ) : null}
+        {tabs.isPropose ? (
+          <TabsContent value="propose">
+            <DuyetDeXuat />
+          </TabsContent>
+        ) : null}
+        {tabs.isResource ? (
+          <TabsContent value="resource">
+            <NguonLuc />
+          </TabsContent>
+        ) : null}
       </Tabs>
     </>
   );
