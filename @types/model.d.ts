@@ -1,3 +1,44 @@
+interface ITask {
+  id: string;
+  name: string;
+  note: OrNull<string>;
+  isActive: boolean;
+}
+interface ITaskOfWork {
+  id: string;
+  idTask: string;
+  idEmployee: string;
+  percentOfDone: number;
+  finishDateET: OrNull<string>;
+  finishDate: OrNull<string>;
+  note: OrNull<string>;
+  task: ITask;
+}
+interface IWorksEmployee {
+  id: string;
+  idEmployee: string;
+  idWorksProject: string;
+  note: OrNull<string>;
+  tasksOfWork: ITaskOfWork[];
+}
+
+interface IWorkProject {
+  id: string;
+  idProject: string;
+  idWork: string;
+  createdDate: string;
+  finishDate: OrNull<string>;
+  finishDateET: OrNull<string>;
+  note: OrNull<string>;
+  worksOfEmployee: IWorksEmployee[];
+  work?: IWork;
+}
+interface IWork {
+  id: string;
+  name: string;
+  note: OrNull<string>;
+}
+
 interface IResource {
   id: string;
   idResourceType: string;

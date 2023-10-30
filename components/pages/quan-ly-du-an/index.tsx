@@ -6,42 +6,83 @@ import DuyetDeXuat from './duyet-de-xuat';
 import CalendarDauViec from './calendar-dau-viec/calendar-dau-viec';
 import NhanVienDuAn from './nhan-vien-du-an';
 import NguonLuc from './nguon-luc';
-const QuanLyDuAn = () => {
+import useQueryParams from '@/hooks/useQueryParams';
+
+interface IQuanLyDuAn {
+  data: { data: unknown[]; totalItems: number } | unknown[];
+}
+
+const QuanLyDuAn = (props: IQuanLyDuAn) => {
+  const { data } = props;
+  const { handlePush, searchParams } = useQueryParams({
+    initSearchParams: {
+      tab: 'works-board',
+    },
+  });
+
+  console.log(data);
+
   return (
     <>
-      <Tabs defaultValue="board" className="w-full">
+      <Tabs className="w-full" defaultValue={searchParams.tab}>
         <TabsList className="w-[100% - 1rem] flex mx-2">
-          <TabsTrigger className="flex-1" value="board">
+          <TabsTrigger
+            className="flex-1"
+            value="works-board"
+            onClick={() => handlePush({ tab: 'works-board' })}
+          >
             Đầu việc - Board
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="calendar">
+          <TabsTrigger
+            className="flex-1"
+            value="works-calendar"
+            onClick={() => handlePush({ tab: 'works-calendar' })}
+          >
             Đầu việc - Calendar
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="nhan-vien">
+          <TabsTrigger
+            className="flex-1"
+            value="employee"
+            onClick={() => handlePush({ tab: 'employee' })}
+          >
             Nhân viên dự án
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="duyet-de-xuat">
+          <TabsTrigger
+            className="flex-1"
+            value="propose"
+            onClick={() => handlePush({ tab: 'propose' })}
+          >
             Duyệt đề xuất
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="nguon-luc">
+          <TabsTrigger
+            className="flex-1"
+            value="resource"
+            onClick={() => handlePush({ tab: 'resource' })}
+          >
             Nguồn lực
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="board" className="flex gap-2 overflow-x-auto pt-1">
-          <BoardDuAn />
-          <BoardDuAn />
-          <BoardDuAn />
+        <TabsContent
+          value="works-board"
+          className="flex gap-2 overflow-x-auto pt-1"
+        >
+          {(data as IWorkProject[])?.map((workPj) => (
+            <BoardDuAn {...workPj} key={workPj.idWork} />
+          ))}
         </TabsContent>
-        <TabsContent value="calendar" className="flex gap-2 overflow-x-auto">
+        <TabsContent
+          value="works-calendar"
+          className="flex gap-2 overflow-x-auto"
+        >
           <CalendarDauViec />
         </TabsContent>
-        <TabsContent value="nhan-vien">
+        <TabsContent value="employee">
           <NhanVienDuAn />
         </TabsContent>
-        <TabsContent value="duyet-de-xuat">
+        <TabsContent value="propose">
           <DuyetDeXuat />
         </TabsContent>
-        <TabsContent value="nguon-luc">
+        <TabsContent value="resource">
           <NguonLuc />
         </TabsContent>
       </Tabs>

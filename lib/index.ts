@@ -8,3 +8,7 @@ export * as ReviewProjectServices from './review-project';
 export * as ProjectServices from './project';
 export * as AuthenticationServices from './authentication';
 export * as ResourceServices from './resource';
+export * as EmployeeProjectServices from './project/employee';
+export * as ResourceProjectServices from './project/resource';
+export * as ReviewProposeResourceServices from './project/review-propose-resource';
+export * as WorkProjectServices from './project/work';

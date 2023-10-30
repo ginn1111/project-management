@@ -35,11 +35,8 @@ type BoardDuAnItemProps = {
   status: keyof typeof LABEL_COLOR;
   title: ReactNode;
   progress: number;
+  note: OrNull<string>;
 };
-
-interface IModalState {
-  open: boolean;
-}
 
 const BoardDuAnItem = (props: BoardDuAnItemProps) => {
   const { status, title, progress } = props;

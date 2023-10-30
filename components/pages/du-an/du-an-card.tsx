@@ -18,6 +18,7 @@ interface IDuAnCard extends IProject {
 }
 
 const DuAnCard = ({
+  id,
   name,
   startDate,
   finishDateET,
@@ -100,7 +101,7 @@ const DuAnCard = ({
         <span className="group" role="button" onClick={onAddResource}>
           <IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
         </span>
-        <Link href="/du-an/1">
+        <Link href={`/du-an/${id}`}>
           <IconEyeTwoTone />
         </Link>
       </div>
