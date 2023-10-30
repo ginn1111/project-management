@@ -2,7 +2,7 @@ import QuanLyDuAn from '@/components/pages/quan-ly-du-an';
 import {
   EmployeeProjectServices,
   ResourceProjectServices,
-  ReviewProposeResourceServices,
+  ProposeResourceServices,
   WorkProjectServices,
 } from '@/lib';
 import { AxiosResponse } from 'axios';
@@ -25,7 +25,7 @@ const getData: Record<
   employee: (idProject: string, searchParams: string) =>
     EmployeeProjectServices.getList({ idProject, searchParams }),
   propose: (idProject: string, searchParams: string) =>
-    ReviewProposeResourceServices.getList({ idProject, searchParams }),
+    ProposeResourceServices.getList({ idProject, searchParams }),
   resource: (idProject: string, searchParams: string) =>
     ResourceProjectServices.getList({ idProject, searchParams }),
 };

@@ -2,8 +2,8 @@ import ThemNguonLuc from '@/components/special/them-nguon-luc';
 import { Button } from '@/components/ui/button';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { ProjectServices } from '@/lib';
+import { formatResourceForm } from '@/utils/format-resource-form';
 import { AxiosError } from 'axios';
-import { isEmpty } from 'lodash';
 import { ReactNode, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -32,7 +32,7 @@ const ModalThemNguonLuc = (
   const handleThemNL = () => {
     const payload = {
       id: data?.id!,
-      resource: formatPayload(
+      resource: formatResourceForm(
         themNLRef.current?.getValues() as Record<
           string,
           { active?: boolean; number?: number }
@@ -55,24 +55,6 @@ const ModalThemNguonLuc = (
         <Button onClick={handleThemNL}>Xác nhận</Button>
       </div>
     </Modal>
-  );
-};
-
-const formatPayload = (
-  payload: Record<string, { active?: boolean; number?: number }>
-) => {
-  if (isEmpty(payload)) return [];
-  return Object.entries(payload).reduce(
-    (acc, [idResource, { active, number }]) => {
-      if (active && number) {
-        acc.push({
-          id: idResource,
-          amount: number,
-        });
-      }
-      return acc;
-    },
-    [] as { id: string; amount: number }[]
   );
 };
 

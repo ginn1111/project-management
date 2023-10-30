@@ -1,69 +1,98 @@
 import IconPlus from '@/components/Icon/IconPlus';
 import { Button } from '@/components/ui/button';
-import DataTable from '@/components/ui/data-table';
-import { faker } from '@faker-js/faker';
-import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import ModalThemNguonLuc from '../../du-an/modal/modal-them-nguon-luc';
 import useModal from '@/hooks/useModal';
+import useQueryParams from '@/hooks/useQueryParams';
+import { DataTable } from 'mantine-datatable';
+import { useParams } from 'next/navigation';
+import ModalThemNguonLuc from '../../du-an/modal/modal-them-nguon-luc';
 
-const DUMMY = Array(20)
-  .fill(0)
-  .map(() => ({
-    id: faker.string.alpha(),
-    name: faker.string.alphanumeric(),
-    amount: faker.number.int(),
-    used: faker.number.int(),
-  }));
+interface INguonLuc {
+	data: {
+		projectResource: IResourceProject[];
+		totalItems: number;
+	};
+}
 
-const NguonLuc = () => {
-  const { modal, handleCloseModal, handleOpenModal } = useModal({
-    modalNL: { open: false },
-  });
-  const columns: ColumnDef<(typeof DUMMY)[0]>[] = [
-    {
-      accessorKey: 'id',
-    },
-    {
-      accessorKey: 'name',
-    },
-    {
-      accessorKey: 'amount',
-      header: 'Used /amount',
-      cell: ({ row }) => (
-        <p>
-          {row.getValue('used')}/{row.getValue('amount')}
-        </p>
-      ),
-    },
-    {
-      accessorKey: 'actions',
-      size: 100,
-      header: '',
-      cell: () => (
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => handleOpenModal('modalNL')}
-          >
-            <IconPlus className="w-5 h-5" />
-          </Button>
-        </div>
-      ),
-    },
-  ];
-  return (
-    <div className="mx-2">
-      <DataTable data={DUMMY} columns={columns} />
-      <ModalThemNguonLuc
-        data={{}}
-        open={modal.modalNL.open}
-        onClose={() => handleCloseModal('modalNL')}
-        title="Thêm nguồn lực"
-      />
-    </div>
-  );
+const NguonLuc = ({ data }: INguonLuc) => {
+	const { id } = useParams();
+	const { handlePush, searchParams } = useQueryParams({
+		initSearchParams: { page: 1, limit: 10, tab: 'resource' },
+	});
+	const { modal, handleCloseModal, handleOpenModal } = useModal({
+		modalNL: { open: false },
+	});
+	const columns = [
+		{
+			accessor: 'resource.name',
+			title: 'Tên nguồn lực',
+		},
+		{
+			accessor: 'resource.resourceType.name',
+			title: 'Loại',
+		},
+		{
+			accessor: 'resource.amount',
+			title: 'Số lượng đã dùng/ tổng',
+			textAlignment: 'right',
+			render: (record: IResourceProject) => {
+				const usedAmount =
+					record.resourceOfTasks?.reduce(
+						(acc, task) => acc + task?.amount,
+						0
+					) ?? 0;
+				return <p>{`${usedAmount}/${record.amount}`}</p>;
+			},
+		},
+		{
+			accessor: 'actions',
+			title: '',
+			width: 70,
+			render: () => (
+				<div className="text-center">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={() => handleOpenModal('modalNL')}
+					>
+						<IconPlus className="w-5 h-5" />
+					</Button>
+				</div>
+			),
+		},
+	];
+	return (
+		<div className="mx-2">
+			<div className="datatables">
+				<DataTable
+					noRecordsText="Không có dữ liệu"
+					highlightOnHover
+					className="table-hover whitespace-nowrap"
+					records={data.projectResource}
+					columns={columns}
+					totalRecords={data.totalItems}
+					recordsPerPage={parseInt(searchParams.limit)}
+					page={parseInt(searchParams.page)}
+					onPageChange={(p) => {
+						handlePush({ page: p });
+					}}
+					recordsPerPageOptions={[10, 20, 30, 50, 100]}
+					onRecordsPerPageChange={(limit) => {
+						handlePush({ limit, page: 1 });
+					}}
+					minHeight={200}
+					paginationText={({ from, to, totalRecords }) =>
+						`Từ  ${from} đến ${to} của ${totalRecords}`
+					}
+				/>
+			</div>
+			<ModalThemNguonLuc
+				data={{ id }}
+				open={modal.modalNL.open}
+				onClose={() => handleCloseModal('modalNL')}
+				title="Thêm nguồn lực"
+			/>
+		</div>
+	);
 };
 
 export default NguonLuc;

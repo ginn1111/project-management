@@ -53,6 +53,7 @@ const LayoutQLDA = () => {
         open={modal.modalTDX.open}
         data={{}}
         onClose={() => handleCloseModal('modalTDX')}
+        onRefresh={() => router.refresh()}
       />
       <ModalTaoDauViec
         title="Thêm đầu việc"
