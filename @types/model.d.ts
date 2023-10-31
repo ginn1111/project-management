@@ -1,3 +1,11 @@
+interface IResourcesPropose {
+	id: string;
+	idResource: string;
+	idProposeResource: string;
+	amount: number;
+	resource: IResource;
+}
+
 interface IReviewProposeResource {
 	id: string;
 	idProposeResource: string;
@@ -13,6 +21,7 @@ interface IProposeResource {
 	idEmpProject: string;
 	description: OrNull<string>;
 	employeesOfProject?: EmployeesOfProject;
+	resourcesProposes: IResourcesPropose[];
 }
 interface IResourceProject {
 	id: string;

@@ -1,3 +1,4 @@
+import { StatePropose } from '@/constants/general';
 import { privateRequest } from '../axios';
 
 const PREFIX_URL = '/project/propose/resource';
@@ -19,3 +20,12 @@ export const add = ({
 	description?: string;
 }) =>
 	privateRequest.post(`${PREFIX_URL}/${idEmpProject}/create`, { ...payload });
+
+export const review = ({
+	id,
+	...payload
+}: {
+	id: string;
+	note: OrNull<string>;
+	stateName: ValueOf<typeof StatePropose>;
+}) => privateRequest.post(`${PREFIX_URL}/${id}/review`, payload);
