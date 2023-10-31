@@ -7,74 +7,106 @@ import { WorkProjectServices } from '@/lib';
 import { WorkSchema } from '@/yup-schema/work';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
-import { ReactNode } from 'react';
+import dayjs from 'dayjs';
+import { omit } from 'lodash';
+import { ReactNode, useEffect } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
 
 interface IModalTaoDauViec
-  extends Omit<IModalProps<{ idProject: string }>, 'children'> {
-  isEdit?: boolean;
+	extends Omit<IModalProps<Partial<IWorkProject>>, 'children'> {
+	isEdit?: boolean;
 }
 
 const ModalTaoDauViec = (props: IModalTaoDauViec) => {
-  const { isEdit, data, ...rest } = props;
-  const { mutate: addWork, isLoading } = useMutation({
-    mutationFn: WorkProjectServices.add,
-    onSettled: () => rest.onClose(),
-    onSuccess: () => {
-      toast.success('Thêm đầu việc thành công');
-      rest.onRefresh?.();
-    },
-    onError: (error: AxiosError) => {
-      toast.error(error.response?.data as ReactNode);
-    },
-  });
-  const form = useForm({
-    resolver: yupResolver(WorkSchema) as any,
-  });
+	const { isEdit, data, ...rest } = props;
+	const { mutate: addWork, isLoading } = useMutation({
+		mutationFn: isEdit ? WorkProjectServices.update : WorkProjectServices.add,
+		onSettled: () => rest.onClose(),
+		onSuccess: () => {
+			toast.success(`${isEdit ? 'Cập nhật' : 'Thêm'} đầu việc thành công`);
+			rest.onRefresh?.();
+		},
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as ReactNode);
+		},
+	});
+	const form = useForm({
+		resolver: yupResolver(WorkSchema(isEdit)) as any,
+	});
 
-  const handleSuccess: SubmitHandler<Partial<IWorkProject>> = (values) => {
-    const payload = { ...values, idProject: data?.idProject! };
-    addWork(payload);
-  };
+	useEffect(() => {
+		if (rest.open && isEdit) {
+			const { startDate, finishDateET, work, note } = data ?? {};
+			form.reset({
+				startDate: dayjs(startDate).isValid()
+					? dayjs(startDate).format('YYYY-MM-DD')
+					: undefined,
+				finishDateET: dayjs(finishDateET).isValid()
+					? dayjs(finishDateET).format('YYYY-MM-DD')
+					: undefined,
+				...work,
+				note,
+			});
+		} else {
+			form.reset();
+		}
+	}, [rest.open]);
 
-  const handleError: SubmitErrorHandler<Partial<IWorkProject>> = (errors) => {
-    const keys = Object.keys(errors) as (keyof IWorkProject)[];
-    toast.error(errors[keys[0]]?.message as ReactNode);
-  };
+	const handleSuccess: SubmitHandler<Partial<IWorkProject>> = (values) => {
+		const payload = {
+			...(isEdit ? omit(values, ['startDate', 'endDate']) : values),
+			id: data?.id,
+			idProject: data?.idProject!,
+		};
+		addWork(payload);
+	};
 
-  return (
-    <Modal {...rest} loading={isLoading}>
-      <form
-        className="space-y-4"
-        onSubmit={form.handleSubmit(handleSuccess, handleError)}
-      >
-        <div>
-          <Label required>Tên đầu việc</Label>
-          <Input {...form.register('name')} placeholder="tên đầu việc" />
-        </div>
-        <div>
-          <Label required>Ngày bắt đầu</Label>
-          <Input {...form.register('startDate')} type="date" />
-        </div>
-        <div>
-          <Label required>Ngày hoàn thành dự kiến</Label>
-          <Input {...form.register('finishDateET')} type="date" />
-        </div>
-        <div>
-          <Label>Mô tả</Label>
-          <Textarea {...form.register('note')} placeholder="mô tả" rows={10} />
-        </div>
-        <div className="items-center justify-end gap-4 flex mt-2">
-          <Button type="button" variant="outline" onClick={rest.onClose}>
-            Đóng
-          </Button>
-          <Button>Xác nhận</Button>
-        </div>
-      </form>
-    </Modal>
-  );
+	const handleError: SubmitErrorHandler<Partial<IWorkProject>> = (errors) => {
+		const keys = Object.keys(errors) as (keyof IWorkProject)[];
+		toast.error(errors[keys[0]]?.message as ReactNode);
+	};
+
+	return (
+		<Modal {...rest} loading={isLoading}>
+			<form
+				className="space-y-4"
+				onSubmit={form.handleSubmit(handleSuccess, handleError)}
+			>
+				<div>
+					<Label required>Tên đầu việc</Label>
+					<Input {...form.register('name')} placeholder="tên đầu việc" />
+				</div>
+				<div>
+					<Label required>Ngày bắt đầu</Label>
+					<Input
+						{...form.register('startDate')}
+						type="date"
+						disabled={isEdit}
+					/>
+				</div>
+				<div>
+					<Label required>Ngày hoàn thành dự kiến</Label>
+					<Input
+						{...form.register('finishDateET')}
+						type="date"
+						disabled={isEdit}
+					/>
+				</div>
+				<div>
+					<Label>Mô tả</Label>
+					<Textarea {...form.register('note')} placeholder="mô tả" rows={10} />
+				</div>
+				<div className="items-center justify-end gap-4 flex mt-2">
+					<Button type="button" variant="outline" onClick={rest.onClose}>
+						Đóng
+					</Button>
+					<Button>Xác nhận</Button>
+				</div>
+			</form>
+		</Modal>
+	);
 };
 
 export default ModalTaoDauViec;

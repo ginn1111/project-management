@@ -90,7 +90,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 						value="works-calendar"
 						className="flex gap-2 overflow-x-auto"
 					>
-						<CalendarDauViec />
+						<CalendarDauViec data={data as IWorkProject[]} />
 					</TabsContent>
 				) : null}
 				{tabs.isEmployee ? (

@@ -3,7 +3,10 @@ import { privateRequest } from '../axios';
 const PREFIX_URL = '/project/work';
 
 export const getList = ({ idProject }: { idProject: string }) =>
-  privateRequest.get(`${PREFIX_URL}/${idProject}`);
+	privateRequest.get(`${PREFIX_URL}/${idProject}`);
 
 export const add = ({ idProject, ...payload }: Partial<IWorkProject>) =>
-  privateRequest.post(`${PREFIX_URL}/${idProject}/create`, payload);
+	privateRequest.post(`${PREFIX_URL}/${idProject}/create`, payload);
+
+export const update = ({ id, ...payload }: Partial<IWorkProject>) =>
+	privateRequest.post(`${PREFIX_URL}/${id}/update`, payload);

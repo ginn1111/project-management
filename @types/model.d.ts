@@ -70,7 +70,7 @@ interface IWorkProject {
 	id: string;
 	idProject: string;
 	idWork: string;
-	createdDate: string;
+	startDate: string;
 	finishDate: OrNull<string>;
 	finishDateET: OrNull<string>;
 	note: OrNull<string>;
