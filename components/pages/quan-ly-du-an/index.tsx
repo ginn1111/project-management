@@ -100,7 +100,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 				) : null}
 				{tabs.isPropose ? (
 					<TabsContent value="propose">
-						<DuyetDeXuat />
+						<DuyetDeXuat data={data as any} />
 					</TabsContent>
 				) : null}
 				{tabs.isResource ? (

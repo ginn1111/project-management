@@ -30,7 +30,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
 	const router = useRouter();
 	const { data } = props;
 	const { handlePush, searchParams } = useQueryParams({
-		initSearchParams: { page: 1, limit: 10, search: '' },
+		initSearchParams: { page: 1, limit: 10 },
 	});
 
 	const { mutate, isLoading } = useMutation({
