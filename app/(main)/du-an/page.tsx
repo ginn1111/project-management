@@ -1,29 +1,34 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import FilterDuAn from '@/components/pages/du-an/filter-du-an';
 import ListDuAn from '@/components/pages/du-an/list-du-an';
 import { ProjectServices } from '@/lib';
+import { getServerSession } from 'next-auth';
 
 const DuAn = async ({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: ISearchParams & {
-    startDate?: string;
-    finishDateET?: string;
-    idDepartment?: string;
-  };
+	searchParams: ISearchParams & {
+		startDate?: string;
+		finishDateET?: string;
+		idDepartment?: string;
+	};
 }) => {
-  const projectListData = await ProjectServices.getList(
-    `search=${searchParams.search ?? ''}&startDate=${
-      searchParams.startDate ?? ''
-    }&finishDateET=${searchParams.finishDateET ?? ''}&idDepartment=${
-      searchParams.idDepartment ?? ''
-    }`
-  );
-  return (
-    <div>
-      <FilterDuAn />
-      <ListDuAn data={projectListData.data} />
-    </div>
-  );
+	const session = await getServerSession(authOptions);
+	console.log(session?.user.accessToken);
+	const projectListData = await ProjectServices.getList(
+		`search=${searchParams.search ?? ''}&startDate=${
+			searchParams.startDate ?? ''
+		}&finishDateET=${searchParams.finishDateET ?? ''}&idDepartment=${
+			searchParams.idDepartment ?? ''
+		}`,
+		session?.user.accessToken
+	);
+	return (
+		<div>
+			<FilterDuAn />
+			<ListDuAn data={projectListData.data} />
+		</div>
+	);
 };
 
 export default DuAn;

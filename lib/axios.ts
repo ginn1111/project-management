@@ -1,21 +1,40 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { getSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const BASE_URL = 'http://localhost:8080';
 
 export const publicRequest = axios.create({
-  baseURL: BASE_URL,
+	baseURL: BASE_URL,
 });
 
-export const privateRequest = axios.create({
-  baseURL: BASE_URL,
-});
+const initialPrivateRequest = () => {
+	const privateRequest = axios.create({
+		baseURL: BASE_URL,
+	});
 
-export const initialPrivateRequest = (accessToken: string) => {
-  privateRequest.interceptors.request.clear();
-  privateRequest.interceptors.request.use((config) => {
-    console.log(config.headers, accessToken);
-    config.headers['x-authorization'] = `Bearer ${accessToken}`;
+	privateRequest.interceptors.request.use(async (config) => {
+		const session = await getSession();
+		if (session?.user.accessToken)
+			config.headers['x-authorization'] = `Bearer ${session?.user.accessToken}`;
 
-    return config;
-  });
+		return config;
+	});
+
+	privateRequest.interceptors.response.use(
+		(response) => {
+			return response;
+		},
+		async (error: AxiosError) => {
+			if (error.response?.status === 401 || error.response?.status === 403) {
+				redirect('/api/logout');
+			}
+
+			return error;
+		}
+	);
+
+	return privateRequest;
 };
+
+export const privateRequest = initialPrivateRequest();

@@ -273,6 +273,7 @@ interface IEmployee {
 	departments?: IEmployeesOfDepartment[];
 	positions?: IPositionsEmployee[];
 	account?: account;
+	accessToken?: string;
 }
 
 interface IProvince {

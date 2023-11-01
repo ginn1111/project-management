@@ -41,6 +41,7 @@
     "lucide-react": "^0.279.0",
     "mantine-datatable": "^6.0.0",
     "next": "latest",
+    "next-auth": "^4.24.4",
     "react": "latest",
     "react-animate-height": "^3.2.2",
     "react-day-picker": "^8.8.2",
