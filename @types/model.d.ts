@@ -52,6 +52,7 @@ interface ITaskOfWork {
 	id: string;
 	idTask: string;
 	idEmployee: string;
+	startDate: string;
 	percentOfDone: number;
 	finishDateET: OrNull<string>;
 	finishDate: OrNull<string>;

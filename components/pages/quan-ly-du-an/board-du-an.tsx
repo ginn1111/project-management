@@ -116,15 +116,9 @@ const BoardDuAn = (props: IBoardDuAn) => {
 			<ul className="max-w-[500px] w-max-content p-4 rounded-b-md space-y-3 bg-primary2-light overflow-y-auto h-max">
 				{worksOfEmployee?.map((worksOfEmployee) => {
 					return (
-						<li key={worksOfEmployee.id}>
+						<li key={worksOfEmployee.id} className="space-y-3">
 							{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
-								<BoardDuAnItem
-									key={taskOfWork.idTask}
-									status="progress"
-									title={taskOfWork.task.name}
-									progress={taskOfWork.percentOfDone}
-									note={taskOfWork.task.note}
-								/>
+								<BoardDuAnItem key={taskOfWork.idTask} {...taskOfWork} />
 							))}
 						</li>
 					);
