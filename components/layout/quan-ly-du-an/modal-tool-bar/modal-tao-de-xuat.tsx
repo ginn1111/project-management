@@ -10,69 +10,69 @@ import { ReactNode, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
 
 interface IModalTaoDeXuat<T> extends Omit<IModalProps, 'children'> {
-  data: T;
+	data: T;
 }
 
 const ModalTaoDeXuat = <T,>(props: IModalTaoDeXuat<T>) => {
-  const { data, ...rest } = props;
-  const refNL = useRef<UseFormReturn>();
-  const refDescription = useRef<HTMLTextAreaElement | null>(null);
-  const { mutate: createPropose, isLoading } = useMutation({
-    mutationFn: ProposeResourceServices.add,
-    onSettled: () => {
-      rest.onClose();
-    },
-    onError: (error: AxiosError<ReactNode>) => {
-      toast.error(error.response?.data);
-    },
-    onSuccess: (response: AxiosResponse) => {
-      toast.success(response.data);
-      rest.onRefresh?.();
-    },
-  });
+	const params = useParams();
+	const { data, ...rest } = props;
+	const refNL = useRef<UseFormReturn>();
+	const refDescription = useRef<HTMLTextAreaElement | null>(null);
+	const { mutate: createPropose, isLoading } = useMutation({
+		mutationFn: ProposeResourceServices.add,
+		onSettled: () => {
+			rest.onClose();
+		},
+		onError: (error: AxiosError<ReactNode>) => {
+			toast.error(error.response?.data);
+		},
+		onSuccess: (response: AxiosResponse) => {
+			toast.success(response.data);
+			rest.onRefresh?.();
+		},
+	});
 
-  const handleAddPropose = () => {
-    const payload = {
-      // TODO
-      // hardcode for test
-      idEmpProject: 'EMPR_01HDKX8QAPZZJC56H5EH72QZW4',
-      resource: formatResourceForm(
-        refNL.current?.getValues() as Record<
-          string,
-          { active?: boolean; number?: number }
-        >
-      ),
-      description: refDescription.current?.value,
-    };
+	const handleAddPropose = () => {
+		const payload = {
+			idProject: params.id as string,
+			resource: formatResourceForm(
+				refNL.current?.getValues() as Record<
+					string,
+					{ active?: boolean; number?: number }
+				>
+			),
+			description: refDescription.current?.value,
+		};
 
-    createPropose(payload);
-  };
+		createPropose(payload);
+	};
 
-  return (
-    <Modal {...rest} loading={isLoading}>
-      <div className="space-y-4">
-        <ThemNguonLuc
-          ref={refNL}
-          scrollAreaProps={{
-            className: 'h-[40vh]',
-          }}
-        />
-        <div>
-          <Label>Mô tả</Label>
-          <Textarea ref={refDescription} rows={5} placeholder="mô tả" />
-        </div>
-      </div>
+	return (
+		<Modal {...rest} loading={isLoading}>
+			<div className="space-y-4">
+				<ThemNguonLuc
+					ref={refNL}
+					scrollAreaProps={{
+						className: 'h-[40vh]',
+					}}
+				/>
+				<div>
+					<Label>Mô tả</Label>
+					<Textarea ref={refDescription} rows={5} placeholder="mô tả" />
+				</div>
+			</div>
 
-      <div className="items-center justify-end gap-4 flex mt-2">
-        <Button variant="outline" onClick={rest.onClose}>
-          Đóng
-        </Button>
-        <Button onClick={handleAddPropose}>Xác nhận</Button>
-      </div>
-    </Modal>
-  );
+			<div className="items-center justify-end gap-4 flex mt-2">
+				<Button variant="outline" onClick={rest.onClose}>
+					Đóng
+				</Button>
+				<Button onClick={handleAddPropose}>Xác nhận</Button>
+			</div>
+		</Modal>
+	);
 };
 
 export default ModalTaoDeXuat;

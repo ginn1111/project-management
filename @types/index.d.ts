@@ -35,7 +35,7 @@ declare global {
 
 declare module 'next-auth' {
 	interface Session {
-		user: IEmployee & DefaultSession['user'];
+		user: { info: IEmployee; accessToken?: string } & DefaultSession['user'];
 	}
 }
 

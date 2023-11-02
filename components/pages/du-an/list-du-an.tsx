@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useMutation } from 'react-query';
 import { ProjectServices } from '@/lib';
 import { AxiosError } from 'axios';
+import { signOut, useSession } from 'next-auth/react';
 
 interface IListDuAn {
 	data: { projects: IProject[]; totalItems: number };
@@ -20,6 +21,8 @@ interface IListDuAn {
 
 const ListDuAn = ({ data }: IListDuAn) => {
 	const router = useRouter();
+	const {data: session} = useSession()
+	const {user} = session ?? {}
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
 		modalPJ: { open: false, project: {} },
 		modalRS: { open: false, project: { id: '' } },
@@ -45,12 +48,17 @@ const ListDuAn = ({ data }: IListDuAn) => {
 	const contentRef = useRef<HTMLTextAreaElement | null>(null);
 
 	const handlePropose = () => {
+		if(!user?.info?.id) {
+			signOut();
+			return;
+		}
 		if (!contentRef.current?.value) {
 			toast.error('Vui lòng nhập lời nhắn để đề xuất');
 			return;
 		}
 		const payload = {
 			...modal.modalPP.payload,
+			idEmployee: user?.info.id,
 			content: contentRef.current.value,
 		};
 		proposeProject(payload);
@@ -64,12 +72,9 @@ const ListDuAn = ({ data }: IListDuAn) => {
 					{...project}
 					onUpdate={() => handleOpenModal('modalPJ', { project })}
 					onAddResource={() => handleOpenModal('modalRS', { project })}
-					// TODO
-					// hardcode for idEmployee, update late
 					onPropose={() =>
 						handleOpenModal('modalPP', {
 							payload: {
-								idEmployee: 'EMPL_01HCYJHDATA3XECHSYBBPNF28K',
 								idProject: project.id,
 							},
 						})

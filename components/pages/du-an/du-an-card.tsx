@@ -4,7 +4,6 @@ import IconEditTwoTone from '@/components/Icon/IconEditTwoTone';
 import IconEyeTwoTone from '@/components/Icon/IconEyeTwoTone';
 import IconSendTwoTone from '@/components/Icon/IconSendTwoTone';
 import { Label } from '@/components/ui/label';
-import useModal from '@/hooks/useModal';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';

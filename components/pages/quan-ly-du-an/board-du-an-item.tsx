@@ -13,11 +13,12 @@ import useModal from '@/hooks/useModal';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { AlertCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
-import ModalChinhSuaCongViec from './modal-du-an-item/modal-chinh-sua-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
 import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
+import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 
 dayjs.extend(duration);
 
@@ -36,12 +37,13 @@ const LABEL: { [k in keyof typeof LABEL_COLOR]: string } = {
 const BoardDuAnItem = (props: ITaskOfWork) => {
 	const { note, finishDateET, task } = props;
 	const { name } = task ?? {};
+	const router = useRouter();
 	const {
 		modal: modalState,
 		handleCloseModal,
 		handleOpenModal,
 	} = useModal({
-		modalCS: { open: false },
+		modalCS: { open: false, task: {} },
 		modalLS: { open: false },
 		modalPQ: { open: false },
 		modalCT: { open: false },
@@ -91,7 +93,9 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 						<DropdownMenuItem onClick={() => handleOpenModal('modalDone')}>
 							Hoàn thành
 						</DropdownMenuItem>
-						<DropdownMenuItem onClick={() => handleOpenModal('modalCS')}>
+						<DropdownMenuItem
+							onClick={() => handleOpenModal('modalCS', { task: props })}
+						>
 							Chỉnh sửa
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => handleOpenModal('modalCT')}>
@@ -116,11 +120,13 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				title="Phân quyền"
 				onClose={() => handleCloseModal('modalPQ')}
 			/>
-			<ModalChinhSuaCongViec
-				data={{}}
+			<ModalTaoCongViec
+				isEdit
+				data={modalState.modalCS.task}
 				open={modalState.modalCS.open}
 				title="Chỉnh sửa công việc"
 				onClose={() => handleCloseModal('modalCS')}
+				onRefresh={() => router.refresh()}
 			/>
 			<ModalChiTietCongViec
 				data={{}}

@@ -139,16 +139,19 @@ const BoardDuAn = (props: IBoardDuAn) => {
 			<ModalGiaoViec
 				open={modalState.modalGV.open}
 				title="Giao việc"
-				data={{}}
+				data={props}
 				onClose={() => handleCloseModal('modalGV')}
+				onRefresh={() => router.refresh()}
 			/>
 			<ModalTaoCongViec
 				open={modalState.modalTCV.open}
 				title="Tạo công việc"
-				data={{}}
+				data={props}
 				onClose={() => handleCloseModal('modalTCV')}
+				onRefresh={() => router.refresh()}
 			/>
 			<ModalPhanQuyen
+				onRefresh={() => router.refresh()}
 				open={modalState.modalPQ.open}
 				title="Phân quyền"
 				data={{}}

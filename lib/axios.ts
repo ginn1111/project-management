@@ -23,14 +23,14 @@ const initialPrivateRequest = () => {
 
 	privateRequest.interceptors.response.use(
 		(response) => {
-			return response;
+			return Promise.resolve(response)
 		},
 		async (error: AxiosError) => {
 			if (error.response?.status === 401 || error.response?.status === 403) {
 				redirect('/api/logout');
 			}
 
-			return error;
+			return Promise.reject(error)
 		}
 	);
 

@@ -17,3 +17,13 @@ export const add = ({ idProject, ...payload }: Partial<IWorkProject>) =>
 
 export const update = ({ id, ...payload }: Partial<IWorkProject>) =>
 	privateRequest.post(`${PREFIX_URL}/${id}/update`, payload);
+
+// assignment
+export const assign = ({ id, ...payload }: Partial<IWorkProject>) =>
+	privateRequest.post(`${PREFIX_URL}/${id}/assign`, payload);
+
+// task
+export const createTask = ({ id, ...payload }: Partial<ITaskOfWork>) =>
+	privateRequest.post(`${PREFIX_URL}/${id}/task/create`, payload);
+export const updateTask = ({ id, ...payload }: Partial<ITaskOfWork>) =>
+	privateRequest.patch(`${PREFIX_URL}/${id}/task/update`, payload);

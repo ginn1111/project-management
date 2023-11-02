@@ -20,14 +20,12 @@ export const getList = (
 	});
 
 export const add = ({
-	idEmpProject,
 	...payload
 }: {
 	resource: { id: string; amount: number }[];
-	idEmpProject: string;
+	idProject: string;
 	description?: string;
-}) =>
-	privateRequest.post(`${PREFIX_URL}/${idEmpProject}/create`, { ...payload });
+}) => privateRequest.post(`${PREFIX_URL}/create`, { ...payload });
 
 export const review = ({
 	id,

@@ -65,6 +65,7 @@ interface IWorksEmployee {
 	idWorksProject: string;
 	note: OrNull<string>;
 	tasksOfWork: ITaskOfWork[];
+	employee?: IEmployeeProject;
 }
 
 interface IWorkProject {

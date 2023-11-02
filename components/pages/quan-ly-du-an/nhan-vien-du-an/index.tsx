@@ -57,6 +57,10 @@ const TableNhanVien = (props: ITableNhanVien) => {
 			title: 'Số điện thoại',
 		},
 		{
+			accessor: 'proposeProject.employeesOfDepartment.department.name',
+			title: 'Phòng ban',
+		},
+		{
 			accessor: `${employeePath}.gender`,
 			title: 'Giới tính',
 			render: (record: IEmployeeProject) => (
@@ -68,14 +72,6 @@ const TableNhanVien = (props: ITableNhanVien) => {
 					}
 				</p>
 			),
-		},
-		{
-			accessor: 'birthday',
-			title: 'Ngày sinh',
-			render: (record: IEmployeeProject) => {
-				const birthday = get(record, `${employeePath}.birthday`);
-				return <p>{birthday ? dayjs(birthday).format('DD/MM/YYYY') : 'N/A'}</p>;
-			},
 		},
 		{
 			accessor: `${employeePath}.email`,
@@ -104,6 +100,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
 			),
 		},
 	];
+
+	console.log(data.employeesOfProject);
 
 	return (
 		<>

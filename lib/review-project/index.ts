@@ -4,8 +4,12 @@ const PREFIX_URL = '/project/propose';
 
 // join to the project
 
-export const getList = (searchParams: string) =>
-	privateRequest.get(`${PREFIX_URL}/list?${searchParams}`);
+export const getList = (searchParams: string, accessToken?: string) =>
+	privateRequest.get(`${PREFIX_URL}/list?${searchParams}`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});
 
 export const review = ({
 	id,

@@ -2,7 +2,7 @@ import { QueryKeys } from '@/constants/query-key';
 import { DepartmentServices, EmployeeProjectServices } from '@/lib';
 import { AxiosResponse } from 'axios';
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import ReactSelect from '../ui/react-select';
@@ -11,9 +11,11 @@ interface IGroupSelectNhanVien {
 	isMulti?: boolean;
 }
 
-const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
+const GroupSelectNhanVien = forwardRef(({ isMulti = false }: IGroupSelectNhanVien, ref) => {
 	const params = useParams();
 	const form = useForm();
+	
+	useImperativeHandle(ref, () => form)
 
 	const { data: departmentData } = useQuery<
 		AxiosResponse<{ departments: IDepartment[] }>
@@ -93,7 +95,7 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
 			<div className="custom-select">
 				<ReactSelect
 					control={form.control}
-					name="idEmployeePj"
+					name="idEmployee"
 					labelProps={{ required: true }}
 					title="Nhân viên"
 					placeholder="nhân viên"
@@ -110,6 +112,8 @@ const GroupSelectNhanVien = ({ isMulti = false }: IGroupSelectNhanVien) => {
 			</div>
 		</>
 	);
-};
+});
+
+GroupSelectNhanVien.displayName = 'GroupSelectNhanVien'
 
 export default GroupSelectNhanVien;

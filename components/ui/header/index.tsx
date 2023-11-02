@@ -20,7 +20,7 @@ import { themeSelectors } from '@/store/selectors/theme-selectors';
 import Link from 'next/link';
 import Dropdown from './dropdown';
 import { Button } from '../button';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 function createMarkup(messages: any) {
 	return { __html: messages };
 }
@@ -85,8 +85,13 @@ const messages = [
 
 const Header = () => {
 	const toggleSidebar = themeSelectors.use.toggleSidebar();
+	const {data} = useSession();
+	const {user} = data ?? {}
+	console.log(user?.info)
+
 	return (
 		<header className="z-40">
+			{user?.info.id}
 			<div className="shadow-sm">
 				<div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
 					<div className="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
@@ -284,7 +289,7 @@ const Header = () => {
 									/>
 								}
 							>
-								<ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+								<ul className="!py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 w-max max-w-[260px]">
 									<li>
 										<div className="flex items-center px-4 py-4">
 											<img
@@ -292,18 +297,15 @@ const Header = () => {
 												src="/assets/images/user-profile.jpeg"
 												alt="userProfile"
 											/>
-											<div className="truncate pl-4">
+											<div className="pl-4">
 												<h4 className="text-base">
-													John Doe
-													<span className="rounded bg-success-light px-1 text-xs text-success ml-2">
-														Pro
-													</span>
+													{user?.info?.fullName}
 												</h4>
 												<button
 													type="button"
 													className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
 												>
-													johndoe@gmail.com
+													{user?.info?.email}
 												</button>
 											</div>
 										</div>

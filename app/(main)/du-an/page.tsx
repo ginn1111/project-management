@@ -14,7 +14,7 @@ const DuAn = async ({
 	};
 }) => {
 	const session = await getServerSession(authOptions);
-	console.log(session?.user.accessToken);
+
 	const projectListData = await ProjectServices.getList(
 		`search=${searchParams.search ?? ''}&startDate=${
 			searchParams.startDate ?? ''
