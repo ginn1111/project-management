@@ -1,67 +1,101 @@
-import IconXCircle from '@/components/Icon/IconXCircle';
 import { Button } from '@/components/ui/button';
-import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
-interface IModalDuAn<T> extends Omit<IModalProps, 'children'> {
-  data: T;
-}
+const ModalChiTietCongViec = (
+	props: Omit<IModalProps<ITaskOfWork>, 'children'>
+) => {
+	const { data, ...rest } = props;
 
-const ModalChiTietCongViec = <T,>(props: IModalDuAn<T>) => {
-  const { ...rest } = props;
-  return (
-    <Modal {...rest}>
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <Label>Ngày bắt đầu</Label>
-            <Input type="datetime-local" disabled />
-          </div>
-          <div className="flex-1">
-            <Label>Ngày hoàn thành</Label>
-            <Input type="datetime-local" disabled />
-          </div>
-        </div>
-        <div className="max-h-[50vh] overflow-y-auto">
-          <Label>Mô tả</Label>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem
-            nihil enim aut nobis fugit impedit a iste sit asperiores ipsa, porro
-            facere consectetur debitis distinctio. Ab itaque deserunt sed odio?
-          </p>
-        </div>
-        <div>
-          <Label>Nguồn lực sử dụng</Label>
-          <ScrollArea className="px-4 py-2 border rounded-md h-[200px]">
-            {Array(10)
-              .fill(0)
-              .map((_, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-4 justify-between text-sm"
-                >
-                  <p>Tên nguồn lực</p>
-                  <span>Số lượng</span>
-                </div>
-              ))}
-          </ScrollArea>
-        </div>
-      </div>
+	const date = {
+		startDateJs: dayjs(data?.startDate),
+		finishDateJs: dayjs(data?.finishDateET),
+	};
 
-      <div className="mt-2 flex items-center justify-between">
-        <p className="bg-primary2-light text-primary2 max-w-max px-2 py-1 rounded-sm outline-offset-2 outline outline-solid outline-primary2 text-sm">
-          Đang thực hiện
-        </p>
-        <Button variant="outline" onClick={rest.onClose}>
-          Đóng
-        </Button>
-      </div>
-    </Modal>
-  );
+	return (
+		<Modal {...rest} title={data?.task?.name}>
+			<div className="space-y-4">
+				<div className="flex items-center gap-4">
+					<div className="flex-1">
+						<Label>Ngày bắt đầu</Label>
+						<Input
+							type="date"
+							disabled
+							defaultValue={
+								date.startDateJs.isValid()
+									? date.startDateJs.format('YYYY-MM-DD')
+									: undefined
+							}
+						/>
+					</div>
+					<div className="flex-1">
+						<Label>Ngày hoàn thành dự kiến</Label>
+						<Input
+							type="date"
+							disabled
+							defaultValue={
+								date.startDateJs.isValid()
+									? date.startDateJs.format('YYYY-MM-DD')
+									: undefined
+							}
+						/>
+					</div>
+				</div>
+				{data?.note ? (
+					<div className="ring-2 ring-muted rounded-md mb-5 px-4 py-2">
+						<Label>Mô tả</Label>
+						<p className="text-sm">{data.note}</p>
+					</div>
+				) : null}
+				<div>
+					<Label>Nguồn lực sử dụng</Label>
+					{data?.task?.resourceOfTasks?.length ? (
+						<ScrollArea className="px-4 py-2 border rounded-md h-[200px]">
+							{Array(10)
+								.fill(0)
+								.map((_, idx) => (
+									<div
+										key={idx}
+										className="flex items-center gap-4 justify-between text-sm"
+									>
+										<p>Tên nguồn lực</p>
+										<span>Số lượng</span>
+									</div>
+								))}
+						</ScrollArea>
+					) : (
+						<p className="text-danger text-sm">
+							Công việc chưa sử dụng nguồn lực
+						</p>
+					)}
+				</div>
+			</div>
+
+			<div className="mt-2 flex items-center justify-between">
+				<span
+					className={cn(
+						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2',
+						{
+							['text-success bg-success-light']: !!data?.finishDate,
+							['text-danger bg-danger-light']: !!dayjs(
+								data?.finishDateET
+							).isBefore(dayjs()),
+						}
+					)}
+				>
+					{data?.finishDate ? 'Hoàn thành' : 'Đang thực hiện'}
+					{dayjs(data?.finishDateET).isBefore(dayjs()) ? 'Quá hạn' : null}
+				</span>
+				<Button variant="outline" onClick={rest.onClose}>
+					Đóng
+				</Button>
+			</div>
+		</Modal>
+	);
 };
 
 export default ModalChiTietCongViec;

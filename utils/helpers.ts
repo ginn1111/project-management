@@ -61,5 +61,5 @@ export const getValueFromId = <T extends { name: string; id: string }>(
 	return dfValue ? { label: dfValue.name, value: dfValue.id } : null;
 };
 
-export const getEmployeeFromRelation = (proposeProject?: IProposeProject) =>
+export const getEmployeeFromProposePj = (proposeProject?: IProposeProject) =>
 	get(proposeProject, 'employeesOfDepartment.employee') as IEmployee;

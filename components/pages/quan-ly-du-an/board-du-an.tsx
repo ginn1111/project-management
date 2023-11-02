@@ -15,6 +15,7 @@ import { ColorStatusDauViec } from '@/constants/theme';
 import useModal from '@/hooks/useModal';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import BoardDuAnItem from './board-du-an-item';
 import ModalGiaoViec from './modal-du-an/modal-giao-viec';
 import ModalLichSu from './modal-du-an/modal-lich-su';
@@ -23,9 +24,7 @@ import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
 
-interface IBoardDuAn extends IWorkProject {}
-
-const BoardDuAn = (props: IBoardDuAn) => {
+const BoardDuAn = (props: IWorkProject) => {
 	const router = useRouter();
 	const { work, worksOfEmployee } = props;
 	const {
@@ -42,6 +41,20 @@ const BoardDuAn = (props: IBoardDuAn) => {
 		modalDG: { open: false },
 	});
 
+	const statisticTask = useMemo(() => {
+		const tasksOfWork = props.worksOfEmployee.flatMap(
+			(work) => work.tasksOfWork
+		);
+		const tasksDone = tasksOfWork.reduce(
+			(acc, task) => acc + Number(task?.finishDate ?? 0),
+			0
+		);
+		return {
+			tasksDone,
+			taskIP: tasksOfWork?.length - tasksDone,
+		};
+	}, [JSON.stringify(props.worksOfEmployee)]);
+
 	return (
 		<div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
 			<div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-5px_15px_-10px] shadow-primary2/50 flex-wrap max-w-full gap-2">
@@ -50,7 +63,7 @@ const BoardDuAn = (props: IBoardDuAn) => {
 				</p>
 				<div
 					className={cn(
-						'rounded-full shrink-0 px-2 py-1 text-[12px] ml-auto',
+						'rounded-md shrink-0 px-2 py-1 text-[12px] ml-auto uppercase font-medium',
 						ColorStatusDauViec[
 							(() => {
 								const rd = Math.floor(Math.random());
@@ -104,36 +117,36 @@ const BoardDuAn = (props: IBoardDuAn) => {
 				<div className="flex gap-4 items-center w-full">
 					<div className="flex items-center rounded-sm gap-1">
 						<IconSquareCheck className="w-4 h-4 text-success" />
-						<div className="text-xs">5 Tasks</div>
+						<div className="text-xs">{statisticTask.tasksDone} Tasks</div>
 					</div>
 
 					<div className="flex items-center rounded-sm gap-1">
 						<IconXSquare className="w-4 h-4 text-danger" />
-						<div className="text-xs">5 Tasks</div>
+						<div className="text-xs">{statisticTask.taskIP} Tasks</div>
 					</div>
 				</div>
 			</div>
 			<ul className="max-w-[500px] w-max-content p-4 rounded-b-md space-y-3 bg-primary2-light overflow-y-auto h-max">
-				{worksOfEmployee?.map((worksOfEmployee) => {
-					return (
-						<li key={worksOfEmployee.id} className="space-y-3">
-							{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
-								<BoardDuAnItem key={taskOfWork.idTask} {...taskOfWork} />
-							))}
-						</li>
-					);
-				})}
-				{/* <BoardDuAnItem status="progress" title="Viec 1" progress={100} />
-				<BoardDuAnItem status="progress" title="Viec 1" progress={100} />
-				<BoardDuAnItem status="progress" title="Viec 1" progress={100} />
-				{Math.random() > 0.5 ? (
-					<BoardDuAnItem status="failed" title="Viec 1" progress={100} />
-				) : null} */}
+				{worksOfEmployee?.length ? (
+					worksOfEmployee?.map((worksOfEmployee) => {
+						return (
+							<li key={worksOfEmployee.id} className="space-y-3">
+								{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
+									<BoardDuAnItem key={taskOfWork.idTask} {...taskOfWork} />
+								))}
+							</li>
+						);
+					})
+				) : (
+					<p className="text-center text-mutated-foreground">
+						Không có công việc nào được tạo
+					</p>
+				)}
 			</ul>
 			<ModalChiTietDauViec
 				open={modalState.modalDV.open}
 				onClose={() => handleCloseModal('modalDV')}
-				data={{}}
+				data={props}
 				title="Khảo sát dự án Khảo sát dự án Khảo sát dự án"
 			/>
 			<ModalGiaoViec

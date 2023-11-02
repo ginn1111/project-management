@@ -4,7 +4,7 @@ import Modal, { IModalProps } from '@/components/ui/modal';
 import Label from '@/components/ui/my-label';
 import { Textarea } from '@/components/ui/textarea';
 import { WorkProjectServices } from '@/lib';
-import { getEmployeeFromRelation } from '@/utils/helpers';
+import { getEmployeeFromProposePj } from '@/utils/helpers';
 import { TaskSchema } from '@/yup-schema/task';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
@@ -90,11 +90,9 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 	const handleSuccess: SubmitHandler<Partial<ITaskOfWork>> = (values) => {
 		const empOfWork = (data as IWorkProject)?.worksOfEmployee.find(
 			(w) =>
-				getEmployeeFromRelation(w?.employee?.proposeProject)?.id ===
+				getEmployeeFromProposePj(w?.employee?.proposeProject)?.id ===
 				user?.info.id
 		);
-
-		console.log(data, user);
 
 		const payload = {
 			id: data?.id,

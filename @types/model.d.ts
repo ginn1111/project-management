@@ -47,6 +47,7 @@ interface ITask {
 	name: string;
 	note: OrNull<string>;
 	isActive: boolean;
+	resourceOfTasks?: any;
 }
 interface ITaskOfWork {
 	id: string;

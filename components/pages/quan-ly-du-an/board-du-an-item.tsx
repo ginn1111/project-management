@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { AlertCircle } from 'lucide-react';
@@ -21,18 +22,6 @@ import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 
 dayjs.extend(duration);
-
-const LABEL_COLOR = {
-	progress: 'bg-secondary2',
-	done: 'bg-success',
-	failed: 'bg-danger',
-} as const;
-
-const LABEL: { [k in keyof typeof LABEL_COLOR]: string } = {
-	progress: 'Đang thực hiện',
-	done: 'Đã hoàn thành',
-	failed: 'Quá hạn',
-};
 
 const BoardDuAnItem = (props: ITaskOfWork) => {
 	const { note, finishDateET, task } = props;
@@ -65,23 +54,29 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				<h6 className="text-black font-semibold text-base dark:text-white-light">
 					{name}
 				</h6>
-				{/* <span
+				<span
 					className={cn(
-						'uppercase badge bg-primary/10 py-1.5',
-						LABEL_COLOR[status]
+						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2',
+						{
+							['text-success bg-success-light']: !!props.finishDate,
+							['text-danger bg-danger-light']: !!dayjs(
+								props?.finishDateET
+							).isBefore(dayjs()),
+						}
 					)}
 				>
-					{LABEL[status]}
-				</span> */}
+					{props?.finishDate ? 'Hoàn thành' : 'Đang thực hiện'}
+					{dayjs(props?.finishDateET).isBefore(dayjs()) ? 'Quá hạn' : null}
+				</span>
 			</div>
 			<p>{note}</p>
 			<div className="flex items-center justify-between mt-3">
 				<div className="flex items-center rounded-full bg-danger/20 px-2 py-1 text-xs font-semibold text-danger w-max">
 					<IconClock className="w-3 h-3 mr-1" />
-					{_duration.year ? _duration.year + 'năm' : null}{' '}
-					{_duration.month ? _duration.month + 'tháng' : null}{' '}
-					{_duration.day ? _duration.day + 'ngày' : null}{' '}
-					{_duration.hour ? _duration.hour + 'giờ' : null} {' còn lại'}
+					{_duration.year ? _duration.year + 'y' : null}{' '}
+					{_duration.month ? _duration.month + 'm' : null}{' '}
+					{_duration.day ? _duration.day + 'd' : null}{' '}
+					{_duration.hour ? _duration.hour + 'h' : null} {' còn lại'}
 				</div>
 				<DropdownMenu>
 					<DropdownMenuTrigger>
@@ -129,7 +124,7 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				onRefresh={() => router.refresh()}
 			/>
 			<ModalChiTietCongViec
-				data={{}}
+				data={props}
 				open={modalState.modalCT.open}
 				title="Khảo sát dự án 1"
 				onClose={() => handleCloseModal('modalCT')}
