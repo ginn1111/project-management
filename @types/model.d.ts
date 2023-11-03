@@ -1,3 +1,10 @@
+interface IHistory {
+	id: string;
+	idEmployee: string;
+	createdDate: string;
+	content: string;
+	note: string;
+}
 interface IResourcesPropose {
 	id: string;
 	idResource: string;

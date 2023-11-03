@@ -14,13 +14,13 @@ const DuAn = async ({
 	};
 }) => {
 	const session = await getServerSession(authOptions);
+	// TODO filter depend on idDepartment
+	const idDepartment = session?.user.info.departments?.[0]?.idDepartment;
 
 	const projectListData = await ProjectServices.getList(
 		`search=${searchParams.search ?? ''}&startDate=${
 			searchParams.startDate ?? ''
-		}&finishDateET=${searchParams.finishDateET ?? ''}&idDepartment=${
-			searchParams.idDepartment ?? ''
-		}`,
+		}&finishDateET=${searchParams.finishDateET ?? ''}&idDepartment=${''}`,
 		session?.user.accessToken
 	);
 	return (

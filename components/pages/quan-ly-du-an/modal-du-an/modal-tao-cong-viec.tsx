@@ -29,8 +29,9 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 	const { data: session } = useSession();
 	const params = useParams();
 	const { user } = session ?? {};
+
 	const form = useForm({
-		resolver: yupResolver(TaskSchema) as any,
+		resolver: yupResolver(TaskSchema(isEdit, data?.finishDateET)) as any,
 	});
 
 	const { mutate: createTask, isLoading } = useMutation({
@@ -67,10 +68,10 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 				name: (data as ITaskOfWork)?.task.name,
 				note: data?.note,
 				startDate: dayjs(data?.startDate).isValid()
-					? dayjs(data?.startDate).format('YYYY-MM-DD')
+					? dayjs(data?.startDate).format('YYYY-MM-DDTHH:mm')
 					: undefined,
 				finishDateET: dayjs(data?.finishDateET).isValid()
-					? dayjs(data?.finishDateET).format('YYYY-MM-DD')
+					? dayjs(data?.finishDateET).format('YYYY-MM-DDTHH:mm')
 					: undefined,
 			};
 			form.reset(resetData);
@@ -124,11 +125,11 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 				</div>
 				<div>
 					<Label required>Ngày bắt đầu</Label>
-					<Input {...form.register('startDate')} type="date" />
+					<Input {...form.register('startDate')} type="datetime-local" />
 				</div>
 				<div>
 					<Label required>Ngày hoàn thành dự kiến</Label>
-					<Input {...form.register('finishDateET')} type="date" />
+					<Input {...form.register('finishDateET')} type="datetime-local" />
 				</div>
 				<div>
 					<Label>Mô tả</Label>

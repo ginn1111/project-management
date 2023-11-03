@@ -33,3 +33,10 @@ export const proposeProject = (payload: {
 	idProject: string;
 	content: string;
 }) => privateRequest.post(`${PREFIX_URL}/propose`, payload);
+
+export const inProject = (idProject: string, accessToken?: string) =>
+	privateRequest.get(`${PREFIX_URL}/${idProject}/in-project`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});

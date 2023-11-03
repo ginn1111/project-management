@@ -2,8 +2,8 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import QuanLyDuAn from '@/components/pages/quan-ly-du-an';
 import {
 	EmployeeProjectServices,
-	ResourceProjectServices,
 	ProposeResourceServices,
+	ResourceProjectServices,
 	WorkProjectServices,
 } from '@/lib';
 import { AxiosResponse } from 'axios';

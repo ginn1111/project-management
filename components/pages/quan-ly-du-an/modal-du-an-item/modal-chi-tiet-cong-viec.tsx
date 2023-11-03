@@ -3,7 +3,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 const ModalChiTietCongViec = (
@@ -17,17 +16,17 @@ const ModalChiTietCongViec = (
 	};
 
 	return (
-		<Modal {...rest} title={data?.task?.name}>
+		<Modal {...rest}>
 			<div className="space-y-4">
 				<div className="flex items-center gap-4">
 					<div className="flex-1">
 						<Label>Ngày bắt đầu</Label>
 						<Input
-							type="date"
+							type="datetime-local"
 							disabled
 							defaultValue={
 								date.startDateJs.isValid()
-									? date.startDateJs.format('YYYY-MM-DD')
+									? date.startDateJs.format('YYYY-MM-DDTHH:mm')
 									: undefined
 							}
 						/>
@@ -35,11 +34,11 @@ const ModalChiTietCongViec = (
 					<div className="flex-1">
 						<Label>Ngày hoàn thành dự kiến</Label>
 						<Input
-							type="date"
+							type="datetime-local"
 							disabled
 							defaultValue={
 								date.startDateJs.isValid()
-									? date.startDateJs.format('YYYY-MM-DD')
+									? date.startDateJs.format('YYYY-MM-DDTHH:mm')
 									: undefined
 							}
 						/>
@@ -76,21 +75,7 @@ const ModalChiTietCongViec = (
 			</div>
 
 			<div className="mt-2 flex items-center justify-between">
-				<span
-					className={cn(
-						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2',
-						{
-							['text-success bg-success-light']: !!data?.finishDate,
-							['text-danger bg-danger-light']: !!dayjs(
-								data?.finishDateET
-							).isBefore(dayjs()),
-						}
-					)}
-				>
-					{data?.finishDate ? 'Hoàn thành' : 'Đang thực hiện'}
-					{dayjs(data?.finishDateET).isBefore(dayjs()) ? 'Quá hạn' : null}
-				</span>
-				<Button variant="outline" onClick={rest.onClose}>
+				<Button className="ml-auto" variant="outline" onClick={rest.onClose}>
 					Đóng
 				</Button>
 			</div>

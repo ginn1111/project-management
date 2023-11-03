@@ -127,7 +127,10 @@ const BoardDuAn = (props: IWorkProject) => {
 				</div>
 			</div>
 			<ul className="max-w-[500px] w-max-content p-4 rounded-b-md space-y-3 bg-primary2-light overflow-y-auto h-max">
-				{worksOfEmployee?.length ? (
+				{worksOfEmployee?.reduce(
+					(acc, work) => acc + work.tasksOfWork?.length,
+					0
+				) ? (
 					worksOfEmployee?.map((worksOfEmployee) => {
 						return (
 							<li key={worksOfEmployee.id} className="space-y-3">
@@ -173,7 +176,7 @@ const BoardDuAn = (props: IWorkProject) => {
 			<ModalLichSu
 				open={modalState.modalLS.open}
 				title="Lịch sử"
-				data={{}}
+				data={props}
 				onClose={() => handleCloseModal('modalLS')}
 			/>
 			<ModalTaoDauViec

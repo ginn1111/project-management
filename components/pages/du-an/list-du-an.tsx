@@ -21,8 +21,8 @@ interface IListDuAn {
 
 const ListDuAn = ({ data }: IListDuAn) => {
 	const router = useRouter();
-	const {data: session} = useSession()
-	const {user} = session ?? {}
+	const { data: session } = useSession();
+	const { user } = session ?? {};
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
 		modalPJ: { open: false, project: {} },
 		modalRS: { open: false, project: { id: '' } },
@@ -48,7 +48,7 @@ const ListDuAn = ({ data }: IListDuAn) => {
 	const contentRef = useRef<HTMLTextAreaElement | null>(null);
 
 	const handlePropose = () => {
-		if(!user?.info?.id) {
+		if (!user?.info?.id) {
 			signOut();
 			return;
 		}
@@ -66,21 +66,27 @@ const ListDuAn = ({ data }: IListDuAn) => {
 
 	return (
 		<div className="grid grid-cols-fill-300 gap-3 m-2">
-			{data.projects.map((project, idx) => (
-				<DuAnCard
-					key={idx}
-					{...project}
-					onUpdate={() => handleOpenModal('modalPJ', { project })}
-					onAddResource={() => handleOpenModal('modalRS', { project })}
-					onPropose={() =>
-						handleOpenModal('modalPP', {
-							payload: {
-								idProject: project.id,
-							},
-						})
-					}
-				/>
-			))}
+			{data?.projects ? (
+				data.projects.map((project, idx) => (
+					<DuAnCard
+						key={idx}
+						{...project}
+						onUpdate={() => handleOpenModal('modalPJ', { project })}
+						onAddResource={() => handleOpenModal('modalRS', { project })}
+						onPropose={() =>
+							handleOpenModal('modalPP', {
+								payload: {
+									idProject: project.id,
+								},
+							})
+						}
+					/>
+				))
+			) : (
+				<p className="w-full text-center text-[16px] text-danger font-bold">
+					Không có dự án nào
+				</p>
+			)}
 
 			<ModalThemNguonLuc
 				title="Thêm nguồn lực"

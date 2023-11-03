@@ -8,7 +8,6 @@ import { WorkSchema } from '@/yup-schema/work';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { omit } from 'lodash';
 import { ReactNode, useEffect } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -33,7 +32,7 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 		},
 	});
 	const form = useForm({
-		resolver: yupResolver(WorkSchema(isEdit)) as any,
+		resolver: yupResolver(WorkSchema(isEdit, data?.finishDateET)) as any,
 	});
 
 	useEffect(() => {
@@ -56,7 +55,7 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 
 	const handleSuccess: SubmitHandler<Partial<IWorkProject>> = (values) => {
 		const payload = {
-			...(isEdit ? omit(values, ['startDate', 'endDate']) : values),
+			...values,
 			id: data?.id,
 			idProject: data?.idProject!,
 		};
@@ -80,19 +79,11 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 				</div>
 				<div>
 					<Label required>Ngày bắt đầu</Label>
-					<Input
-						{...form.register('startDate')}
-						type="date"
-						disabled={isEdit}
-					/>
+					<Input {...form.register('startDate')} type="date" />
 				</div>
 				<div>
 					<Label required>Ngày hoàn thành dự kiến</Label>
-					<Input
-						{...form.register('finishDateET')}
-						type="date"
-						disabled={isEdit}
-					/>
+					<Input {...form.register('finishDateET')} type="date" />
 				</div>
 				<div>
 					<Label>Mô tả</Label>

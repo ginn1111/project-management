@@ -80,9 +80,15 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 						value="works-board"
 						className="flex gap-2 overflow-x-auto pt-1"
 					>
-						{(data as IWorkProject[])?.map((workPj) => (
-							<BoardDuAn {...workPj} key={workPj.idWork} />
-						))}
+						{(data as IWorkProject[])?.length ? (
+							(data as IWorkProject[])?.map((workPj) => (
+								<BoardDuAn {...workPj} key={workPj.idWork} />
+							))
+						) : (
+							<p className="text-center w-full text-[16px] font-bold text-danger">
+								Chưa có đầu việc nào
+							</p>
+						)}
 					</TabsContent>
 				) : null}
 				{tabs.isWorkCalendar ? (
