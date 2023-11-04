@@ -20,6 +20,12 @@ import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
 import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
+import { useMutation } from 'react-query';
+import { WorkProjectServices } from '@/lib';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { useRef } from 'react';
 
 dayjs.extend(duration);
 
@@ -39,6 +45,19 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		modalDone: { open: false },
 		modalNL: { open: false },
 	});
+	const { mutate: doneTask, isLoading } = useMutation({
+		mutationFn: WorkProjectServices.doneTask,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Đã đánh dấu công việc là hoàn thành');
+			router.refresh();
+		},
+		onSettled: () => {
+			handleCloseModal('modalDone');
+		},
+	});
 
 	const duration = dayjs.duration(dayjs(finishDateET).diff(dayjs()));
 	const _duration = {
@@ -49,10 +68,12 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		year: duration.years(),
 	};
 
+	const percentRef = useRef<HTMLInputElement | null>(null);
+
 	const isExpired =
-		dayjs(props?.finishDateET).isBefore(dayjs(), 'h') ||
+		dayjs(props?.finishDateET).isBefore(dayjs(), 'm') ||
 		(props?.finishDate &&
-			dayjs(props.finishDateET).isBefore(props?.finishDate, 'h'));
+			dayjs(props.finishDateET).isBefore(props?.finishDate, 'm'));
 	const isDone = !!props.finishDate;
 
 	let dropdownItems = [
@@ -100,7 +121,8 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 						}
 					)}
 				>
-					{isDone ? 'Hoàn thành' : isExpired ? 'Quá hạn' : 'Đang thực hiện'}
+					{isDone ? 'Hoàn thành' : 'Đang thực hiện'}
+					{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
 				</span>
 			</div>
 			<p>{note}</p>
@@ -144,10 +166,10 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				onRefresh={() => router.refresh()}
 			/>
 			<ModalChiTietCongViec
+				title="just dummy"
 				data={props}
 				open={modalState.modalCT.open}
 				onClose={() => handleCloseModal('modalCT')}
-				title={props.task.name}
 			/>
 			<ModalLichSu
 				data={props}
@@ -156,20 +178,35 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				onClose={() => handleCloseModal('modalLS')}
 			/>
 			<ModalConfirm
-				variant="default"
+				loading={isLoading}
 				msgCTA="Xác nhận hoàn thành"
 				title="Bạn chắc chắn muốn hoàn thành?"
 				message={
-					<Alert className="border-warning text-warning">
-						<AlertCircle color="#fbbf24" className="w-4 h-4" />
-						<AlertTitle>Warning</AlertTitle>
-						<AlertDescription>
-							Sau khi hoàn thành, bạn sẽ không được chỉnh sửa!
-						</AlertDescription>
-					</Alert>
+					<div>
+						<Alert className="border-warning text-warning">
+							<AlertCircle color="#fbbf24" className="w-4 h-4" />
+							<AlertTitle>Warning</AlertTitle>
+							<AlertDescription>
+								Sau khi hoàn thành, bạn sẽ không được chỉnh sửa!
+							</AlertDescription>
+						</Alert>
+						<Input
+							ref={percentRef}
+							className="mt-3"
+							placeholder="Mức độ hoàn thành 0 - 100"
+							type="number"
+						/>
+					</div>
 				}
 				open={modalState.modalDone.open}
-				onAccept={() => alert('Done task')}
+				onAccept={() => {
+					const percentOfDone = parseFloat(percentRef.current?.value ?? '');
+					if (!percentOfDone || percentOfDone > 100 || percentOfDone < 0) {
+						toast.error('Mức độ hoàn thành không hợp lệ');
+						return;
+					}
+					doneTask({ idTaskOfWOrk: props.id, percentOfDone });
+				}}
 				onClose={() => handleCloseModal('modalDone')}
 			/>
 			<ModalThemNguonLuc

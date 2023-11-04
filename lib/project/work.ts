@@ -18,6 +18,9 @@ export const add = ({ idProject, ...payload }: Partial<IWorkProject>) =>
 export const update = ({ id, ...payload }: Partial<IWorkProject>) =>
 	privateRequest.post(`${PREFIX_URL}/${id}/update`, payload);
 
+export const done = (idWorkProject: string) =>
+	privateRequest.post(`${PREFIX_URL}/${idWorkProject}/done`);
+
 // assignment
 export const assign = ({ id, ...payload }: Partial<IWorkProject>) =>
 	privateRequest.post(`${PREFIX_URL}/${id}/assign`, payload);
@@ -51,3 +54,14 @@ export const getHistoryOfTask = (
 			idProject,
 		}
 	);
+
+export const doneTask = ({
+	idTaskOfWOrk,
+	percentOfDone,
+}: {
+	idTaskOfWOrk: string;
+	percentOfDone: number;
+}) =>
+	privateRequest.post(`${PREFIX_URL}/${idTaskOfWOrk}/task/done`, {
+		percentOfDone,
+	});

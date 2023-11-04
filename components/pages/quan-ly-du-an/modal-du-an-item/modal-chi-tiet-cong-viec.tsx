@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 const ModalChiTietCongViec = (
@@ -18,7 +19,29 @@ const ModalChiTietCongViec = (
 	};
 
 	return (
-		<Modal {...rest}>
+		<Modal
+			{...rest}
+			title={
+				<div className="flex gap-2 items-center justify-between">
+					<p>{data?.task.name}</p>
+					{data?.percentOfDone ? (
+						<p
+							className={cn(
+								'text-[15px] text-danger bg-danger-light mr-5 px-4 py-2 rounded-lg ring-danger',
+								{
+									['ring-success text-success bg-success-light']:
+										data?.percentOfDone >= 75,
+									['ring-warning text-warning bg-warning-light ring-1']:
+										data?.percentOfDone >= 50,
+								}
+							)}
+						>
+							{data?.percentOfDone}
+						</p>
+					) : null}
+				</div>
+			}
+		>
 			<div className="space-y-4">
 				<div className="flex items-center gap-4">
 					<div className="flex-1">

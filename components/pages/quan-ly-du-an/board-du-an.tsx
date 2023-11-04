@@ -24,6 +24,13 @@ import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
 import dayjs from 'dayjs';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
+import { useMutation } from 'react-query';
+import { WorkProjectServices } from '@/lib';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 const BoardDuAn = (props: IWorkProject) => {
 	const router = useRouter();
@@ -39,9 +46,23 @@ const BoardDuAn = (props: IWorkProject) => {
 		modalTCV: { open: false },
 		modalDV: { open: false },
 		modalGV: { open: false },
+		modalDone: { open: false },
 		modalDG: { open: false },
 	});
 
+	const { mutate: doneWork, isLoading } = useMutation({
+		mutationFn: WorkProjectServices.done,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Đã đánh dấu đầu việc là hoàn thành');
+			router.refresh();
+		},
+		onSettled: () => {
+			handleCloseModal('modalDone');
+		},
+	});
 	const isExpired =
 		dayjs(props?.finishDateET).isBefore(dayjs(), 'h') ||
 		(props?.finishDate &&
@@ -85,6 +106,9 @@ const BoardDuAn = (props: IWorkProject) => {
 			<DropdownMenuItem key="assign" onClick={() => handleOpenModal('modalGV')}>
 				Giao việc
 			</DropdownMenuItem>,
+			<DropdownMenuItem key="done" onClick={() => handleOpenModal('modalDone')}>
+				Hoàn thành
+			</DropdownMenuItem>,
 			<DropdownMenuItem
 				key="evaluate"
 				onClick={() => handleOpenModal('modalDG')}
@@ -99,9 +123,10 @@ const BoardDuAn = (props: IWorkProject) => {
 			(work) => work.tasksOfWork
 		);
 		const tasksDone = tasksOfWork.reduce(
-			(acc, task) => acc + Number(task?.finishDate ?? 0),
+			(acc, task) => acc + Number(!!task?.finishDate ?? 0),
 			0
 		);
+		console.log({ tasksOfWork, tasksDone });
 		return {
 			tasksDone,
 			taskIP: tasksOfWork?.length - tasksDone,
@@ -123,7 +148,8 @@ const BoardDuAn = (props: IWorkProject) => {
 						}
 					)}
 				>
-					{isDone ? 'Hoàn thành' : isExpired ? 'Quá hạn' : 'Đang thực hiện'}
+					{isDone ? 'Hoàn thành' : 'Đang thực hiện'}
+					{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
 				</div>
 
 				<div className="ml-2">
@@ -172,11 +198,29 @@ const BoardDuAn = (props: IWorkProject) => {
 					</p>
 				)}
 			</ul>
+
+			<ModalConfirm
+				loading={isLoading}
+				onAccept={() => doneWork(props.id)}
+				open={modalState.modalDone.open}
+				onClose={() => handleCloseModal('modalDone')}
+				message={
+					<Alert className="border-warning text-warning">
+						<AlertCircle color="#fbbf24" className="w-4 h-4" />
+						<AlertTitle>Warning</AlertTitle>
+						<AlertDescription>
+							Sau khi hoàn thành, bạn sẽ không được chỉnh sửa!
+						</AlertDescription>
+					</Alert>
+				}
+				msgCTA="Xác nhận hoàn thành"
+				title="Bạn muốn hoàn thành đầu việc này?"
+			/>
 			<ModalChiTietDauViec
 				open={modalState.modalDV.open}
 				onClose={() => handleCloseModal('modalDV')}
 				data={props}
-				title="Khảo sát dự án Khảo sát dự án Khảo sát dự án"
+				title={props.work?.name}
 			/>
 			<ModalGiaoViec
 				open={modalState.modalGV.open}

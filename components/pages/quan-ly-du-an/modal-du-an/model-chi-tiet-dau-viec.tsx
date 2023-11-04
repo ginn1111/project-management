@@ -25,7 +25,7 @@ const ModalChiTietDauViec = (
 
 	return (
 		<>
-			<Modal {...rest} title={data?.work?.name}>
+			<Modal {...rest}>
 				<div className="flex items-center gap-4">
 					<div className="flex-1">
 						<Label>Ngày bắt đầu</Label>
