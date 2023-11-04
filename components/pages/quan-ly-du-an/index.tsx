@@ -11,10 +11,11 @@ import NhanVienDuAn from './nhan-vien-du-an';
 
 interface IQuanLyDuAn {
 	data: { data: unknown[]; totalItems: number } | unknown[];
+	project?: IProject;
 }
 
 const QuanLyDuAn = (props: IQuanLyDuAn) => {
-	const { data } = props;
+	const { data, project } = props;
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: {
 			tab: 'works-board',
@@ -82,7 +83,10 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 					>
 						{(data as IWorkProject[])?.length ? (
 							(data as IWorkProject[])?.map((workPj) => (
-								<BoardDuAn {...workPj} key={workPj.idWork} />
+								<BoardDuAn
+									{...{ ...workPj, finishDateETProject: project?.finishDateET }}
+									key={workPj.idWork}
+								/>
 							))
 						) : (
 							<p className="text-center w-full text-[16px] font-bold text-danger">

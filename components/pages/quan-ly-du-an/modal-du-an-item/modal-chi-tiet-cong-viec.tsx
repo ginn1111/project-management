@@ -10,9 +10,11 @@ const ModalChiTietCongViec = (
 ) => {
 	const { data, ...rest } = props;
 
+	const isDone = !!data?.finishDate;
+
 	const date = {
 		startDateJs: dayjs(data?.startDate),
-		finishDateJs: dayjs(data?.finishDateET),
+		finishDateJs: dayjs(data?.finishDate ?? data?.finishDateET),
 	};
 
 	return (
@@ -32,13 +34,13 @@ const ModalChiTietCongViec = (
 						/>
 					</div>
 					<div className="flex-1">
-						<Label>Ngày hoàn thành dự kiến</Label>
+						<Label>Ngày hoàn thành {isDone ? '' : 'dự kiến'}</Label>
 						<Input
 							type="datetime-local"
 							disabled
 							defaultValue={
-								date.startDateJs.isValid()
-									? date.startDateJs.format('YYYY-MM-DDTHH:mm')
+								date.finishDateJs.isValid()
+									? date.finishDateJs.format('YYYY-MM-DDTHH:mm')
 									: undefined
 							}
 						/>

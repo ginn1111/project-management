@@ -4,4 +4,5 @@ export const QueryKeys = {
 	getDepartment: (...keys: string[]) => ['get-department', ...keys],
 	getEmployeeProject: (...keys: string[]) => ['get-employee-project', ...keys],
 	getWorkHistory: (...keys: string[]) => ['get-work-history', ...keys],
+	getDetailProject: (...keys: string[]) => ['get-detail-project', ...keys],
 };

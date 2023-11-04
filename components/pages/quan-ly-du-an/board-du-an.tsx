@@ -23,6 +23,7 @@ import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
+import dayjs from 'dayjs';
 
 const BoardDuAn = (props: IWorkProject) => {
 	const router = useRouter();
@@ -40,6 +41,58 @@ const BoardDuAn = (props: IWorkProject) => {
 		modalGV: { open: false },
 		modalDG: { open: false },
 	});
+
+	const isExpired =
+		dayjs(props?.finishDateET).isBefore(dayjs(), 'h') ||
+		(props?.finishDate &&
+			dayjs(props.finishDateET).isBefore(props?.finishDate, 'h'));
+
+	const isDone = !!props.finishDate;
+
+	let dropdownItems = [
+		<DropdownMenuItem key="detail" onClick={() => handleOpenModal('modalDV')}>
+			Chi tiết
+		</DropdownMenuItem>,
+
+		<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
+			Phân quyền
+		</DropdownMenuItem>,
+		<DropdownMenuItem key="history" onClick={() => handleOpenModal('modalLS')}>
+			Lịch sử
+		</DropdownMenuItem>,
+	];
+
+	if (!isDone) {
+		dropdownItems = dropdownItems.concat(
+			<DropdownMenuItem
+				key="update"
+				onClick={() =>
+					handleOpenModal('modalCS', {
+						data: {
+							...props,
+						},
+					})
+				}
+			>
+				Chỉnh sửa
+			</DropdownMenuItem>,
+			<DropdownMenuItem
+				key="create"
+				onClick={() => handleOpenModal('modalTCV')}
+			>
+				Tạo công việc
+			</DropdownMenuItem>,
+			<DropdownMenuItem key="assign" onClick={() => handleOpenModal('modalGV')}>
+				Giao việc
+			</DropdownMenuItem>,
+			<DropdownMenuItem
+				key="evaluate"
+				onClick={() => handleOpenModal('modalDG')}
+			>
+				Đánh giá
+			</DropdownMenuItem>
+		);
+	}
 
 	const statisticTask = useMemo(() => {
 		const tasksOfWork = props.worksOfEmployee.flatMap(
@@ -63,20 +116,14 @@ const BoardDuAn = (props: IWorkProject) => {
 				</p>
 				<div
 					className={cn(
-						'rounded-md shrink-0 px-2 py-1 text-[12px] ml-auto uppercase font-medium',
-						ColorStatusDauViec[
-							(() => {
-								const rd = Math.floor(Math.random());
-								return rd > 0.6
-									? 'success'
-									: rd > 0.3
-									? 'inprogress'
-									: 'failed';
-							})()
-						]
+						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 ml-auto',
+						{
+							['text-success bg-success-light']: isDone,
+							['text-danger bg-danger-light']: isExpired,
+						}
 					)}
 				>
-					Đang thực hiện
+					{isDone ? 'Hoàn thành' : isExpired ? 'Quá hạn' : 'Đang thực hiện'}
 				</div>
 
 				<div className="ml-2">
@@ -86,31 +133,7 @@ const BoardDuAn = (props: IWorkProject) => {
 								<IconSettings className="w-5 h-5" />
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuItem
-								onClick={() => handleOpenModal('modalCS', { data: props })}
-							>
-								Chỉnh sửa
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalDV')}>
-								Chi tiết
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalTCV')}>
-								Tạo công việc
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalGV')}>
-								Giao việc
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
-								Phân quyền
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalDG')}>
-								Đánh giá
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => handleOpenModal('modalLS')}>
-								Lịch sử
-							</DropdownMenuItem>
-						</DropdownMenuContent>
+						<DropdownMenuContent>{dropdownItems}</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
 
@@ -135,7 +158,10 @@ const BoardDuAn = (props: IWorkProject) => {
 						return (
 							<li key={worksOfEmployee.id} className="space-y-3">
 								{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
-									<BoardDuAnItem key={taskOfWork.idTask} {...taskOfWork} />
+									<BoardDuAnItem
+										key={taskOfWork.idTask}
+										{...{ ...taskOfWork, finishDateETWork: props.finishDateET }}
+									/>
 								))}
 							</li>
 						);
@@ -162,7 +188,7 @@ const BoardDuAn = (props: IWorkProject) => {
 			<ModalTaoCongViec
 				open={modalState.modalTCV.open}
 				title="Tạo công việc"
-				data={props}
+				data={{ ...props, finishDateETWork: props.finishDateET }}
 				onClose={() => handleCloseModal('modalTCV')}
 				onRefresh={() => router.refresh()}
 			/>

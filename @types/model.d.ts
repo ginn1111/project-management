@@ -63,6 +63,7 @@ interface ITaskOfWork {
 	startDate: string;
 	percentOfDone: number;
 	finishDateET: OrNull<string>;
+	finishDateETWork: OrNull<string>;
 	finishDate: OrNull<string>;
 	note: OrNull<string>;
 	task: ITask;
@@ -83,6 +84,7 @@ interface IWorkProject {
 	startDate: string;
 	finishDate: OrNull<string>;
 	finishDateET: OrNull<string>;
+	finishDateETProject?: OrNull<string>;
 	note: OrNull<string>;
 	worksOfEmployee: IWorksEmployee[];
 	work?: IWork;

@@ -31,7 +31,9 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 	const { user } = session ?? {};
 
 	const form = useForm({
-		resolver: yupResolver(TaskSchema(isEdit, data?.finishDateET)) as any,
+		resolver: yupResolver(
+			TaskSchema(isEdit, (data as ITaskOfWork)?.finishDateETWork)
+		) as any,
 	});
 
 	const { mutate: createTask, isLoading } = useMutation({

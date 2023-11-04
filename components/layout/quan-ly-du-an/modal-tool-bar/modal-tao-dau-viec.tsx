@@ -32,7 +32,7 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 		},
 	});
 	const form = useForm({
-		resolver: yupResolver(WorkSchema(isEdit, data?.finishDateET)) as any,
+		resolver: yupResolver(WorkSchema(isEdit, data?.finishDateETProject)) as any,
 	});
 
 	useEffect(() => {

@@ -2,6 +2,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import QuanLyDuAn from '@/components/pages/quan-ly-du-an';
 import {
 	EmployeeProjectServices,
+	ProjectServices,
 	ProposeResourceServices,
 	ResourceProjectServices,
 	WorkProjectServices,
@@ -52,17 +53,20 @@ const DuAn = async ({
 	const { tab } = searchParams;
 	const session = await getServerSession(authOptions);
 
-	const data = await getData[tab ?? 'works-board']?.(
-		id,
-		`page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${
-			parseInt(searchParams.limit as any) || 10
-		}`,
-		session?.user.accessToken
-	);
+	const [data, projectData] = await Promise.all([
+		getData[tab ?? 'works-board']?.(
+			id,
+			`page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${
+				parseInt(searchParams.limit as any) || 10
+			}`,
+			session?.user.accessToken
+		),
+		ProjectServices.getDetail(id, session?.user.accessToken),
+	]);
 
 	return (
 		<div className="flex overflow-x-auto">
-			<QuanLyDuAn data={data?.data} />
+			<QuanLyDuAn data={data?.data} project={projectData?.data} />
 		</div>
 	);
 };

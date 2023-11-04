@@ -24,7 +24,7 @@ import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 dayjs.extend(duration);
 
 const BoardDuAnItem = (props: ITaskOfWork) => {
-	const { note, finishDateET, task } = props;
+	const { note, finishDateET, task, finishDateETWork } = props;
 	const { name } = task ?? {};
 	const router = useRouter();
 	const {
@@ -70,7 +70,9 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				Hoàn thành
 			</DropdownMenuItem>,
 			<DropdownMenuItem
-				onClick={() => handleOpenModal('modalCS', { task: props })}
+				onClick={() =>
+					handleOpenModal('modalCS', { task: { ...props, finishDateETWork } })
+				}
 			>
 				Chỉnh sửa
 			</DropdownMenuItem>,
@@ -148,7 +150,7 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				title={props.task.name}
 			/>
 			<ModalLichSu
-				data={{}}
+				data={props}
 				open={modalState.modalLS.open}
 				title="Lịch sử"
 				onClose={() => handleCloseModal('modalLS')}

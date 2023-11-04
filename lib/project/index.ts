@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { privateRequest } from '../axios';
 
 const PREFIX_URL = '/project';
@@ -10,6 +9,13 @@ export const getList = (searchParams: string, accessToken?: string) => {
 		},
 	});
 };
+
+export const getDetail = (idProject: string, accessToken?: string) =>
+	privateRequest.get(`${PREFIX_URL}/${idProject}`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});
 
 export const getListByDepartment = (idDepartment: string) =>
 	privateRequest.get(`${PREFIX_URL}/${idDepartment}/department`);

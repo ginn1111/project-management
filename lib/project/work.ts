@@ -28,5 +28,26 @@ export const createTask = ({ id, ...payload }: Partial<ITaskOfWork>) =>
 export const updateTask = ({ id, ...payload }: Partial<ITaskOfWork>) =>
 	privateRequest.patch(`${PREFIX_URL}/${id}/task/update`, payload);
 
-export const getHistory = (idWorkProject: string, searchParams: string) =>
-	privateRequest.get(`${PREFIX_URL}/${idWorkProject}/history?${searchParams}`);
+export const getHistory = (
+	idWorkProject: string,
+	idProject: string,
+	searchParams: string
+) =>
+	privateRequest.post(
+		`${PREFIX_URL}/${idWorkProject}/history?${searchParams}`,
+		{
+			idProject,
+		}
+	);
+
+export const getHistoryOfTask = (
+	idTaskOfWork: string,
+	idProject: string,
+	searchParams: string
+) =>
+	privateRequest.post(
+		`${PREFIX_URL}/${idTaskOfWork}/task/history?${searchParams}`,
+		{
+			idProject,
+		}
+	);

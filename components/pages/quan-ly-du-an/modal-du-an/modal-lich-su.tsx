@@ -6,25 +6,28 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
+import { useParams } from 'next/navigation';
 
 const ModalLichSu = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 	const { data, ...rest } = props;
+	const params = useParams();
 	const [paging, setPaging] = useState({ page: 1, limit: 10 });
 
 	const { data: historyData, isFetching } = useQuery({
 		queryKey: QueryKeys.getWorkHistory(
 			data?.id ?? '',
 			paging.page.toString(),
-			paging.limit.toString()
+			paging.limit.toString(),
+			params.id as string
 		),
 		queryFn: ({ queryKey }) => {
-			console.log(Number(queryKey[2]));
 			return WorkProjectServices.getHistory(
 				queryKey[1],
+				queryKey[4],
 				`page=${(Number(queryKey[2]) || 1) - 1}&limit=${queryKey[3]}`
 			);
 		},
-		enabled: rest.open && !!data?.id,
+		enabled: rest.open && !!data?.id && !!(params?.id as string),
 	});
 
 	const columns: DataTableColumn<IHistory>[] = [
@@ -50,14 +53,20 @@ const ModalLichSu = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 						<ReactJson
 							collapseStringsAfterLength={10}
 							src={JSON.parse(record?.content ?? '{}')}
+							enableClipboard={false}
+							displayDataTypes={false}
 						/>
 					</div>
 				);
 			},
 		},
 		{
+			width: 300,
 			accessor: 'note',
 			title: 'Ghi chú',
+			render: (record) => {
+				return <p className="whitespace-normal">{record.note}</p>;
+			},
 		},
 	];
 

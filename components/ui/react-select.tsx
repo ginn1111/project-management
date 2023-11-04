@@ -47,7 +47,7 @@ const ReactSelect = <
 				return acc;
 			}, {} as Record<string, Option>) ?? {}
 		);
-	}, [rest.isMulti]);
+	}, [rest.isMulti, JSON.stringify(rest.options ?? '')]);
 
 	// fallback for dummy UI
 	if (!control) {
@@ -86,8 +86,9 @@ const ReactSelect = <
 								const value = rest.isMulti
 									? e.map(({ value }: { value: string }) => value)
 									: e.value;
-								if (!allowChange || allowChange?.(field.value, value))
+								if (!allowChange || allowChange?.(field.value, value)) {
 									field.onChange(value);
+								}
 								rest?.onChange?.(e, {} as any);
 							}}
 							value={(() => {

@@ -16,23 +16,12 @@ const ModalChiTietDauViec = (
 	const [show, , setShow] = useToggle();
 	const { data, ...rest } = props;
 
-	const form = useForm();
+	const isDone = !!data?.finishDate;
 
-	useEffect(() => {
-		if (rest.open) {
-			const { startDate, finishDateET } = data ?? {};
-			const startDateJs = dayjs(startDate);
-			const finishDateJs = dayjs(finishDateET);
-			form.reset({
-				startDate: startDateJs.isValid()
-					? startDateJs.format('YYYY-MM-DD')
-					: undefined,
-				finishDateET: finishDateJs.isValid()
-					? finishDateJs.format('YYYY-MM-DD')
-					: undefined,
-			});
-		}
-	}, [rest.open]);
+	const date = {
+		startDateJs: dayjs(data?.startDate),
+		finishDateJs: dayjs(data?.finishDate ?? data?.finishDateET),
+	};
 
 	return (
 		<>
@@ -40,11 +29,27 @@ const ModalChiTietDauViec = (
 				<div className="flex items-center gap-4">
 					<div className="flex-1">
 						<Label>Ngày bắt đầu</Label>
-						<Input {...form.register('startDate')} type="date" disabled />
+						<Input
+							type="date"
+							disabled
+							defaultValue={
+								date.startDateJs.isValid()
+									? date.startDateJs.format('YYYY-MM-DD')
+									: undefined
+							}
+						/>
 					</div>
 					<div className="flex-1">
-						<Label>Ngày hoàn thành</Label>
-						<Input {...form.register('finishDateET')} type="date" disabled />
+						<Label>Ngày hoàn thành {isDone ? '' : 'dự kiến'}</Label>
+						<Input
+							type="date"
+							disabled
+							defaultValue={
+								date.finishDateJs.isValid()
+									? date.finishDateJs.format('YYYY-MM-DD')
+									: undefined
+							}
+						/>
 					</div>
 				</div>
 				<div>
@@ -61,7 +66,7 @@ const ModalChiTietDauViec = (
 											{
 												getEmployeeFromProposePj(
 													workOfEmp.employee?.proposeProject
-												).fullName
+												)?.fullName
 											}
 											<span> - </span>
 											{

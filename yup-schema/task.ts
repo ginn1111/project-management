@@ -16,8 +16,7 @@ export const TaskSchema = (
 				(value) => {
 					if (isEdit) return true;
 					return (
-						dayjs(value).isSame(dayjs().format('YYYY-MM-DD')) ||
-						dayjs(value).isAfter(dayjs())
+						dayjs(value).isSame(dayjs(), 'm') || dayjs(value).isAfter(dayjs())
 					);
 				}
 			),
