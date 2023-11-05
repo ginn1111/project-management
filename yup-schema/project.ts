@@ -25,6 +25,7 @@ export const ProjectSchema = (isEdit?: boolean) =>
 				'more-than-start-date',
 				'Ngày hoàn thành dự kiến phải lớn hơn ngày bắt đầu dự án',
 				function (value) {
+					if (isEdit) return true;
 					return dayjs(value).isAfter((this.options as any).parent.startDate);
 				}
 			),

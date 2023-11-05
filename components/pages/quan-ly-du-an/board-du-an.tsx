@@ -4,6 +4,7 @@ import IconSettings from '@/components/Icon/IconSettings';
 import IconSquareCheck from '@/components/Icon/IconSquareCheck';
 import IconXSquare from '@/components/Icon/IconXSquare';
 import ModalTaoDauViec from '@/components/layout/quan-ly-du-an/modal-tool-bar/modal-tao-dau-viec';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -11,11 +12,17 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ColorStatusDauViec } from '@/constants/theme';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
+import { WorkProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
+import { AxiosError } from 'axios';
+import dayjs from 'dayjs';
+import { AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
 import BoardDuAnItem from './board-du-an-item';
 import ModalGiaoViec from './modal-du-an/modal-giao-viec';
 import ModalLichSu from './modal-du-an/modal-lich-su';
@@ -23,18 +30,14 @@ import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
-import dayjs from 'dayjs';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import { useMutation } from 'react-query';
-import { WorkProjectServices } from '@/lib';
-import { toast } from 'sonner';
-import { AxiosError } from 'axios';
 
 const BoardDuAn = (props: IWorkProject) => {
 	const router = useRouter();
-	const { work, worksOfEmployee } = props;
+	const { work, worksOfEmployee, startDate, finishDate, finishDateET } = props;
+	const dates = {
+		startDateJs: dayjs(startDate),
+		endDateJs: dayjs(finishDate ?? finishDateET),
+	};
 	const {
 		modal: modalState,
 		handleCloseModal,
@@ -64,9 +67,9 @@ const BoardDuAn = (props: IWorkProject) => {
 		},
 	});
 	const isExpired =
-		dayjs(props?.finishDateET).isBefore(dayjs(), 'h') ||
+		dayjs(props?.finishDateET).isBefore(dayjs(), 'd') ||
 		(props?.finishDate &&
-			dayjs(props.finishDateET).isBefore(props?.finishDate, 'h'));
+			dayjs(props.finishDateET).isBefore(props?.finishDate, 'd'));
 
 	const isDone = !!props.finishDate;
 
@@ -75,9 +78,6 @@ const BoardDuAn = (props: IWorkProject) => {
 			Chi tiết
 		</DropdownMenuItem>,
 
-		<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
-			Phân quyền
-		</DropdownMenuItem>,
 		<DropdownMenuItem key="history" onClick={() => handleOpenModal('modalLS')}>
 			Lịch sử
 		</DropdownMenuItem>,
@@ -85,6 +85,9 @@ const BoardDuAn = (props: IWorkProject) => {
 
 	if (!isDone) {
 		dropdownItems = dropdownItems.concat(
+			<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
+				Phân quyền
+			</DropdownMenuItem>,
 			<DropdownMenuItem
 				key="update"
 				onClick={() =>
@@ -126,7 +129,6 @@ const BoardDuAn = (props: IWorkProject) => {
 			(acc, task) => acc + Number(!!task?.finishDate ?? 0),
 			0
 		);
-		console.log({ tasksOfWork, tasksDone });
 		return {
 			tasksDone,
 			taskIP: tasksOfWork?.length - tasksDone,
@@ -135,43 +137,49 @@ const BoardDuAn = (props: IWorkProject) => {
 
 	return (
 		<div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
-			<div className="text-primary px-4 py-2 rounded-t-md flex items-center shadow-[0_-5px_15px_-10px] shadow-primary2/50 flex-wrap max-w-full gap-2">
-				<p className="text-xl font-bold max-w-full word-wrap-wrap mr-1">
-					{work?.name}
+			<div className="text-primary px-4 py-2 rounded-t-md shadow-[0_-5px_15px_-10px] shadow-primary2/50 max-w-full">
+				<p className="text-end text-muted-foreground text-[12px] font-medium mb-2">
+					{dates.startDateJs.format('ddd DD/MM/YYYY')} <span> - </span>
+					{dates.endDateJs.format('ddd DD/MM/YYYY')}
 				</p>
-				<div
-					className={cn(
-						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 ml-auto',
-						{
-							['text-success bg-success-light']: isDone,
-							['text-danger bg-danger-light']: isExpired,
-						}
-					)}
-				>
-					{isDone ? 'Hoàn thành' : 'Đang thực hiện'}
-					{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
-				</div>
-
-				<div className="ml-2">
-					<DropdownMenu>
-						<DropdownMenuTrigger>
-							<Button variant="outline" size="icon">
-								<IconSettings className="w-5 h-5" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>{dropdownItems}</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-
-				<div className="flex gap-4 items-center w-full">
-					<div className="flex items-center rounded-sm gap-1">
-						<IconSquareCheck className="w-4 h-4 text-success" />
-						<div className="text-xs">{statisticTask.tasksDone} Tasks</div>
+				<div className="flex items-center flex-wrap max-w-full gap-2">
+					<p className="text-xl font-bold max-w-full word-wrap-wrap mr-1">
+						{work?.name}
+					</p>
+					<div
+						className={cn(
+							'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 ml-auto',
+							{
+								['text-success bg-success-light']: isDone,
+								['text-danger bg-danger-light']: isExpired,
+							}
+						)}
+					>
+						{isDone ? 'Hoàn thành' : isExpired ? '' : 'Đang thực hiện'}
+						{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
 					</div>
 
-					<div className="flex items-center rounded-sm gap-1">
-						<IconXSquare className="w-4 h-4 text-danger" />
-						<div className="text-xs">{statisticTask.taskIP} Tasks</div>
+					<div className="ml-2">
+						<DropdownMenu>
+							<DropdownMenuTrigger>
+								<Button variant="outline" size="icon">
+									<IconSettings className="w-5 h-5" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>{dropdownItems}</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+
+					<div className="flex gap-4 items-center w-full">
+						<div className="flex items-center rounded-sm gap-1">
+							<IconSquareCheck className="w-4 h-4 text-success" />
+							<div className="text-xs">{statisticTask.tasksDone} Tasks</div>
+						</div>
+
+						<div className="flex items-center rounded-sm gap-1">
+							<IconXSquare className="w-4 h-4 text-danger" />
+							<div className="text-xs">{statisticTask.taskIP} Tasks</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -198,7 +206,6 @@ const BoardDuAn = (props: IWorkProject) => {
 					</p>
 				)}
 			</ul>
-
 			<ModalConfirm
 				loading={isLoading}
 				onAccept={() => doneWork(props.id)}

@@ -6,9 +6,9 @@ import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getEmployeeFromProposePj } from '@/utils/helpers';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import duration from 'dayjs/plugin/duration';
 import { useToggle } from 'usehooks-ts';
+dayjs.extend(duration);
 
 const ModalChiTietDauViec = (
 	props: Omit<IModalProps<IWorkProject>, 'children'>

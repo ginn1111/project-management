@@ -86,6 +86,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		if (isEdit) {
 			values.id = data?.id;
 			delete values.startDate;
+			delete values.finishDateET;
 		}
 		addProject(pickBy(values, identity) as IProject);
 	};
@@ -111,7 +112,11 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 					</div>
 					<div className="flex-1">
 						<Label required>Ngày hoàn thành dự kiến</Label>
-						<Input {...form.register('finishDateET')} type="date" />
+						<Input
+							{...form.register('finishDateET')}
+							type="date"
+							disabled={isEdit}
+						/>
 					</div>
 				</div>
 				<ReactSelect

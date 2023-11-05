@@ -29,6 +29,7 @@ export const WorkSchema = (
 					finishDateETProject
 				).format('DD/MM/YYYY')}`,
 				function (value) {
+					if (isEdit) return true;
 					return dayjs(value).isBefore(finishDateETProject, 'day');
 				}
 			)

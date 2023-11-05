@@ -4,11 +4,11 @@ import Modal, { IModalProps } from '@/components/ui/modal';
 import Label from '@/components/ui/my-label';
 import { Textarea } from '@/components/ui/textarea';
 import { WorkProjectServices } from '@/lib';
-import { getEmployeeFromProposePj } from '@/utils/helpers';
+import { betweenTime, getEmployeeFromProposePj } from '@/utils/helpers';
 import { TaskSchema } from '@/yup-schema/task';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
@@ -82,15 +82,56 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 		}
 	}, [rest.open]);
 
+	const handleCheckValidDate = (startDate?: string, finishDateET?: string) => {
+		const workTimes: [Dayjs, Dayjs] = [
+			dayjs(data?.startDate),
+			dayjs(data?.finishDateET),
+		];
+		const errorMsg1 = betweenTime(
+			dayjs(startDate as any),
+			workTimes,
+			'm',
+			'đầu việc'
+		);
+		const errorMsg2 = betweenTime(
+			dayjs(finishDateET as any),
+			workTimes,
+			'm',
+			'đầu việc'
+		);
+
+		if (errorMsg1 || errorMsg2) {
+			toast.error(errorMsg1 || errorMsg2);
+			return;
+		}
+
+		return true;
+	};
+
 	const handleUpdate: SubmitErrorHandler<Partial<ITaskOfWork>> = (values) => {
-		updateTask({
+		if (
+			!handleCheckValidDate(values.startDate as any, values.finishDateET as any)
+		) {
+			return;
+		}
+		const payload = {
 			...values,
 			id: (data as ITaskOfWork)?.id,
 			idProject: params.id,
-		} as any);
+		};
+		if (isEdit) {
+			delete payload.startDate;
+			delete payload.finishDateET;
+		}
+		updateTask(payload as any);
 	};
 
 	const handleSuccess: SubmitHandler<Partial<ITaskOfWork>> = (values) => {
+		if (
+			!handleCheckValidDate(values.startDate as any, values.finishDateET as any)
+		) {
+			return;
+		}
 		const empOfWork = (data as IWorkProject)?.worksOfEmployee.find(
 			(w) =>
 				getEmployeeFromProposePj(w?.employee?.proposeProject)?.id ===

@@ -1,14 +1,20 @@
 'use client';
 
-import { now, getMonth } from '@/utils/helpers';
+import ModalTaoDauViec from '@/components/layout/quan-ly-du-an/modal-tool-bar/modal-tao-dau-viec';
+import LoadingInline from '@/components/ui/loading/loading-inline';
+import { QueryKeys } from '@/constants/query-key';
+import useModal from '@/hooks/useModal';
+import { ProjectServices, WorkProjectServices } from '@/lib';
+import { betweenTime, getMonth, hasTask, now } from '@/utils/helpers';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import { isEmpty } from 'lodash';
-import { useMemo, useState } from 'react';
-import ModalChinhSuaDauViec from '../modal-du-an/modal-chinh-sua-dau-viec';
-import dayjs from 'dayjs';
+import { AxiosError } from 'axios';
+import dayjs, { Dayjs } from 'dayjs';
+import { useParams, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import { toast } from 'sonner';
 
 const DUMMY = [
 	{
@@ -121,62 +127,164 @@ const DUMMY = [
 	},
 ];
 
-type EventType = Partial<(typeof DUMMY)[0]>;
-
 interface ICalendarDauViec {
 	data: IWorkProject[];
 }
 
 const CalendarDauViec = ({ data }: ICalendarDauViec) => {
-	console.log(data);
-	const [editEvent, setEditEvent] = useState<EventType>({});
+	const router = useRouter();
+
+	const { id } = useParams();
+
+	const { mutate: updateWork, isLoading } = useMutation({
+		mutationFn: WorkProjectServices.update,
+		onSuccess: () => {
+			toast.success('Cập nhật thành công');
+			router.refresh();
+		},
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+	});
+
+	const { data: projectData, isFetching } = useQuery({
+		queryKey: QueryKeys.getDetailProject(id as string),
+		queryFn: ({ queryKey }) => ProjectServices.getDetail(queryKey[1]),
+	});
+
+	const { modal, handleCloseModal, handleOpenModal } = useModal({
+		modalDV: { open: false, isEdit: false, data: {} },
+	});
 	const fmtData = useMemo(() => {
 		if (!data?.length) return [];
-		return data?.map(
-			({ id, note, finishDate, finishDateET, startDate, work }, idx) => ({
-				id: idx + 1,
+
+		return data?.map(({ id, finishDate, finishDateET, startDate, work }) => {
+			const isExpired =
+				dayjs(finishDateET).isBefore(dayjs(), 'day') ||
+				(finishDate && dayjs(finishDateET).isBefore(finishDate, 'day'));
+
+			const isDone = !!finishDate;
+
+			return {
+				id,
 				start: startDate,
 				end: finishDate ?? finishDateET,
-				description: note,
+				finish: finishDate,
+				description: work?.note,
 				title: work?.name,
-				className: finishDate
-					? 'success'
-					: dayjs(finishDateET).isBefore(new Date())
-					? 'danger'
-					: 'primary',
-			})
-		);
+				className:
+					isDone && isExpired
+						? 'bg-warning'
+						: isDone
+						? 'bg-success'
+						: isExpired
+						? 'bg-danger'
+						: 'bg-primary2',
+			};
+		});
 	}, [data]);
 
 	return (
-		<div className="calendar-wrapper mx-2 p-2 rounded-sm border">
+		<div className="calendar-wrapper mx-2 p-2 rounded-sm border relative">
+			<div className="flex items-center gap-4 mb-2">
+				<span className="rounded-md text-success bg-success-light px-2 py-1">
+					Hoàn thành
+				</span>
+				<span className="rounded-md text-warning bg-warning-light px-2 py-1">
+					Hoàn thành - quá hạn
+				</span>
+				<span className="rounded-md text-primary2 bg-primary2-light px-2 py-1">
+					Đang thực hiện
+				</span>
+				<span className="rounded-md text-danger bg-danger-light px-2 py-1">
+					Quá hạn
+				</span>
+			</div>
+			{isLoading || isFetching ? <LoadingInline /> : null}
 			<FullCalendar
-				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+				plugins={[dayGridPlugin, interactionPlugin]}
 				initialView="dayGridMonth"
-				headerToolbar={{
-					left: 'prev,next today',
-					center: 'title',
-					right: 'dayGridMonth,timeGridWeek,timeGridDay',
-				}}
 				editable={true}
-				dayMaxEvents={true}
 				selectable={true}
-				droppable={true}
-				eventDrop={() => console.log('drop')}
-				eventClick={(event: any) => {
-					setEditEvent(event.event);
+				eventDrop={(info) => {
+					const eventData = info.event;
+
+					const selectedWork: Partial<IWorkProject> =
+						data.find((work) => eventData.id === work.id) ?? {};
+					if (selectedWork.finishDate) {
+						info.revert();
+						return;
+					}
+					if (hasTask(selectedWork?.worksOfEmployee ?? [])) {
+						info.revert();
+						return;
+					}
+					const arrTimes: [Dayjs, Dayjs] = [
+						dayjs(projectData?.data.startDate),
+						dayjs(projectData?.data?.finishDateET),
+					];
+					const errorMsg1 = betweenTime(dayjs(eventData.start), arrTimes);
+					const errorMsg2 = betweenTime(
+						dayjs(eventData.end ?? eventData.start),
+						arrTimes
+					);
+
+					if (errorMsg1 || errorMsg2) {
+						info.revert();
+						toast.error(errorMsg1 || errorMsg2);
+						return;
+					}
+
+					updateWork({
+						id: eventData.id,
+						startDate: eventData.startStr,
+						finishDateET: eventData.endStr || eventData.startStr,
+						idProject: id as string,
+					});
 				}}
-				select={(event: any) => {
-					console.log(event);
-					setEditEvent(JSON.parse(JSON.stringify(event)));
+				eventClick={(event: any) => {
+					const selectedWork: Partial<IWorkProject> =
+						data.find((work) => event.event.id === work.id) ?? {};
+					if (selectedWork.finishDate) return;
+
+					handleOpenModal('modalDV', {
+						isEdit: true,
+						data: {
+							...selectedWork,
+						},
+					});
+				}}
+				select={(info) => {
+					const startDate = info.start;
+					const endDate = dayjs(info.end).subtract(1, 'day');
+					const arrTimes: [Dayjs, Dayjs] = [
+						dayjs(projectData?.data.startDate),
+						dayjs(projectData?.data?.finishDateET),
+					];
+					const errorMsg1 = betweenTime(dayjs(startDate), arrTimes);
+					const errorMsg2 = betweenTime(dayjs(endDate), arrTimes);
+
+					if (errorMsg1 || errorMsg2) {
+						toast.error(errorMsg1 || errorMsg2);
+						return;
+					}
+					handleOpenModal('modalDV', {
+						isEdit: false,
+						data: {
+							startDate: startDate,
+							finishDateET: endDate,
+						},
+					});
 				}}
 				events={fmtData}
 			/>
-			<ModalChinhSuaDauViec<EventType>
-				title="Chỉnh sửa đầu việc"
-				data={editEvent}
-				open={!isEmpty(editEvent)}
-				onClose={() => setEditEvent({})}
+			<ModalTaoDauViec
+				open={modal.modalDV.open}
+				data={modal.modalDV.data}
+				onClose={() => handleCloseModal('modalDV')}
+				title={`${modal.modalDV.isEdit ? 'Chỉnh sửa' : 'Thêm'} Đầu việc`}
+				onRefresh={() => router.refresh()}
+				isEdit={modal.modalDV.isEdit}
 			/>
 		</div>
 	);

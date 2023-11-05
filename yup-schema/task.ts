@@ -29,7 +29,11 @@ export const TaskSchema = (
 					finishDateETWork
 				).format('DD/MM/YYYY')}`,
 				function (value) {
-					return dayjs(value).isBefore(finishDateETWork, 'day');
+					if (isEdit) return true;
+					return (
+						dayjs(value).isBefore(finishDateETWork, 'day') ||
+						dayjs(value).isSame(finishDateETWork, 'day')
+					);
 				}
 			)
 			.test(
@@ -37,8 +41,8 @@ export const TaskSchema = (
 				'Ngày hoàn thành dự kiến phải lớn hơn ngày bắt đầu công việc',
 				function (value) {
 					return (
-						dayjs(value).isAfter((this.options as any).parent.startDate) ||
-						dayjs(value).isSame((this.options as any).parent.startDate, 'day')
+						dayjs(value).isAfter((this.options as any).parent.startDate, 'm') ||
+						dayjs(value).isSame((this.options as any).parent.startDate, 'm')
 					);
 				}
 			),

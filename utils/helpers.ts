@@ -1,3 +1,4 @@
+import { Dayjs, OpUnitType } from 'dayjs';
 import { get } from 'lodash';
 
 export const IS_BROWSER = typeof window !== 'undefined';
@@ -63,3 +64,26 @@ export const getValueFromId = <T extends { name: string; id: string }>(
 
 export const getEmployeeFromProposePj = (proposeProject?: IProposeProject) =>
 	get(proposeProject, 'employeesOfDepartment.employee') as IEmployee;
+
+export const betweenTime = (
+	time: Dayjs,
+	timeRange: [Dayjs, Dayjs],
+	unit: OpUnitType = 'd',
+	type = 'dự án'
+) => {
+	const isValid = time.isValid() && timeRange.every((day) => day.isValid());
+	if (!isValid) return 'Ngày không hợp lệ';
+	if (time.isBefore(timeRange[0], unit) && !time.isSame(timeRange[0], 'd')) {
+		return `Ngày bắt đầu không thể nhỏ hơn ngày bắt đầu ${type}!`;
+	}
+	if (time.isAfter(timeRange[1], unit) && !time.isSame(timeRange[1], 'd')) {
+		return `Ngày hoàn thành dự kiến không thể quá ngày hoàn thành dự kiến ${type}!`;
+	}
+	return '';
+};
+
+export const hasTask = (worksOfEmployee: IWorksEmployee[]) => {
+	const tasksOfWork = worksOfEmployee.flatMap((work) => work.tasksOfWork);
+
+	return tasksOfWork?.length > 0;
+};

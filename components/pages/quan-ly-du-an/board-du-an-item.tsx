@@ -30,9 +30,14 @@ import { useRef } from 'react';
 dayjs.extend(duration);
 
 const BoardDuAnItem = (props: ITaskOfWork) => {
-	const { note, finishDateET, task, finishDateETWork } = props;
+	const { note, startDate, finishDateET, finishDate, task, finishDateETWork } =
+		props;
 	const { name } = task ?? {};
 	const router = useRouter();
+	const dates = {
+		startDateJs: dayjs(startDate),
+		endDateJs: dayjs(finishDate ?? finishDateET),
+	};
 	const {
 		modal: modalState,
 		handleCloseModal,
@@ -97,9 +102,6 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 			>
 				Chỉnh sửa
 			</DropdownMenuItem>,
-			<DropdownMenuItem onClick={() => handleOpenModal('modalPQ')}>
-				Phân quyền
-			</DropdownMenuItem>,
 			<DropdownMenuItem onClick={() => handleOpenModal('modalNL')}>
 				Thêm nguồn lực
 			</DropdownMenuItem>
@@ -108,20 +110,24 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 
 	return (
 		<li className="w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light p-5 justify-start">
+			<p className="text-end text-muted-foreground text-[12px] font-medium mb-2">
+				{dates.startDateJs.format('ddd DD/MM/YYYY HH:mm')} <span> - </span>
+				{dates.endDateJs.format('ddd DD/MM/YYYY HH:mm')}
+			</p>
 			<div className="flex justify-between mb-5 items-center">
 				<h6 className="text-black font-semibold text-base dark:text-white-light">
 					{name}
 				</h6>
 				<span
 					className={cn(
-						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2',
+						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 flex-shrink-0',
 						{
 							['text-success bg-success-light']: isDone,
 							['text-danger bg-danger-light']: isExpired,
 						}
 					)}
 				>
-					{isDone ? 'Hoàn thành' : 'Đang thực hiện'}
+					{isDone ? 'Hoàn thành' : isExpired ? '' : 'Đang thực hiện'}
 					{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
 				</span>
 			</div>

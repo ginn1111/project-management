@@ -29,10 +29,10 @@ const ModalChiTietCongViec = (
 							className={cn(
 								'text-[15px] text-danger bg-danger-light mr-5 px-4 py-2 rounded-lg ring-danger',
 								{
-									['ring-success text-success bg-success-light']:
-										data?.percentOfDone >= 75,
 									['ring-warning text-warning bg-warning-light ring-1']:
 										data?.percentOfDone >= 50,
+									['ring-success text-success bg-success-light']:
+										data?.percentOfDone >= 75,
 								}
 							)}
 						>
