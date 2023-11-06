@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { AlertCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
@@ -30,6 +30,7 @@ import { useRef } from 'react';
 dayjs.extend(duration);
 
 const BoardDuAnItem = (props: ITaskOfWork) => {
+	const { id } = useParams();
 	const { note, startDate, finishDateET, finishDate, task, finishDateETWork } =
 		props;
 	const { name } = task ?? {};
@@ -216,6 +217,8 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				onClose={() => handleCloseModal('modalDone')}
 			/>
 			<ModalThemNguonLuc
+				idProject={id as string}
+				data={props}
 				open={modalState.modalNL.open}
 				onClose={() => handleCloseModal('modalNL')}
 				title="Thêm nguồn lực cho công việc"

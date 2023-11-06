@@ -119,10 +119,10 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 			id: (data as ITaskOfWork)?.id,
 			idProject: params.id,
 		};
-		if (isEdit) {
-			delete payload.startDate;
-			delete payload.finishDateET;
-		}
+		// if (isEdit) {
+		// 	delete payload.startDate;
+		// 	delete payload.finishDateET;
+		// }
 		updateTask(payload as any);
 	};
 

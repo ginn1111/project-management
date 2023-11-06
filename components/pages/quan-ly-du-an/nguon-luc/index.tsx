@@ -2,7 +2,7 @@ import IconPlus from '@/components/Icon/IconPlus';
 import { Button } from '@/components/ui/button';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
-import { DataTable } from 'mantine-datatable';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useParams } from 'next/navigation';
 import ModalThemNguonLuc from '../../du-an/modal/modal-them-nguon-luc';
 
@@ -21,7 +21,7 @@ const NguonLuc = ({ data }: INguonLuc) => {
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
 		modalNL: { open: false },
 	});
-	const columns = [
+	const columns: DataTableColumn<IResourceProject>[] = [
 		{
 			accessor: 'resource.name',
 			title: 'Tên nguồn lực',
@@ -31,7 +31,7 @@ const NguonLuc = ({ data }: INguonLuc) => {
 			title: 'Loại',
 		},
 		{
-			accessor: 'resource.amount',
+			accessor: 'resource',
 			title: 'Số lượng đã dùng/ tổng',
 			textAlignment: 'right',
 			render: (record: IResourceProject) => {
@@ -40,7 +40,7 @@ const NguonLuc = ({ data }: INguonLuc) => {
 						(acc, task) => acc + task?.amount,
 						0
 					) ?? 0;
-				return <p>{`${usedAmount}/${record.amount}`}</p>;
+				return <p>{`${usedAmount}/${record.amount + usedAmount}`}</p>;
 			},
 		},
 		{
@@ -86,7 +86,7 @@ const NguonLuc = ({ data }: INguonLuc) => {
 				/>
 			</div>
 			<ModalThemNguonLuc
-				data={{ id }}
+				data={{ id: id as string }}
 				open={modal.modalNL.open}
 				onClose={() => handleCloseModal('modalNL')}
 				title="Thêm nguồn lực"

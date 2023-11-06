@@ -3,8 +3,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useFormContext } from 'react-hook-form';
 
-const ItemNguonLuc = (props: IResource) => {
-	const { name, id, amount } = props;
+const ItemNguonLuc = (props: Partial<IResource | IResourceProject>) => {
+	const { name, id, amount = 0 } = props;
 
 	const useFormContextReturn = useFormContext();
 

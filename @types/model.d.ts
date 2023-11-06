@@ -17,6 +17,7 @@ interface IReviewProposeResource {
 	id: string;
 	idProposeResource: string;
 	idState: string;
+	createdDate: string;
 	reviewingDate: OrNull<string>;
 	note: OrNull<string>;
 	state: IStatePropose;
@@ -37,6 +38,8 @@ interface IResourceProject {
 	amount: number;
 	note: OrNull<string>;
 	resource: IResource;
+	name?: string;
+	resourceOfTasks?: IResourceOfTask[];
 }
 
 interface IEmployeeProject {
@@ -54,8 +57,18 @@ interface ITask {
 	name: string;
 	note: OrNull<string>;
 	isActive: boolean;
-	resourceOfTasks?: any;
+	resourceOfTasks?: IResourceOfTask[];
 }
+
+interface IResourceOfTask {
+	id: string;
+	idResource: string;
+	idTask: string;
+	amount: number;
+	note: any;
+	resource?: IResourceProject;
+}
+
 interface ITaskOfWork {
 	id: string;
 	idTask: string;

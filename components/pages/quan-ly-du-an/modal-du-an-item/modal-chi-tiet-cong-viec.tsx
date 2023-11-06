@@ -78,18 +78,16 @@ const ModalChiTietCongViec = (
 				<div>
 					<Label>Nguồn lực sử dụng</Label>
 					{data?.task?.resourceOfTasks?.length ? (
-						<ScrollArea className="px-4 py-2 border rounded-md h-[200px]">
-							{Array(10)
-								.fill(0)
-								.map((_, idx) => (
-									<div
-										key={idx}
-										className="flex items-center gap-4 justify-between text-sm"
-									>
-										<p>Tên nguồn lực</p>
-										<span>Số lượng</span>
-									</div>
-								))}
+						<ScrollArea className="px-4 py-2 border rounded-md h-[100px]">
+							{data?.task?.resourceOfTasks.map((resourceOfTask, idx) => (
+								<div
+									key={idx}
+									className="flex items-center gap-4 justify-between text-sm"
+								>
+									<p>{resourceOfTask.resource?.resource?.name}</p>
+									<span>{resourceOfTask.amount}</span>
+								</div>
+							))}
 						</ScrollArea>
 					) : (
 						<p className="text-danger text-sm">

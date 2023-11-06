@@ -160,7 +160,7 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 
 		return data?.map(({ id, finishDate, finishDateET, startDate, work }) => {
 			const isExpired =
-				dayjs(finishDateET).isBefore(dayjs(), 'day') ||
+				(!finishDate && dayjs(finishDateET).isBefore(dayjs(), 'day')) ||
 				(finishDate && dayjs(finishDateET).isBefore(finishDate, 'day'));
 
 			const isDone = !!finishDate;
@@ -276,7 +276,7 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						},
 					});
 				}}
-				events={fmtData}
+				events={fmtData as any}
 			/>
 			<ModalTaoDauViec
 				open={modal.modalDV.open}

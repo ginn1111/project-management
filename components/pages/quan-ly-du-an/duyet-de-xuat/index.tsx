@@ -100,6 +100,19 @@ const DuyetDeXuat = ({ data }: IDuyetDeXuat) => {
 			},
 		},
 		{
+			accessor: 'createdDate',
+			title: 'Ngày giờ tạo',
+			render: (record) => {
+				return (
+					<p>
+						{dayjs(record.createdDate).isValid()
+							? dayjs(record.createdDate).format('DD/MM/YYYY - HH:mm')
+							: 'N/A'}
+					</p>
+				);
+			},
+		},
+		{
 			accessor: 'reviewingDate',
 			title: 'Ngày giờ duyệt',
 			render: (record) => {

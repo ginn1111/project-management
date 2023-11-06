@@ -10,91 +10,141 @@ import { getResourceTypeList } from '@/lib/utils/resource-type';
 import { AxiosResponse } from 'axios';
 import LoadingInline from '@/components/ui/loading/loading-inline';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { ResourceServices } from '@/lib';
+import { ResourceProjectServices, ResourceServices } from '@/lib';
 import { debounce } from 'lodash';
 import { FormProvider, useForm } from 'react-hook-form';
 
 interface IThemNguonLuc {
-  scrollAreaProps?: React.ComponentPropsWithoutRef<
-    typeof ScrollAreaPrimitive.Root
-  >;
+	type?: 'resource' | 'resourceOfProject';
+	idProject?: string;
+	scrollAreaProps?: React.ComponentPropsWithoutRef<
+		typeof ScrollAreaPrimitive.Root
+	>;
 }
 
 const ThemNguonLuc = forwardRef((props: IThemNguonLuc, ref) => {
-  const { scrollAreaProps } = props;
-  const { className, ...restScrollAreaProps } = scrollAreaProps ?? {};
+	const { type = 'resource', idProject, scrollAreaProps } = props;
+	const { className, ...restScrollAreaProps } = scrollAreaProps ?? {};
 
-  const form = useForm();
+	const form = useForm();
 
-  useImperativeHandle(ref, () => form);
+	useImperativeHandle(ref, () => form);
 
-  const { data: resourceTypeData, isFetching } = useQuery<
-    AxiosResponse<IResourceType[]>
-  >({
-    queryKey: QueryKeys.getResourceType(),
-    queryFn: getResourceTypeList,
-  });
+	const { data: resourceTypeData, isFetching } = useQuery<
+		AxiosResponse<IResourceType[]>
+	>({
+		queryKey: QueryKeys.getResourceType(),
+		queryFn: getResourceTypeList,
+	});
 
-  const [selectedTab, setSelectedTab] = useState<IResourceType['id']>('');
-  const [search, setSearch] = useState('');
+	const [selectedTab, setSelectedTab] = useState<IResourceType['id']>('');
+	const [search, setSearch] = useState('');
 
-  const { data: resourceData, isFetching: fetchingResource } = useQuery<
-    AxiosResponse<{ resource: IResource[]; totalItems: number }>
-  >({
-    queryKey: QueryKeys.getResource(selectedTab, search),
-    queryFn: ({ queryKey }) => {
-      return ResourceServices.getList(
-        `idResourceType=${queryKey[1]}&search=${queryKey[2]}`
-      );
-    },
-    enabled: !!selectedTab,
-  });
+	const { data: resourceData, isFetching: fetchingResource } = useQuery<
+		AxiosResponse<{ resource: IResource[]; totalItems: number }>
+	>({
+		queryKey: QueryKeys.getResource(selectedTab, search),
+		queryFn: ({ queryKey }) => {
+			return ResourceServices.getList(
+				`idResourceType=${queryKey[1]}&search=${queryKey[2]}`
+			);
+		},
+		enabled: type === 'resource' && !!selectedTab,
+	});
 
-  useEffect(() => {
-    setSelectedTab(resourceTypeData?.data?.[0]?.id ?? '');
-  }, [resourceTypeData?.data]);
+	const { data: resourceOfProjData, isFetching: fetchingResourceOfProj } =
+		useQuery<
+			AxiosResponse<{ projectResource: IResourceProject[]; totalItems: number }>
+		>({
+			queryKey: QueryKeys.getResource(selectedTab, search, idProject ?? ''),
+			queryFn: ({ queryKey }) => {
+				return ResourceProjectServices.getList({
+					idProject: queryKey[3] as string,
+					searchParams: `idResourceType=${queryKey[1]}&search=${queryKey[2]}`,
+				});
+			},
+			enabled: type === 'resourceOfProject' && !!selectedTab,
+		});
 
-  return (
-    <div>
-      <Tabs className="mb-2 relative" value={selectedTab}>
-        {isFetching ? <LoadingInline /> : null}
-        <TabsList className="w-full">
-          {resourceTypeData?.data?.map(({ id, name }) => (
-            <TabsTrigger
-              onClick={() => setSelectedTab(id)}
-              key={id}
-              className="flex-1"
-              value={id}
-            >
-              {name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+	const resourceList =
+		type === 'resource'
+			? resourceData?.data?.resource
+			: resourceOfProjData?.data?.projectResource;
 
-      <Search
-        onChange={debounce((e) => setSearch(e.target.value), 300)}
-        classNameContainer="mb-2 text-sm"
-        placeholder="tên nguồn lực"
-      />
-      <ScrollArea
-        className={cn(
-          'h-[200px] w-full rounded-md border px-4 py-2',
-          className
-        )}
-        {...restScrollAreaProps}
-      >
-        {fetchingResource ? <LoadingInline /> : null}
-        <FormProvider {...form}>
-          {resourceData?.data?.resource.map((resource, idx) => (
-            <ItemNguonLuc {...resource} key={resource.id} />
-          ))}
-        </FormProvider>
-      </ScrollArea>
-    </div>
-  );
+	useEffect(() => {
+		setSelectedTab(resourceTypeData?.data?.[0]?.id ?? '');
+	}, [resourceTypeData?.data]);
+
+	return (
+		<div>
+			<Tabs className="mb-2 relative" value={selectedTab}>
+				{isFetching ? <LoadingInline /> : null}
+				<TabsList className="w-full">
+					{resourceTypeData?.data?.map(({ id, name }) => (
+						<TabsTrigger
+							onClick={() => setSelectedTab(id)}
+							key={id}
+							className="flex-1"
+							value={id}
+						>
+							{name}
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
+
+			<Search
+				onChange={debounce((e) => setSearch(e.target.value), 300)}
+				classNameContainer="mb-2 text-sm"
+				placeholder="tên nguồn lực"
+			/>
+			<ScrollArea
+				className={cn(
+					'h-[200px] w-full rounded-md border px-4 py-2',
+					className
+				)}
+				{...restScrollAreaProps}
+			>
+				{fetchingResource || fetchingResourceOfProj ? <LoadingInline /> : null}
+				<FormProvider {...form}>
+					{resourceList?.map((resource, idx) => {
+						let payload: Partial<IResource | IResourceProject> = {};
+						if (isResource(type, resource)) {
+							payload = resource;
+						} else if (isResourceOfProj(type, resource)) {
+							payload = {
+								...resource,
+								name: resource.resource.name,
+							};
+						}
+
+						return (
+							<ItemNguonLuc
+								{...payload}
+								key={payload?.id ?? (idx.toString() as string)}
+							/>
+						);
+					})}
+				</FormProvider>
+			</ScrollArea>
+		</div>
+	);
 });
 
 ThemNguonLuc.displayName = 'ThemNguonLuc';
+
+const isResource = (
+	type: 'resource' | 'resourceOfProject',
+	r: IResource | IResourceProject
+): r is IResource => {
+	return type === 'resource';
+};
+
+const isResourceOfProj = (
+	type: 'resource' | 'resourceOfProject',
+	r: IResource | IResourceProject
+): r is IResourceProject => {
+	return type === 'resourceOfProject';
+};
 
 export default ThemNguonLuc;

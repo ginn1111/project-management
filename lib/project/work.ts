@@ -65,3 +65,17 @@ export const doneTask = ({
 	privateRequest.post(`${PREFIX_URL}/${idTaskOfWOrk}/task/done`, {
 		percentOfDone,
 	});
+
+export const addResourceForTask = ({
+	idTask,
+	idProject,
+	resource,
+}: {
+	idTask: string;
+	idProject: string;
+	resource: { id: string; amount: number }[];
+}) =>
+	privateRequest.post(
+		`${PREFIX_URL}/${idProject}/${idTask}/task/add-resource`,
+		{ resource }
+	);
