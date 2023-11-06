@@ -46,3 +46,6 @@ export const inProject = (idProject: string, accessToken?: string) =>
 			['x-authorization']: `Bearer ${accessToken}`,
 		},
 	});
+
+export const doneProject = (idProject: string) =>
+	privateRequest.post(`${PREFIX_URL}/${idProject}/done`);

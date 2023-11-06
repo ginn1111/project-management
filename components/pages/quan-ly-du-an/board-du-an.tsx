@@ -67,7 +67,7 @@ const BoardDuAn = (props: IWorkProject) => {
 		},
 	});
 	const isExpired =
-		dayjs(props?.finishDateET).isBefore(dayjs(), 'd') ||
+		(!props?.finishDate && dayjs(props?.finishDateET).isBefore(dayjs(), 'd')) ||
 		(props?.finishDate &&
 			dayjs(props.finishDateET).isBefore(props?.finishDate, 'd'));
 

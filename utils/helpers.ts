@@ -87,3 +87,29 @@ export const hasTask = (worksOfEmployee: IWorksEmployee[]) => {
 
 	return tasksOfWork?.length > 0;
 };
+
+export const getTimeUnit = (secondTime: number) => {
+	if(secondTime >= 365*30*24*3600) {
+		return  {
+			type: 'years',
+			unit: ' Năm'
+		}
+	}
+	if(secondTime >= 30*24*3600) {
+		return  {
+			type: 'months',
+			unit: ' Tháng'
+		}
+	}
+	if(secondTime >= 7*24*3600) {
+		return  {
+			type: 'weeks',
+			unit: ' Tuần'
+		}
+	}
+	return {
+		type: 'days',
+		unit: ' Ngày'
+	}
+
+}

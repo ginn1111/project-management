@@ -76,7 +76,7 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 	const percentRef = useRef<HTMLInputElement | null>(null);
 
 	const isExpired =
-		dayjs(props?.finishDateET).isBefore(dayjs(), 'm') ||
+		(!props?.finishDate && dayjs(props?.finishDateET).isBefore(dayjs(), 'm')) ||
 		(props?.finishDate &&
 			dayjs(props.finishDateET).isBefore(props?.finishDate, 'm'));
 	const isDone = !!props.finishDate;
