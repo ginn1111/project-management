@@ -11,7 +11,8 @@ import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import { GenderIndex } from '@/constants/indexes';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
-import * as EmployeeServices from '@/lib/employee';
+import { EmployeeProjectServices } from '@/lib';
+import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import vi from 'dayjs/locale/vi';
 import { get } from 'lodash';
@@ -33,16 +34,26 @@ const TableNhanVien = (props: ITableNhanVien) => {
 		initSearchParams: { page: 1, limit: 10 },
 	});
 
-	const { mutate, isLoading } = useMutation({
-		mutationFn: (id: string) => EmployeeServices.remove(id),
-	});
-
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
 		modalNV: { open: false, employee: {} },
 		modalRM: { open: false, id: '' },
 		modalPB: { open: false, employee: { departments: [] } },
 		modalCV: { open: false, employee: { positions: [] } },
 		modalTK: { open: false, employee: {} },
+	});
+
+	const { mutate: removeEmpFromProject, isLoading } = useMutation({
+		mutationFn: EmployeeProjectServices.remove,
+		onSuccess: () => {
+			toast.success('Đã xoá nhân viên khỏi dự án');
+			router.refresh();
+		},
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSettled: () => {
+			handleCloseModal('modalRM');
+		},
 	});
 
 	const employeePath = 'proposeProject.employeesOfDepartment.employee';
@@ -92,7 +103,10 @@ const TableNhanVien = (props: ITableNhanVien) => {
 						<DropdownMenuItem>Chỉnh sửa quyền</DropdownMenuItem>
 						<DropdownMenuItem>Giao việc</DropdownMenuItem>
 						<DropdownMenuItem>Xem workload</DropdownMenuItem>
-						<DropdownMenuItem className="text-destructive hover:!text-destructive">
+						<DropdownMenuItem
+							className="text-destructive hover:!text-destructive"
+							onClick={() => handleOpenModal('modalRM', { id: row.id })}
+						>
 							Xoá khỏi dự án
 						</DropdownMenuItem>
 					</DropdownMenuContent>
@@ -100,8 +114,6 @@ const TableNhanVien = (props: ITableNhanVien) => {
 			),
 		},
 	];
-
-	console.log(data.employeesOfProject);
 
 	return (
 		<>
@@ -133,10 +145,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
 				title="Xoá nhân viên"
 				message="Bạn có muốn xoá nhân viên này?"
 				onAccept={() => {
-					mutate(modal.modalRM.id);
+					removeEmpFromProject(modal.modalRM.id);
 					handleCloseModal('modalRM');
-					toast.success('Xoá nhân viên thành công');
-					router.refresh();
 				}}
 				onClose={() => handleCloseModal('modalRM')}
 				open={modal.modalRM.open}

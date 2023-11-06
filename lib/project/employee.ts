@@ -17,3 +17,6 @@ export const getList = (
 			['x-authorization']: `Bearer ${accessToken}`,
 		},
 	});
+
+export const remove = (idEmpProject: string) =>
+	privateRequest.post(`${PREFIX_URL}/${idEmpProject}/remove`);
