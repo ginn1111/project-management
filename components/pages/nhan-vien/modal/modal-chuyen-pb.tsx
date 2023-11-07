@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import Modal, { IModalProps } from '@/components/ui/modal';
 import ReactSelect from '@/components/ui/react-select';
 import { DepartmentServices } from '@/lib';
+import { AxiosError } from 'axios';
 import { isNull } from 'lodash';
+import { AlertCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
@@ -30,8 +32,13 @@ const ModalChuyenPB = (
 		}) => DepartmentServices.addToEmployee(idDepartment, idEmployee, data),
 		onSuccess: () => {
 			toast.success('Thêm nhân viên vào phòng ban thành công');
-			rest.onClose();
 			onRefresh?.();
+		},
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSettled: () => {
+			rest.onClose();
 		},
 	});
 
@@ -77,7 +84,7 @@ const ModalChuyenPB = (
 				className="flex flex-col gap-4 min-h-[300px]"
 				onSubmit={handleSubmit(handleSuccess)}
 			>
-				{(data?.departments?.length ?? 0) > 0 ? (
+				{nowDepartment ? (
 					<ReactSelect
 						control={control}
 						labelProps={{ required: true }}
@@ -92,10 +99,11 @@ const ModalChuyenPB = (
 					/>
 				) : (
 					<Alert className="text-info border-info bg-info-light">
-						<AlertTitle>Warning</AlertTitle>
-						<AlertDescription>
-							Nhân viên mới, vui lòng thêm nhân viên vào phòng ban trước!
-						</AlertDescription>
+						<AlertTitle className="flex items-center gap-2">
+							<AlertCircle className="w-4 h-4" />
+							Info
+						</AlertTitle>
+						<AlertDescription>Nhân viên chưa vào phòng ban!</AlertDescription>
 					</Alert>
 				)}
 				<ReactSelect

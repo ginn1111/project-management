@@ -89,27 +89,29 @@ export const hasTask = (worksOfEmployee: IWorksEmployee[]) => {
 };
 
 export const getTimeUnit = (secondTime: number) => {
-	if(secondTime >= 365*30*24*3600) {
-		return  {
+	if (secondTime >= 365 * 30 * 24 * 3600) {
+		return {
 			type: 'years',
-			unit: ' Năm'
-		}
+			unit: ' Năm',
+		};
 	}
-	if(secondTime >= 30*24*3600) {
-		return  {
+	if (secondTime >= 30 * 24 * 3600) {
+		return {
 			type: 'months',
-			unit: ' Tháng'
-		}
+			unit: ' Tháng',
+		};
 	}
-	if(secondTime >= 7*24*3600) {
-		return  {
+	if (secondTime >= 7 * 24 * 3600) {
+		return {
 			type: 'weeks',
-			unit: ' Tuần'
-		}
+			unit: ' Tuần',
+		};
 	}
 	return {
 		type: 'days',
-		unit: ' Ngày'
-	}
+		unit: ' Ngày',
+	};
+};
 
-}
+export const removeSign = (str?: string) =>
+	str?.normalize('NFD')?.replace(/[\u0300-\u036f]/g, '');
