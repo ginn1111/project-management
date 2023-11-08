@@ -277,6 +277,7 @@ interface ICertification {
 }
 
 interface IEmployee {
+	info?: IEmployee;
 	id: string;
 	idWard: OrNull<string>;
 	idProvince: OrNull<string>;
@@ -299,6 +300,7 @@ interface IEmployee {
 	positions?: IPositionsEmployee[];
 	account?: account;
 	accessToken?: string;
+	role?: string;
 }
 
 interface IProvince {

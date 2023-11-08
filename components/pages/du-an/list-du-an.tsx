@@ -1,19 +1,19 @@
 'use client';
 
-import useModal from '@/hooks/useModal';
-import { useRouter } from 'next/navigation';
-import DuAnCard from './du-an-card';
-import ModalThemDuAn from './modal/modal-them-du-an';
-import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import { Label } from '@/components/ui/label';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import { Textarea } from '@/components/ui/textarea';
-import { ReactNode, useRef } from 'react';
-import { toast } from 'sonner';
-import { useMutation } from 'react-query';
+import useModal from '@/hooks/useModal';
 import { ProjectServices } from '@/lib';
 import { AxiosError } from 'axios';
 import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { ReactNode, useRef } from 'react';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
+import DuAnCard from './du-an-card';
+import ModalThemDuAn from './modal/modal-them-du-an';
+import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
 
 interface IListDuAn {
 	data: { projects: IProject[]; totalItems: number };
@@ -66,7 +66,7 @@ const ListDuAn = ({ data }: IListDuAn) => {
 
 	return (
 		<div className="grid grid-cols-fill-300 gap-3 m-2">
-			{data?.projects ? (
+			{data?.projects?.length ? (
 				data.projects.map((project, idx) => (
 					<DuAnCard
 						key={idx}
@@ -83,7 +83,7 @@ const ListDuAn = ({ data }: IListDuAn) => {
 					/>
 				))
 			) : (
-				<p className="w-full text-center text-[16px] text-danger font-bold">
+				<p className="col-span-3 text-center text-[16px] text-danger font-bold">
 					Không có dự án nào
 				</p>
 			)}

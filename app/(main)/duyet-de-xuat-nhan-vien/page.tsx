@@ -3,7 +3,6 @@ import FilterDuyetDXNV from '@/components/pages/duyet-de-xuat-nhan-vien/filter-d
 import TableDuyetDXNV from '@/components/pages/duyet-de-xuat-nhan-vien/table-duyet-de-xuat-nhan-vien';
 import { ProjectServices, ReviewProjectServices } from '@/lib';
 import { getServerSession } from 'next-auth';
-import React from 'react';
 
 const DuyetDeXuatNhanVien = async ({
 	searchParams,
@@ -11,15 +10,21 @@ const DuyetDeXuatNhanVien = async ({
 	searchParams: ISearchParams;
 }) => {
 	const session = await getServerSession(authOptions);
+	const idDepartment = session?.user?.info?.departments?.[0]?.idDepartment;
 
 	const reviewProposeProject = await ReviewProjectServices.getList(
 		`page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${
 			parseInt(searchParams.limit as any) || 10
-		}&idProject=${searchParams.idProject ?? ''}`,
+		}&idProject=${searchParams.idProject ?? ''}&idDepartment=${
+			idDepartment ?? ''
+		}`,
 		session?.user.accessToken
 	);
 
-	const project = await ProjectServices.getList('', session?.user.accessToken);
+	const project = await ProjectServices.getList(
+		`idDepartment=${idDepartment}`,
+		session?.user.accessToken
+	);
 
 	return (
 		<div className="m-2 rounded-sm p-2">

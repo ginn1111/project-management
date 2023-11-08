@@ -8,46 +8,48 @@ import { getValueFromId } from '@/utils/helpers';
 import { useEffect, useState } from 'react';
 
 interface IFilterDuyetDXND {
-  projects: IProject[];
+	projects: IProject[];
 }
 
 const FilterDuyetDXNV = ({ projects }: IFilterDuyetDXND) => {
-  const { handlePush, handleReset, searchParams } = useQueryParams({
-    initSearchParams: { idProject: '', page: 1, limit: 10 },
-  });
+	const { handlePush, handleReset, searchParams } = useQueryParams({
+		initSearchParams: { idProject: '', page: 1, limit: 10 },
+	});
 
-  const [selectValue, setSelectValue] = useState(
-    getValueFromId<IProject>(searchParams.idProject, projects)
-  );
+	const [selectValue, setSelectValue] = useState(
+		getValueFromId<IProject>(searchParams.idProject, projects)
+	);
 
-  useEffect(() => {
-    setSelectValue(getValueFromId(searchParams.idProject, projects));
-  }, [searchParams.idProject]);
+	useEffect(() => {
+		setSelectValue(getValueFromId(searchParams.idProject, projects));
+	}, [searchParams.idProject]);
 
-  return (
-    <div className="flex items-center gap-2">
-      <div className="w-full max-w-[400px]">
-        <ReactSelect
-          className="z-10"
-          placeholder="dự án"
-          title={null}
-          value={selectValue}
-          options={projects.map(({ name, id }) => ({
-            value: id,
-            label: name,
-          }))}
-          onChange={(newValue) => {
-            handlePush({ idProject: (newValue as any).value, page: 1 });
-          }}
-        />
-      </div>
-      <div className="flex items-center gap-2 ml-auto">
-        <Button variant="outline" onClick={handleReset}>
-          <IconRefresh />
-        </Button>
-      </div>
-    </div>
-  );
+	return (
+		<div className="flex items-center gap-2">
+			<div className="w-full max-w-[400px]">
+				<ReactSelect
+					isClearable
+					className="z-10"
+					placeholder="dự án"
+					title={null}
+					value={selectValue}
+					options={projects.map(({ name, id }) => ({
+						value: id,
+						label: name,
+					}))}
+					onChange={(newValue) => {
+						console.log(newValue);
+						handlePush({ idProject: (newValue as any)?.value ?? '', page: 1 });
+					}}
+				/>
+			</div>
+			<div className="flex items-center gap-2 ml-auto">
+				<Button variant="outline" onClick={handleReset}>
+					<IconRefresh />
+				</Button>
+			</div>
+		</div>
+	);
 };
 
 export default FilterDuyetDXNV;

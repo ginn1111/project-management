@@ -5,12 +5,14 @@ import IconRefresh from '@/components/Icon/IconRefresh';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Search from '@/components/ui/search';
+import { Role } from '@/constants/general';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
 import dayjs from 'dayjs';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ModalThemDuAn from './modal/modal-them-du-an';
-import { useRouter } from 'next/navigation';
 
 const FilterDuAn = () => {
 	const { handlePush, handleReset, searchParams } = useQueryParams({
@@ -21,6 +23,8 @@ const FilterDuAn = () => {
 			idDepartment: '',
 		},
 	});
+	const { data: session } = useSession();
+	const { user } = session ?? {};
 	const router = useRouter();
 
 	const [filter, setFilter] = useState({ ...searchParams });
@@ -78,14 +82,17 @@ const FilterDuAn = () => {
 					}
 				/>
 			</div>
-			<Button
-				variant="outline"
-				className="items-center gap-2"
-				onClick={() => handleOpenModal('modalPJ')}
-			>
-				<IconPlus />
-				Thêm dự án
-			</Button>
+			{user?.info?.role === Role.QUAN_LY_TRUONG_PHONG ||
+			user?.info?.role === Role.TRUONG_PHONG ? (
+				<Button
+					variant="outline"
+					className="items-center gap-2"
+					onClick={() => handleOpenModal('modalPJ')}
+				>
+					<IconPlus />
+					Thêm dự án
+				</Button>
+			) : null}
 			<Button
 				variant="outline"
 				className="items-center gap-2"

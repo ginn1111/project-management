@@ -8,24 +8,24 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
+import { WorkProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
+import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { AlertCircle } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import { useRef } from 'react';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
 import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
 import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
 import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
-import { useMutation } from 'react-query';
-import { WorkProjectServices } from '@/lib';
-import { AxiosError } from 'axios';
-import { toast } from 'sonner';
-import { Input } from '@/components/ui/input';
-import { useRef } from 'react';
 
 dayjs.extend(duration);
 
@@ -210,6 +210,13 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 					const percentOfDone = parseFloat(percentRef.current?.value ?? '');
 					if (!percentOfDone || percentOfDone > 100 || percentOfDone < 0) {
 						toast.error('Mức độ hoàn thành không hợp lệ');
+						return;
+					}
+
+					if (props.startDate && dayjs().isBefore(dayjs(props.startDate))) {
+						toast.error(
+							'Thời gian hoàn thành không thể nhỏ hơn thời gian bắt đầu!'
+						);
 						return;
 					}
 					doneTask({ idTaskOfWOrk: props.id, percentOfDone });

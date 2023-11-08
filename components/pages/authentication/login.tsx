@@ -95,7 +95,7 @@ const Login = () => {
 											{...form.register('username')}
 											className="ps-10"
 											placeholder="nhập tài khoản"
-											defaultValue="thuandz"
+											defaultValue="superadmin"
 										/>
 										<span className="absolute start-4 top-1/2 -translate-y-1/2">
 											<IconMail fill={true} />
@@ -116,7 +116,7 @@ const Login = () => {
 											type="password"
 											className="ps-10"
 											placeholder="nhập mật khẩu"
-											defaultValue="123"
+											defaultValue="admin"
 										/>
 										<span className="absolute start-4 top-1/2 -translate-y-1/2">
 											<IconLockDots fill={true} />

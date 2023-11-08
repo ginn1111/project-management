@@ -5,18 +5,21 @@ import IconRecommend from '@/components/Icon/IconRecommend';
 import IconWork from '@/components/Icon/IconWork';
 import { Button } from '@/components/ui/button';
 
+import LoadingInline from '@/components/ui/loading/loading-inline';
+import { QueryKeys } from '@/constants/query-key';
 import useModal from '@/hooks/useModal';
+import { ProjectServices } from '@/lib';
+import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
+import { useQuery } from 'react-query';
 import ModalPhanQuyenDA from './modal-tool-bar/modal-phan-quyen-da';
 import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalTaoDeXuat from './modal-tool-bar/modal-tao-de-xuat';
-import { useQuery } from 'react-query';
-import { QueryKeys } from '@/constants/query-key';
-import { ProjectServices } from '@/lib';
-import LoadingInline from '@/components/ui/loading/loading-inline';
 
 const LayoutQLDA = () => {
 	const router = useRouter();
+	const { data: session } = useSession();
+	const { user } = session ?? {};
 	const { id } = useParams();
 	const { data: projectData, isFetching } = useQuery({
 		queryKey: QueryKeys.getDetailProject(id as string),
