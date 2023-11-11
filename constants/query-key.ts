@@ -11,4 +11,8 @@ export const QueryKeys = {
 		'get-permission-of-work',
 		...keys,
 	],
+	getPermissionsOfWorkOfEmp: (...keys: string[]) => [
+		'get-permission-of-work-of-emp',
+		...keys,
+	],
 };

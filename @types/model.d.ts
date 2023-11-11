@@ -1,3 +1,11 @@
+interface IWorkOfPermission {
+	id: string;
+	idEmpProject: string;
+	idPermission: string;
+	idWorkProject: string;
+	note: any;
+}
+
 interface IWorkPermission {
 	id: string;
 	name: string;

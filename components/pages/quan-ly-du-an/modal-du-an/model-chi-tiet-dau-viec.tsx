@@ -57,25 +57,27 @@ const ModalChiTietDauViec = (
 					{data?.worksOfEmployee?.length ? (
 						<div>
 							<ScrollArea className="h-[200px] w-full rounded-md border p-2">
-								{data?.worksOfEmployee?.map((workOfEmp) => (
-									<div
-										key={workOfEmp.id}
-										className="flex items-center justify-between hover:bg-muted p-2 rounded-md cursor-pointer"
-									>
-										<span className="text-sm">
-											{
-												getEmployeeFromProposePj(
+								{data?.worksOfEmployee
+									?.filter((workOfEmp) => workOfEmp.employee)
+									?.map((workOfEmp) => (
+										<div
+											key={workOfEmp.id}
+											className="flex items-center justify-between hover:bg-muted p-2 rounded-md cursor-pointer"
+										>
+											<span className="text-sm">
+												{
+													getEmployeeFromProposePj(
+														workOfEmp.employee?.proposeProject
+													)?.fullName
+												}
+												<span> - </span>
+												{
 													workOfEmp.employee?.proposeProject
-												)?.fullName
-											}
-											<span> - </span>
-											{
-												workOfEmp.employee?.proposeProject.employeesOfDepartment
-													?.department?.name
-											}
-										</span>
-									</div>
-								))}
+														.employeesOfDepartment?.department?.name
+												}
+											</span>
+										</div>
+									))}
 							</ScrollArea>
 						</div>
 					) : (

@@ -9,66 +9,76 @@ import ReactSelect from '../ui/react-select';
 
 interface IGroupSelectNhanVien {
 	isMulti?: boolean;
+	onWatch: (...args: unknown[]) => void;
 }
 
-const GroupSelectNhanVien = forwardRef(({ isMulti = false }: IGroupSelectNhanVien, ref) => {
-	const params = useParams();
-	const form = useForm();
-	
-	useImperativeHandle(ref, () => form)
+const GroupSelectNhanVien = forwardRef(
+	({ isMulti = false, onWatch }: IGroupSelectNhanVien, ref) => {
+		const params = useParams();
+		const form = useForm();
 
-	const { data: departmentData } = useQuery<
-		AxiosResponse<{ departments: IDepartment[] }>
-	>({
-		queryKey: QueryKeys.getDepartment(params.id as string),
-		queryFn: ({ queryKey }) =>
-			DepartmentServices.getList(`idProject=${queryKey[1]}`),
-		enabled: !!params.id,
-	});
+		useEffect(() => {
+			const subscription = form.watch((data, { name }) => {
+				onWatch(name, data);
+			});
 
-	const { data: employeeData } = useQuery<
-		AxiosResponse<{ employeesOfProject: IEmployeeProject[] }>
-	>({
-		queryKey: QueryKeys.getDepartment(
-			params.id as string,
-			form.getValues('departmentId')
-		),
-		queryFn: ({ queryKey }) =>
-			EmployeeProjectServices.getList({
-				idProject: queryKey[1] as string,
-				searchParams: `idDepartment=${queryKey[2]}`,
-			}),
-		enabled: !!params.id && !!form.watch('departmentId'),
-	});
+			return () => subscription.unsubscribe();
+		}, []);
 
-	useEffect(() => {
-		const sub = form.watch((_, { name }) => {
-			if (name === 'departmentId') {
-				form.setValue('idEmployeePj', null);
-			}
+		useImperativeHandle(ref, () => form);
+
+		const { data: departmentData } = useQuery<
+			AxiosResponse<{ departments: IDepartment[] }>
+		>({
+			queryKey: QueryKeys.getDepartment(params.id as string),
+			queryFn: ({ queryKey }) =>
+				DepartmentServices.getList(`idProject=${queryKey[1]}`),
+			enabled: !!params.id,
 		});
 
-		return () => sub.unsubscribe();
-	}, []);
+		const { data: employeeData } = useQuery<
+			AxiosResponse<{ employeesOfProject: IEmployeeProject[] }>
+		>({
+			queryKey: QueryKeys.getDepartment(
+				params.id as string,
+				form.getValues('departmentId')
+			),
+			queryFn: ({ queryKey }) =>
+				EmployeeProjectServices.getList({
+					idProject: queryKey[1] as string,
+					searchParams: `idDepartment=${queryKey[2]}`,
+				}),
+			enabled: !!params.id && !!form.watch('departmentId'),
+		});
 
-	return (
-		<>
-			<div className="custom-select flex items-center gap-4">
-				<ReactSelect
-					control={form.control}
-					name="departmentId"
-					labelProps={{ required: true }}
-					containerClass="flex-1"
-					title="Phòng ban"
-					placeholder="phòng ban"
-					options={
-						departmentData?.data.departments.map(({ id, name }) => ({
-							label: name,
-							value: id,
-						})) ?? []
-					}
-				/>
-				{/* <ReactSelect
+		useEffect(() => {
+			const sub = form.watch((_, { name }) => {
+				if (name === 'departmentId') {
+					form.setValue('idEmployeePj', null);
+				}
+			});
+
+			return () => sub.unsubscribe();
+		}, []);
+
+		return (
+			<>
+				<div className="custom-select flex items-center gap-4">
+					<ReactSelect
+						control={form.control}
+						name="departmentId"
+						labelProps={{ required: true }}
+						containerClass="flex-1"
+						title="Phòng ban"
+						placeholder="phòng ban"
+						options={
+							departmentData?.data.departments.map(({ id, name }) => ({
+								label: name,
+								value: id,
+							})) ?? []
+						}
+					/>
+					{/* <ReactSelect
 					title="Chuyên môn"
 					placeholder="chuyên môn"
 					containerClass="flex-1"
@@ -91,29 +101,30 @@ const GroupSelectNhanVien = forwardRef(({ isMulti = false }: IGroupSelectNhanVie
 						},
 					]}
 				/> */}
-			</div>
-			<div className="custom-select">
-				<ReactSelect
-					control={form.control}
-					name="idEmployee"
-					labelProps={{ required: true }}
-					title="Nhân viên"
-					placeholder="nhân viên"
-					isMulti={isMulti}
-					options={
-						employeeData?.data.employeesOfProject.map(
-							({ id, proposeProject: { employeesOfDepartment } }) => ({
-								value: id,
-								label: employeesOfDepartment?.employee?.fullName ?? '',
-							})
-						) ?? []
-					}
-				/>
-			</div>
-		</>
-	);
-});
+				</div>
+				<div className="custom-select">
+					<ReactSelect
+						control={form.control}
+						name="idEmployee"
+						labelProps={{ required: true }}
+						title="Nhân viên"
+						placeholder="nhân viên"
+						isMulti={isMulti}
+						options={
+							employeeData?.data.employeesOfProject.map(
+								({ id, proposeProject: { employeesOfDepartment } }) => ({
+									value: id,
+									label: employeesOfDepartment?.employee?.fullName ?? '',
+								})
+							) ?? []
+						}
+					/>
+				</div>
+			</>
+		);
+	}
+);
 
-GroupSelectNhanVien.displayName = 'GroupSelectNhanVien'
+GroupSelectNhanVien.displayName = 'GroupSelectNhanVien';
 
 export default GroupSelectNhanVien;

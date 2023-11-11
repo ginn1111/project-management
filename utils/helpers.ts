@@ -1,5 +1,5 @@
 import { Dayjs, OpUnitType } from 'dayjs';
-import { get } from 'lodash';
+import { get, isNil } from 'lodash';
 
 export const IS_BROWSER = typeof window !== 'undefined';
 
@@ -115,3 +115,12 @@ export const getTimeUnit = (secondTime: number) => {
 
 export const removeSign = (str?: string) =>
 	str?.normalize('NFD')?.replace(/[\u0300-\u036f]/g, '');
+
+export const formatPermission = (permission: Record<string, boolean>) => {
+	return Object.entries(permission).reduce((acc, [id, isGrant]) => {
+		if (!isNil(isGrant)) {
+			acc.push({ id, isGrant });
+		}
+		return acc;
+	}, [] as { id: string; isGrant: boolean }[]);
+};

@@ -46,7 +46,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	} = useModal({
 		modalCS: { open: false, data: {} },
 		modalLS: { open: false },
-		modalPQ: { open: false },
+		modalPQ: { open: false, data: {} },
 		modalTCV: { open: false },
 		modalDV: { open: false },
 		modalGV: { open: false },
@@ -103,13 +103,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 				</DropdownMenuItem>,
 				<DropdownMenuItem
 					key="update"
-					onClick={() =>
-						handleOpenModal('modalCS', {
-							data: {
-								...props,
-							},
-						})
-					}
+					onClick={() => handleOpenModal('modalCS')}
 				>
 					Chỉnh sửa
 				</DropdownMenuItem>,
@@ -266,7 +260,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 				onRefresh={() => router.refresh()}
 				open={modalState.modalPQ.open}
 				title="Phân quyền"
-				data={{}}
+				data={props}
 				onClose={() => handleCloseModal('modalPQ')}
 			/>
 			<ModalLichSu

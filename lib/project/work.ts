@@ -79,3 +79,23 @@ export const addResourceForTask = ({
 		`${PREFIX_URL}/${idProject}/${idTask}/task/add-resource`,
 		{ resource }
 	);
+
+export const assignPermission = ({
+	idWorkProject,
+	...payload
+}: {
+	permissions: { id: string; isGrant: boolean }[];
+	idEmpProject: string;
+	idWorkProject: string;
+}) => privateRequest.post(`${PREFIX_URL}/${idWorkProject}/permission`, payload);
+
+export const getWorkPermission = ({
+	idEmpProject,
+	idWorkProject,
+}: {
+	idWorkProject: string;
+	idEmpProject: string;
+}) =>
+	privateRequest.get(
+		`${PREFIX_URL}/${idWorkProject}/permission/${idEmpProject}/work`
+	);
