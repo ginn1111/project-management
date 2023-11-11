@@ -1,3 +1,17 @@
+interface IWorkPermission {
+	id: string;
+	name: string;
+	note: OrNull<string>;
+	code: string;
+}
+interface IManageProject {
+	id: string;
+	idProject: string;
+	idEmpHead: string;
+	endDate: any;
+	startDate: string;
+	isHead: boolean;
+}
 interface IHistory {
 	id: string;
 	idEmployee: string;
@@ -30,6 +44,7 @@ interface IProposeResource {
 	description: OrNull<string>;
 	employeesOfProject?: EmployeesOfProject;
 	resourcesProposes: IResourcesPropose[];
+	manageProjects?: IP;
 }
 interface IResourceProject {
 	id: string;
@@ -78,6 +93,7 @@ interface ITaskOfWork {
 	finishDateET: OrNull<string>;
 	finishDateETWork: OrNull<string>;
 	finishDate: OrNull<string>;
+	startDateWork?: string;
 	note: OrNull<string>;
 	task: ITask;
 }
@@ -98,6 +114,8 @@ interface IWorkProject {
 	finishDate: OrNull<string>;
 	finishDateET: OrNull<string>;
 	finishDateETProject?: OrNull<string>;
+	finishDateETWork?: string;
+	startDateWork?: string;
 	note: OrNull<string>;
 	worksOfEmployee: IWorksEmployee[];
 	work?: IWork;
@@ -168,6 +186,7 @@ interface IProject {
 	finishDate: any;
 	note: string;
 	departments?: IDepartmentProject[];
+	manageProjects?: IManageProject[];
 }
 
 interface IWard {

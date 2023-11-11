@@ -46,7 +46,7 @@ const DuAnCard = ({
 	const { mutate: handleToProject, isLoading } = useMutation({
 		mutationFn: ProjectServices.inProject,
 		onSuccess: (response) => {
-			router.push(`/du-an/${response?.data}`);
+			router.push(`/du-an/${response?.data?.idProject}`);
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);

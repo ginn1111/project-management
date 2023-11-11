@@ -12,3 +12,4 @@ export * as WorkProjectServices from './project/work';
 export * as QualificationServices from './qualification';
 export * as ResourceServices from './resource';
 export * as ReviewProjectServices from './review-project';
+export * as UtilsServices from './utils/index';

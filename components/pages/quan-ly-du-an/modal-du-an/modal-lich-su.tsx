@@ -1,12 +1,12 @@
 import Modal, { IModalProps } from '@/components/ui/modal';
 import { QueryKeys } from '@/constants/query-key';
 import { WorkProjectServices } from '@/lib';
-import ReactJson from 'react-json-view';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import ReactJson from 'react-json-view';
+import { useQuery } from 'react-query';
 
 const ModalLichSu = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 	const { data, ...rest } = props;
@@ -15,7 +15,7 @@ const ModalLichSu = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 
 	const { data: historyData, isFetching } = useQuery({
 		queryKey: QueryKeys.getWorkHistory(
-			data?.id ?? '',
+			data?.idWork ?? '',
 			paging.page.toString(),
 			paging.limit.toString(),
 			params.id as string

@@ -4,6 +4,7 @@ import * as yup from 'yup';
 export const ProjectSchema = (isEdit?: boolean) =>
 	yup.object({
 		name: yup.string().required('Tên dự án không được để trống'),
+		idEmpHead: yup.string().required('Vui lòng chọn người phụ trách'),
 		startDate: yup
 			.string()
 			.required('Ngày bắt đầu dự án không được để trống')

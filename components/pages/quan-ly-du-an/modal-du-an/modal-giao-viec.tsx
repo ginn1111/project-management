@@ -33,6 +33,7 @@ const ModalGiaoViec = <T,>(
 		const payload = {
 			idEmployee,
 			id: data?.id,
+			idProject: data?.idProject,
 		};
 
 		assign(payload);

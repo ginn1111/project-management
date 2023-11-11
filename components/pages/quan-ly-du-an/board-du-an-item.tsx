@@ -31,8 +31,15 @@ dayjs.extend(duration);
 
 const BoardDuAnItem = (props: ITaskOfWork) => {
 	const { id } = useParams();
-	const { note, startDate, finishDateET, finishDate, task, finishDateETWork } =
-		props;
+	const {
+		note,
+		startDate,
+		finishDateET,
+		finishDate,
+		task,
+		finishDateETWork,
+		startDateWork,
+	} = props;
 	const { name } = task ?? {};
 	const router = useRouter();
 	const dates = {
@@ -98,7 +105,9 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 			</DropdownMenuItem>,
 			<DropdownMenuItem
 				onClick={() =>
-					handleOpenModal('modalCS', { task: { ...props, finishDateETWork } })
+					handleOpenModal('modalCS', {
+						task: { ...props, finishDateETWork, startDateWork },
+					})
 				}
 			>
 				Chỉnh sửa

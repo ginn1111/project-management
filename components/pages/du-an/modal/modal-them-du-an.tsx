@@ -4,7 +4,9 @@ import Modal, { IModalProps } from '@/components/ui/modal';
 import Label from '@/components/ui/my-label';
 import ReactSelect from '@/components/ui/react-select';
 import { Textarea } from '@/components/ui/textarea';
-import { DepartmentServices, ProjectServices } from '@/lib';
+import { Role } from '@/constants/general';
+import { QueryKeys } from '@/constants/query-key';
+import { DepartmentServices, EmployeeServices, ProjectServices } from '@/lib';
 import { ProjectSchema } from '@/yup-schema/project';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -29,6 +31,22 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		queryFn: () => DepartmentServices.getList(''),
 		enabled: rest.open,
 	});
+
+	const { data: employeeListData, isFetching: employeeFetching } = useQuery<
+		AxiosResponse<{ employees: IEmployee[]; totalItems: number }>
+	>({
+		queryKey: QueryKeys.getEmployee(),
+		queryFn: ({}) =>
+			EmployeeServices.getList(`code=${Role.QUAN_LY_TRUONG_PHONG}`),
+		enabled: rest.open,
+	});
+
+	const employeeOptions = useMemo(() => {
+		return employeeListData?.data?.employees?.map(({ id, fullName }) => ({
+			value: id,
+			label: fullName,
+		}));
+	}, [JSON.stringify(employeeListData?.data?.employees ?? {})]);
 
 	const departmentOptions = useMemo(() => {
 		const departments = departmentData?.data?.departments;
@@ -59,7 +77,15 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 
 	useEffect(() => {
 		if (rest.open && isEdit) {
-			const _payload = omit(data, ['startDate', 'finishDateET', 'departments']);
+			const _payload = omit(data, [
+				'startDate',
+				'finishDateET',
+				'departments',
+				'manageProjects',
+			]);
+
+			const idEmpHead = data?.manageProjects?.[0]?.idEmpHead;
+
 			const dates = {
 				startDate: dayjs(data?.startDate).isValid()
 					? dayjs(data?.startDate).format('YYYY-MM-DD')
@@ -71,6 +97,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 			form.reset({
 				..._payload,
 				...dates,
+				idEmpHead,
 			});
 		} else {
 			form.reset();
@@ -119,13 +146,22 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 						/>
 					</div>
 				</div>
+
 				<ReactSelect
+					labelProps={{ required: true }}
+					name="idEmpHead"
+					control={form.control}
+					placeholder="quản lý"
+					title="Quản lý dự án"
+					options={employeeOptions ?? []}
+				/>
+				{/* <ReactSelect
 					name="customer"
 					control={form.control}
 					placeholder="khách hàng"
 					title="Khách hàng"
 					options={[{ value: 'kh1', label: 'Khách hàng 1' }]}
-				/>
+				/> */}
 				{isEdit ? (
 					data?.departments?.length ? (
 						<div>

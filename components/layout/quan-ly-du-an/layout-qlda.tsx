@@ -26,35 +26,49 @@ const LayoutQLDA = () => {
 		queryFn: ({ queryKey }) => ProjectServices.getDetail(queryKey[1]),
 	});
 
+	const { data: isInProjectData, isFetching: isFetchingInfoPrj } = useQuery({
+		queryKey: QueryKeys.isInProject(id as string),
+		queryFn: ({ queryKey }) => ProjectServices.inProject(queryKey[1]),
+		enabled: !!id,
+	});
+
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
 		modalTDV: { open: false, idProject: '' },
 		modalPQDA: { open: false },
 		modalTDX: { open: false },
 	});
 
+	const isHeadOrCreator = isInProjectData?.data?.isHeadOrCreator;
+
 	return (
 		<div className="p-2 rounded-md bg-primary2-light m-2 flex items-center gap-2 justify-end sticky top-2 z-10">
-			{isFetching ? <LoadingInline /> : null}
-			<Button
-				variant="outline"
-				size="sm"
-				onClick={() => handleOpenModal('modalTDV', { idProject: id })}
-			>
-				<IconWork />
-				<span className="ml-2">Tạo đầu việc</span>
-			</Button>
-			<Button
-				variant="outline"
-				size="sm"
-				onClick={() => handleOpenModal('modalPQDA')}
-			>
-				<IconAuthenTool />
-				<span className="ml-2">Phân quyền dự án</span>
-			</Button>
-			<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
-				<IconRecommend />
-				<span className="ml-2">Tạo đề xuất</span>
-			</Button>
+			{isFetching || isFetchingInfoPrj ? <LoadingInline /> : null}
+			{isHeadOrCreator ? (
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={() => handleOpenModal('modalTDV', { idProject: id })}
+				>
+					<IconWork />
+					<span className="ml-2">Tạo đầu việc</span>
+				</Button>
+			) : null}
+			{isHeadOrCreator ? (
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={() => handleOpenModal('modalPQDA')}
+				>
+					<IconAuthenTool />
+					<span className="ml-2">Phân quyền dự án</span>
+				</Button>
+			) : null}
+			{!isHeadOrCreator ? (
+				<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
+					<IconRecommend />
+					<span className="ml-2">Tạo đề xuất</span>
+				</Button>
+			) : null}
 			<ModalPhanQuyenDA
 				title="Phân quyền dự án"
 				open={modal.modalPQDA.open}

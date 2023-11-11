@@ -53,7 +53,7 @@ const DuAn = async ({
 	const { tab } = searchParams;
 	const session = await getServerSession(authOptions);
 
-	const [data, projectData] = await Promise.all([
+	const [data, projectData, inProjectData] = await Promise.all([
 		getData[tab ?? 'works-board']?.(
 			id,
 			`page=${(parseInt(searchParams.page as any) || 1) - 1}&limit=${
@@ -62,11 +62,18 @@ const DuAn = async ({
 			session?.user.accessToken
 		),
 		ProjectServices.getDetail(id, session?.user.accessToken),
+		ProjectServices.inProject(id, session?.user.accessToken),
 	]);
+
+	const isHeadOrCreator = inProjectData?.data?.isHeadOrCreator;
 
 	return (
 		<div className="flex overflow-x-auto">
-			<QuanLyDuAn data={data?.data} project={projectData?.data} />
+			<QuanLyDuAn
+				data={data?.data}
+				project={projectData?.data}
+				isHead={isHeadOrCreator}
+			/>
 		</div>
 	);
 };

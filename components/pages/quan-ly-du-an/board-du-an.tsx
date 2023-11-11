@@ -31,9 +31,10 @@ import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
 
-const BoardDuAn = (props: IWorkProject) => {
+const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	const router = useRouter();
-	const { work, worksOfEmployee, startDate, finishDate, finishDateET } = props;
+	const { isHead, work, worksOfEmployee, startDate, finishDate, finishDateET } =
+		props;
 	const dates = {
 		startDateJs: dayjs(startDate),
 		endDateJs: dayjs(finishDate ?? finishDateET),
@@ -84,41 +85,55 @@ const BoardDuAn = (props: IWorkProject) => {
 	];
 
 	if (!isDone) {
-		dropdownItems = dropdownItems.concat(
-			<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
-				Phân quyền
-			</DropdownMenuItem>,
-			<DropdownMenuItem
-				key="update"
-				onClick={() =>
-					handleOpenModal('modalCS', {
-						data: {
-							...props,
-						},
-					})
-				}
-			>
-				Chỉnh sửa
-			</DropdownMenuItem>,
+		dropdownItems.push(
 			<DropdownMenuItem
 				key="create"
 				onClick={() => handleOpenModal('modalTCV')}
 			>
 				Tạo công việc
-			</DropdownMenuItem>,
-			<DropdownMenuItem key="assign" onClick={() => handleOpenModal('modalGV')}>
-				Giao việc
-			</DropdownMenuItem>,
-			<DropdownMenuItem key="done" onClick={() => handleOpenModal('modalDone')}>
-				Hoàn thành
-			</DropdownMenuItem>,
-			<DropdownMenuItem
-				key="evaluate"
-				onClick={() => handleOpenModal('modalDG')}
-			>
-				Đánh giá
 			</DropdownMenuItem>
 		);
+		if (isHead) {
+			dropdownItems.push(
+				<DropdownMenuItem
+					key="author"
+					onClick={() => handleOpenModal('modalPQ')}
+				>
+					Phân quyền
+				</DropdownMenuItem>,
+				<DropdownMenuItem
+					key="update"
+					onClick={() =>
+						handleOpenModal('modalCS', {
+							data: {
+								...props,
+							},
+						})
+					}
+				>
+					Chỉnh sửa
+				</DropdownMenuItem>,
+
+				<DropdownMenuItem
+					key="assign"
+					onClick={() => handleOpenModal('modalGV')}
+				>
+					Giao việc
+				</DropdownMenuItem>,
+				<DropdownMenuItem
+					key="done"
+					onClick={() => handleOpenModal('modalDone')}
+				>
+					Hoàn thành
+				</DropdownMenuItem>,
+				<DropdownMenuItem
+					key="evaluate"
+					onClick={() => handleOpenModal('modalDG')}
+				>
+					Đánh giá
+				</DropdownMenuItem>
+			);
+		}
 	}
 
 	const statisticTask = useMemo(() => {
@@ -239,7 +254,11 @@ const BoardDuAn = (props: IWorkProject) => {
 			<ModalTaoCongViec
 				open={modalState.modalTCV.open}
 				title="Tạo công việc"
-				data={{ ...props, finishDateETWork: props.finishDateET }}
+				data={{
+					...props,
+					finishDateETWork: props.finishDateET,
+					startDateWork: props.startDate,
+				}}
 				onClose={() => handleCloseModal('modalTCV')}
 				onRefresh={() => router.refresh()}
 			/>

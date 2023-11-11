@@ -16,6 +16,7 @@ export function Sidebar() {
 	const toggleSidebar = themeSelectors.use.toggleSidebar();
 	const { data: session } = useSession();
 	const { user } = session ?? {};
+	const _sidebar = themeSelectors.use.sidebar();
 
 	useEffect(() => {
 		setCurrentMenu(ACTIVE_MENUS[pathname as keyof typeof ACTIVE_MENUS]);
@@ -57,12 +58,15 @@ export function Sidebar() {
 							<SidebarItem
 								{...sidebar}
 								key={id}
-								onClick={() =>
+								onClick={() => {
+									if (_sidebar) {
+										toggleSidebar();
+									}
 									setCurrentMenu((old) => {
 										if (old === id) return '';
 										return id;
-									})
-								}
+									});
+								}}
 								isActive={id === currentMenu}
 							/>
 						);

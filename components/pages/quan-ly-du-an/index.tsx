@@ -12,10 +12,11 @@ import NhanVienDuAn from './nhan-vien-du-an';
 interface IQuanLyDuAn {
 	data: { data: unknown[]; totalItems: number } | unknown[];
 	project?: IProject;
+	isHead: boolean;
 }
 
 const QuanLyDuAn = (props: IQuanLyDuAn) => {
-	const { data, project } = props;
+	const { isHead, data, project } = props;
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: {
 			tab: 'works-board',
@@ -47,34 +48,42 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 					>
 						Đầu việc - Board
 					</TabsTrigger>
-					<TabsTrigger
-						className="flex-1"
-						value="works-calendar"
-						onClick={() => handlePush({ tab: 'works-calendar' })}
-					>
-						Đầu việc - Calendar
-					</TabsTrigger>
-					<TabsTrigger
-						className="flex-1"
-						value="employee"
-						onClick={() => handlePush({ tab: 'employee' })}
-					>
-						Nhân viên dự án
-					</TabsTrigger>
-					<TabsTrigger
-						className="flex-1"
-						value="propose"
-						onClick={() => handlePush({ tab: 'propose' })}
-					>
-						Duyệt đề xuất
-					</TabsTrigger>
-					<TabsTrigger
-						className="flex-1"
-						value="resource"
-						onClick={() => handlePush({ tab: 'resource' })}
-					>
-						Nguồn lực
-					</TabsTrigger>
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
+							value="works-calendar"
+							onClick={() => handlePush({ tab: 'works-calendar' })}
+						>
+							Đầu việc - Calendar
+						</TabsTrigger>
+					) : null}
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
+							value="employee"
+							onClick={() => handlePush({ tab: 'employee' })}
+						>
+							Nhân viên dự án
+						</TabsTrigger>
+					) : null}
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
+							value="propose"
+							onClick={() => handlePush({ tab: 'propose' })}
+						>
+							Duyệt đề xuất
+						</TabsTrigger>
+					) : null}
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
+							value="resource"
+							onClick={() => handlePush({ tab: 'resource' })}
+						>
+							Nguồn lực
+						</TabsTrigger>
+					) : null}
 				</TabsList>
 				{tabs.isWorkBoard ? (
 					<TabsContent
@@ -84,7 +93,11 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 						{(data as IWorkProject[])?.length ? (
 							(data as IWorkProject[])?.map((workPj) => (
 								<BoardDuAn
-									{...{ ...workPj, finishDateETProject: project?.finishDateET }}
+									{...{
+										...workPj,
+										finishDateETProject: project?.finishDateET,
+										isHead,
+									}}
 									key={workPj.idWork}
 								/>
 							))

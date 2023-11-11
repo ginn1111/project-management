@@ -84,8 +84,8 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 
 	const handleCheckValidDate = (startDate?: string, finishDateET?: string) => {
 		const workTimes: [Dayjs, Dayjs] = [
-			dayjs(data?.startDate),
-			dayjs(data?.finishDateET),
+			dayjs(data?.startDateWork),
+			dayjs(data?.finishDateETWork),
 		];
 		const errorMsg1 = betweenTime(
 			dayjs(startDate as any),

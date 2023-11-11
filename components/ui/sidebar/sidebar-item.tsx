@@ -60,6 +60,7 @@ const SidebarItem = (props: ISidebarItem) => {
 				className={cn('flex items-center nav-link !justify-start', {
 					active: isActive,
 				})}
+				{...buttonProps}
 			>
 				{prefixIcon ?? (
 					<IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
