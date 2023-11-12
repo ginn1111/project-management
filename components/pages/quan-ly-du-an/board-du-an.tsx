@@ -203,7 +203,11 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 								{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
 									<BoardDuAnItem
 										key={taskOfWork.idTask}
-										{...{ ...taskOfWork, finishDateETWork: props.finishDateET }}
+										{...{
+											...taskOfWork,
+											finishDateETWork: props.finishDateET,
+											startDateWork: props.startDate,
+										}}
 									/>
 								))}
 							</li>

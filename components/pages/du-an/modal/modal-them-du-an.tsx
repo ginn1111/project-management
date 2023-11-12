@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError, AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
 import { identity, omit, pickBy } from 'lodash';
+import { useSession } from 'next-auth/react';
 import { ReactNode, useEffect, useMemo } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
@@ -31,6 +32,12 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		queryFn: () => DepartmentServices.getList(''),
 		enabled: rest.open,
 	});
+
+	const { data: session } = useSession();
+	const { user } = session ?? {};
+
+	const isManage = user?.info?.role === Role.QUAN_LY_TRUONG_PHONG;
+	const isSingleProject = data?.isSingle;
 
 	const { data: employeeListData, isFetching: employeeFetching } = useQuery<
 		AxiosResponse<{ employees: IEmployee[]; totalItems: number }>
@@ -72,7 +79,9 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 	});
 
 	const form = useForm({
-		resolver: yupResolver(ProjectSchema(isEdit)) as any,
+		resolver: yupResolver(
+			ProjectSchema(isEdit, isManage && !isSingleProject)
+		) as any,
 	});
 
 	useEffect(() => {
@@ -147,14 +156,16 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 					</div>
 				</div>
 
-				<ReactSelect
-					labelProps={{ required: true }}
-					name="idEmpHead"
-					control={form.control}
-					placeholder="quản lý"
-					title="Quản lý dự án"
-					options={employeeOptions ?? []}
-				/>
+				{isManage && !isSingleProject ? (
+					<ReactSelect
+						labelProps={{ required: true }}
+						name="idEmpHead"
+						control={form.control}
+						placeholder="quản lý"
+						title="Quản lý dự án"
+						options={employeeOptions ?? []}
+					/>
+				) : null}
 				{/* <ReactSelect
 					name="customer"
 					control={form.control}
@@ -179,27 +190,25 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 						</div>
 					) : null
 				) : null}
-				<ReactSelect
-					isLoading={isFetching}
-					name="departments"
-					control={form.control}
-					placeholder="phòng ban"
-					isMulti
-					title="Phòng ban"
-					options={
-						departmentOptions?.map(({ name, id }: IDepartment) => ({
-							value: id,
-							label: name,
-						})) ?? []
-					}
-				/>
+				{isManage && !isSingleProject ? (
+					<ReactSelect
+						isLoading={isFetching}
+						name="departments"
+						control={form.control}
+						placeholder="phòng ban"
+						isMulti
+						title="Phòng ban"
+						options={
+							departmentOptions?.map(({ name, id }: IDepartment) => ({
+								value: id,
+								label: name,
+							})) ?? []
+						}
+					/>
+				) : null}
 				<div>
 					<Label>Mô tả</Label>
-					<Textarea
-						{...form.register('description')}
-						placeholder="mô tả"
-						rows={5}
-					/>
+					<Textarea {...form.register('note')} placeholder="mô tả" rows={5} />
 				</div>
 				<div className="items-center justify-end gap-4 flex mt-2">
 					<Button type="button" variant="outline" onClick={rest.onClose}>

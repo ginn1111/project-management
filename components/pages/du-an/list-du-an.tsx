@@ -23,6 +23,7 @@ const ListDuAn = ({ data }: IListDuAn) => {
 	const router = useRouter();
 	const { data: session } = useSession();
 	const { user } = session ?? {};
+
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
 		modalPJ: { open: false, project: {} },
 		modalRS: { open: false, project: { id: '' } },

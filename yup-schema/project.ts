@@ -1,10 +1,12 @@
 import dayjs from 'dayjs';
 import * as yup from 'yup';
 
-export const ProjectSchema = (isEdit?: boolean) =>
+export const ProjectSchema = (isEdit?: boolean, isManage?: boolean) =>
 	yup.object({
 		name: yup.string().required('Tên dự án không được để trống'),
-		idEmpHead: yup.string().required('Vui lòng chọn người phụ trách'),
+		...(isManage
+			? { idEmpHead: yup.string().required('Vui lòng chọn người phụ trách') }
+			: null),
 		startDate: yup
 			.string()
 			.required('Ngày bắt đầu dự án không được để trống')

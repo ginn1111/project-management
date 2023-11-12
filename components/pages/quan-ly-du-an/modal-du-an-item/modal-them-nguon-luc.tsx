@@ -40,6 +40,7 @@ const ModalThemNguonLuc = (
 				>
 			),
 			idTask: data?.idTask!,
+			idTaskOfWork: data?.id!,
 			idProject: id as string,
 		});
 	};

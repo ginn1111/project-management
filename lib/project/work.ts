@@ -70,14 +70,16 @@ export const addResourceForTask = ({
 	idTask,
 	idProject,
 	resource,
+	idTaskOfWork,
 }: {
 	idTask: string;
 	idProject: string;
+	idTaskOfWork: string;
 	resource: { id: string; amount: number }[];
 }) =>
 	privateRequest.post(
 		`${PREFIX_URL}/${idProject}/${idTask}/task/add-resource`,
-		{ resource }
+		{ resource, idTaskOfWork }
 	);
 
 export const assignPermission = ({

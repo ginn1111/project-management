@@ -193,6 +193,7 @@ interface IProject {
 	finishDateET: string;
 	finishDate: any;
 	note: string;
+	isSingle: OrNull<boolean>;
 	departments?: IDepartmentProject[];
 	manageProjects?: IManageProject[];
 }
