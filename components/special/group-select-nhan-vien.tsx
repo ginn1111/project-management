@@ -9,7 +9,7 @@ import ReactSelect from '../ui/react-select';
 
 interface IGroupSelectNhanVien {
 	isMulti?: boolean;
-	onWatch: (...args: unknown[]) => void;
+	onWatch?: (...args: unknown[]) => void;
 }
 
 const GroupSelectNhanVien = forwardRef(
@@ -19,7 +19,7 @@ const GroupSelectNhanVien = forwardRef(
 
 		useEffect(() => {
 			const subscription = form.watch((data, { name }) => {
-				onWatch(name, data);
+				onWatch?.(name, data);
 			});
 
 			return () => subscription.unsubscribe();

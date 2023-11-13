@@ -275,7 +275,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			/>
 			<ModalTaoDauViec
 				open={modalState.modalCS.open}
-				data={modalState.modalCS.data}
+				data={props}
 				onClose={() => handleCloseModal('modalCS')}
 				title="Chỉnh sửa đầu việc"
 				onRefresh={() => router.refresh()}

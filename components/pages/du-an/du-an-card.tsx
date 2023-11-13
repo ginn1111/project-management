@@ -130,10 +130,10 @@ const DuAnCard = ({
 					)}
 				</p>
 			</div>
-			<div className="flex items-center gap-4 justify-between">
+			{/* <div className="flex items-center gap-4 justify-between">
 				<Label className="text-md mb-0">Khách hàng</Label>
 				<p>Tên khách hàng</p>
-			</div>
+			</div> */}
 			{departments?.length ? (
 				<div>
 					<Label className="text-md">Phòng ban</Label>

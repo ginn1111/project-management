@@ -243,7 +243,7 @@ interface IPositionsEmployee {
 	startDate: string;
 	endDate: string;
 	note: string;
-	position?: Position;
+	position?: IPosition;
 }
 
 interface IPosition {
@@ -341,9 +341,11 @@ interface IDistrict {
 	code: number;
 	name: string;
 	id: string;
+	province?: IProvince;
 }
 
 interface IWard {
+	district?: IDistrict;
 	code: number;
 	name: string;
 	id: string;
