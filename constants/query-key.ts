@@ -1,4 +1,8 @@
 export const QueryKeys = {
+	getRankEvaluationWork: (...keys: string[]) => [
+		'get-rank-evaluation-work',
+		...keys,
+	],
 	getResourceType: (...keys: string[]) => ['get-resource-type', ...keys],
 	getResource: (...keys: string[]) => ['get-resource', ...keys],
 	getDepartment: (...keys: string[]) => ['get-department', ...keys],

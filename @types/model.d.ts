@@ -1,3 +1,17 @@
+interface IWorkEvaluation {
+	id: string;
+	idEvaluation: string;
+	idWorkOfProject: string;
+	date: string;
+	note: OrNull<string>;
+	rankWorkEvaluation: IRankEvaluationWork;
+	workOfProject: IWorkProject;
+}
+interface IRankEvaluationWork {
+	id: string;
+	name: string;
+	note: OrNull<string>;
+}
 interface IWorkOfPermission {
 	id: string;
 	idEmpProject: string;
@@ -128,6 +142,7 @@ interface IWorkProject {
 	note: OrNull<string>;
 	worksOfEmployee: IWorksEmployee[];
 	work?: IWork;
+	workEvaluation?: IWorkEvaluation[];
 }
 interface IWork {
 	id: string;

@@ -6,9 +6,9 @@ import { useEffect } from 'react';
 import BoardDuAn from './board-du-an';
 import CalendarDauViec from './calendar-dau-viec/calendar-dau-viec';
 import DuyetDeXuat from './duyet-de-xuat';
+import TableDuyetDXNV from './duyet-dx-tham-gia';
 import NguonLuc from './nguon-luc';
 import NhanVienDuAn from './nhan-vien-du-an';
-import TableDuyetDXNV from './duyet-dx-tham-gia';
 
 interface IQuanLyDuAn {
 	data: { data: unknown[]; totalItems: number } | unknown[];
@@ -25,6 +25,8 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 			limit: 10,
 		},
 	});
+
+	const isSingle = project?.isSingle;
 
 	const tabs = {
 		isWorkBoard: searchParams.tab === 'works-board',
@@ -77,7 +79,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 							Duyệt đề xuất
 						</TabsTrigger>
 					) : null}
-					{isHead ? (
+					{isHead && !isSingle ? (
 						<TabsTrigger
 							className="flex-1"
 							value="project"

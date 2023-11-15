@@ -18,7 +18,7 @@ import { WorkProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useMutation } from 'react-query';
@@ -30,6 +30,11 @@ import ModalPhanQuyen from './modal-du-an/modal-phan-quyen';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 import ModalChiTietDauViec from './modal-du-an/model-chi-tiet-dau-viec';
 import ModalDanhGia from './nhan-vien-du-an/modal/modal-danh-gia';
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from '@radix-ui/react-collapsible';
 
 const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	const router = useRouter();
@@ -119,15 +124,19 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 					onClick={() => handleOpenModal('modalDone')}
 				>
 					Hoàn thành
-				</DropdownMenuItem>,
-				<DropdownMenuItem
-					key="evaluate"
-					onClick={() => handleOpenModal('modalDG')}
-				>
-					Đánh giá
 				</DropdownMenuItem>
 			);
 		}
+	}
+	if (!props.workEvaluation?.length && isDone) {
+		dropdownItems.push(
+			<DropdownMenuItem
+				key="evaluate"
+				onClick={() => handleOpenModal('modalDG')}
+			>
+				Đánh giá
+			</DropdownMenuItem>
+		);
 	}
 
 	const statisticTask = useMemo(() => {
@@ -147,10 +156,17 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	return (
 		<div className="rounded-sm px-2 pb-2 flex-shrink-0 min-w-[500px] w-min">
 			<div className="text-primary px-4 py-2 rounded-t-md shadow-[0_-5px_15px_-10px] shadow-primary2/50 max-w-full">
-				<p className="text-end text-muted-foreground text-[12px] font-medium mb-2">
-					{dates.startDateJs.format('ddd DD/MM/YYYY')} <span> - </span>
-					{dates.endDateJs.format('ddd DD/MM/YYYY')}
-				</p>
+				<div className="flex items-center justify-between">
+					{props.workEvaluation?.[0]?.rankWorkEvaluation?.name ? (
+						<p className="bg-primary2-light text-primary2 px-2 py-1 rounded-sm">
+							{props.workEvaluation?.[0]?.rankWorkEvaluation?.name}
+						</p>
+					) : null}
+					<p className="text-end text-muted-foreground text-[12px] font-medium mb-2">
+						{dates.startDateJs.format('ddd DD/MM/YYYY')} <span> - </span>
+						{dates.endDateJs.format('ddd DD/MM/YYYY')}
+					</p>
+				</div>
 				<div className="flex items-center flex-wrap max-w-full gap-2">
 					<p className="text-xl font-bold max-w-full word-wrap-wrap mr-1">
 						{work?.name}
@@ -167,7 +183,6 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 						{isDone ? 'Hoàn thành' : isExpired ? '' : 'Đang thực hiện'}
 						{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
 					</div>
-
 					<div className="ml-2">
 						<DropdownMenu>
 							<DropdownMenuTrigger>
@@ -178,7 +193,6 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 							<DropdownMenuContent>{dropdownItems}</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-
 					<div className="flex gap-4 items-center w-full">
 						<div className="flex items-center rounded-sm gap-1">
 							<IconSquareCheck className="w-4 h-4 text-success" />
@@ -198,18 +212,37 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 					0
 				) ? (
 					worksOfEmployee?.map((worksOfEmployee) => {
+						const employee =
+							worksOfEmployee.employee?.proposeProject.employeesOfDepartment
+								?.employee?.fullName;
+						const hasTask = worksOfEmployee.tasksOfWork?.length;
+
 						return (
-							<li key={worksOfEmployee.id} className="space-y-3">
-								{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
-									<BoardDuAnItem
-										key={taskOfWork.idTask}
-										{...{
-											...taskOfWork,
-											finishDateETWork: props.finishDateET,
-											startDateWork: props.startDate,
-										}}
-									/>
-								))}
+							<li key={worksOfEmployee.id}>
+								<Collapsible defaultOpen>
+									{hasTask ? (
+										<CollapsibleTrigger className="bg-white text-primary px-4 py-2 rounded-sm flex items-center w-full justify-between mb-2">
+											<p className="">
+												{employee ?? 'Người tạo - người phụ trách dự án'}
+											</p>
+											<ChevronsUpDown className="w-4 h-4" />
+										</CollapsibleTrigger>
+									) : null}
+									<CollapsibleContent>
+										<div className="space-y-3 pl-3">
+											{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
+												<BoardDuAnItem
+													key={taskOfWork.idTask}
+													{...{
+														...taskOfWork,
+														finishDateETWork: props.finishDateET,
+														startDateWork: props.startDate,
+													}}
+												/>
+											))}
+										</div>
+									</CollapsibleContent>
+								</Collapsible>
 							</li>
 						);
 					})
@@ -283,9 +316,10 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			/>
 			<ModalDanhGia
 				open={modalState.modalDG.open}
-				data={{}}
+				data={props}
 				onClose={() => handleCloseModal('modalDG')}
 				title="Đánh giá đầu việc"
+				onRefresh={() => router.refresh()}
 			/>
 		</div>
 	);
