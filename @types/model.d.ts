@@ -19,6 +19,7 @@ interface IManageProject {
 	endDate: any;
 	startDate: string;
 	isHead: boolean;
+	employee?: IEmployee;
 }
 interface IHistory {
 	id: string;
@@ -251,6 +252,7 @@ interface IPosition {
 	name: string;
 	note: string;
 	isActive: boolean;
+	code?: string;
 }
 
 interface IDepartment {

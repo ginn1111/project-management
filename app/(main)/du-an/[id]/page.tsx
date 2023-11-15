@@ -5,16 +5,19 @@ import {
 	ProjectServices,
 	ProposeResourceServices,
 	ResourceProjectServices,
+	ReviewProjectServices,
 	WorkProjectServices,
 } from '@/lib';
 import { AxiosResponse } from 'axios';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 type Tab =
 	| 'works-board'
 	| 'works-calendar'
 	| 'employee'
 	| 'propose'
+	| 'project'
 	| 'resource';
 
 const getData: Record<
@@ -36,6 +39,8 @@ const getData: Record<
 		ProposeResourceServices.getList({ idProject, searchParams }, accessToken),
 	resource: (idProject: string, searchParams: string, accessToken?: string) =>
 		ResourceProjectServices.getList({ idProject, searchParams }, accessToken),
+	project: (idProject: string, _: string, accessToken?: string) =>
+		ReviewProjectServices.getListByHeadOfDepartment(idProject, accessToken),
 };
 
 const DuAn = async ({
@@ -66,6 +71,10 @@ const DuAn = async ({
 	]);
 
 	const isHeadOrCreator = inProjectData?.data?.isHeadOrCreator;
+
+	if (!isHeadOrCreator && tab && tab !== 'works-board') {
+		redirect('/');
+	}
 
 	return (
 		<div className="flex overflow-x-auto">

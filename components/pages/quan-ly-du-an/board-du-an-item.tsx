@@ -228,7 +228,11 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 						);
 						return;
 					}
-					doneTask({ idTaskOfWOrk: props.id, percentOfDone });
+					doneTask({
+						idTaskOfWOrk: props.id,
+						percentOfDone,
+						idProject: id as string,
+					});
 				}}
 				onClose={() => handleCloseModal('modalDone')}
 			/>

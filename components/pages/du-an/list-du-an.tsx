@@ -12,8 +12,6 @@ import { ReactNode, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
 import DuAnCard from './du-an-card';
-import ModalThemDuAn from './modal/modal-them-du-an';
-import ModalThemNguonLuc from './modal/modal-them-nguon-luc';
 
 interface IListDuAn {
 	data: { projects: IProject[]; totalItems: number };
@@ -25,8 +23,6 @@ const ListDuAn = ({ data }: IListDuAn) => {
 	const { user } = session ?? {};
 
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
-		modalPJ: { open: false, project: {} },
-		modalRS: { open: false, project: { id: '' } },
 		modalPP: {
 			open: false,
 			payload: { idEmployee: '', idProject: '', content: '' },
@@ -72,8 +68,6 @@ const ListDuAn = ({ data }: IListDuAn) => {
 					<DuAnCard
 						key={idx}
 						{...project}
-						onUpdate={() => handleOpenModal('modalPJ', { project })}
-						onAddResource={() => handleOpenModal('modalRS', { project })}
 						onPropose={() =>
 							handleOpenModal('modalPP', {
 								payload: {
@@ -88,22 +82,6 @@ const ListDuAn = ({ data }: IListDuAn) => {
 					Không có dự án nào
 				</p>
 			)}
-
-			<ModalThemNguonLuc
-				title="Thêm nguồn lực"
-				open={modal.modalRS.open}
-				data={modal.modalRS.project}
-				onClose={() => handleCloseModal('modalRS')}
-				onRefresh={() => router.refresh()}
-			/>
-			<ModalThemDuAn
-				open={modal.modalPJ.open}
-				onClose={() => handleCloseModal('modalPJ')}
-				title="Chỉnh sửa dự án"
-				onRefresh={() => router.refresh()}
-				data={modal.modalPJ.project}
-				isEdit
-			/>
 
 			<ModalConfirm
 				loading={isLoading}

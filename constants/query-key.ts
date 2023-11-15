@@ -7,6 +7,7 @@ export const QueryKeys = {
 	getDetailProject: (...keys: string[]) => ['get-detail-project', ...keys],
 	getEmployee: (...keys: string[]) => ['get-employee', ...keys],
 	isInProject: (...keys: string[]) => ['is-in-project', ...keys],
+	getManageProject: (...keys: string[]) => ['get-project', ...keys],
 	getPermissionsOfWork: (...keys: string[]) => [
 		'get-permission-of-work',
 		...keys,

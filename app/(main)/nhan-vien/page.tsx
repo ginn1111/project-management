@@ -21,7 +21,8 @@ const NhanVien = async ({ searchParams }: { searchParams: ISearchParams }) => {
 			parseInt(searchParams.limit as any) || 10
 		}&search=${searchParams.search ?? ''}&idDepartment=${
 			isHead ? idDepartment : isSuperHead ? '' : ''
-		}`
+		}`,
+		session?.user?.accessToken
 	);
 	const provincesData = await getProvinces();
 	const provinces = provincesData.data;

@@ -57,13 +57,14 @@ export const getHistoryOfTask = (
 
 export const doneTask = ({
 	idTaskOfWOrk,
-	percentOfDone,
+	...payload
 }: {
 	idTaskOfWOrk: string;
 	percentOfDone: number;
+	idProject: string;
 }) =>
 	privateRequest.post(`${PREFIX_URL}/${idTaskOfWOrk}/task/done`, {
-		percentOfDone,
+		...payload,
 	});
 
 export const addResourceForTask = ({

@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 const BASE_URL = 'http://localhost:8080';
+// const BASE_URL = 'https://gw4lhkq6-8080.asse.devtunnels.ms';
 
 export const publicRequest = axios.create({
 	baseURL: BASE_URL,

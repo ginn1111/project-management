@@ -25,6 +25,7 @@ interface IModalThemDuAn
 
 const ModalThemDuAn = (props: IModalThemDuAn) => {
 	const { isEdit = false, data, ...rest } = props;
+
 	const { data: departmentData, isFetching } = useQuery<
 		AxiosResponse<{ departments: IDepartment[]; totalItems: number }>
 	>({
@@ -39,7 +40,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 	const isManage = user?.info?.role === Role.QUAN_LY_TRUONG_PHONG;
 	const isSingleProject = data?.isSingle;
 
-	const { data: employeeListData, isFetching: employeeFetching } = useQuery<
+	const { data: employeeListData } = useQuery<
 		AxiosResponse<{ employees: IEmployee[]; totalItems: number }>
 	>({
 		queryKey: QueryKeys.getEmployee(),
@@ -86,6 +87,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 
 	useEffect(() => {
 		if (rest.open && isEdit) {
+			console.log(data);
 			const _payload = omit(data, [
 				'startDate',
 				'finishDateET',

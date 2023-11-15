@@ -1,29 +1,20 @@
 import IconCalendar from '@/components/Icon/IconCalendar';
-import IconChecks from '@/components/Icon/IconChecks';
-import IconDesign from '@/components/Icon/IconDesign';
-import IconEditTwoTone from '@/components/Icon/IconEditTwoTone';
 import IconEyeTwoTone from '@/components/Icon/IconEyeTwoTone';
 import IconSendTwoTone from '@/components/Icon/IconSendTwoTone';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
 import LoadingInline from '@/components/ui/loading/loading-inline';
-import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import useModal from '@/hooks/useModal';
 import { ProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
 import { getTimeUnit } from '@/utils/helpers';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
 dayjs.extend(duration);
 
 interface IDuAnCard extends IProject {
-	onUpdate: () => void;
-	onAddResource: () => void;
 	onPropose: () => void;
 }
 
@@ -34,14 +25,9 @@ const DuAnCard = ({
 	finishDateET,
 	finishDate,
 	departments,
-	onUpdate,
-	onAddResource,
 	onPropose,
 }: IDuAnCard) => {
 	const router = useRouter();
-	const { modal, handleCloseModal, handleOpenModal } = useModal({
-		modalDoneProject: { open: false, id: '' },
-	});
 
 	const { mutate: handleToProject, isLoading } = useMutation({
 		mutationFn: ProjectServices.inProject,
@@ -50,20 +36,6 @@ const DuAnCard = ({
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
-		},
-	});
-
-	const { mutate: doneProject, isLoading: updating } = useMutation({
-		mutationFn: ProjectServices.doneProject,
-		onError: (error: AxiosError) => {
-			toast.error(error.response?.data as string);
-		},
-		onSuccess: () => {
-			toast.success('Đã hoàn thành dự án!');
-			router.refresh();
-		},
-		onSettled: () => {
-			handleCloseModal('modalDoneProject');
 		},
 	});
 
@@ -90,7 +62,7 @@ const DuAnCard = ({
 				}
 			)}
 		>
-			{isLoading || updating ? <LoadingInline /> : null}
+			{isLoading ? <LoadingInline /> : null}
 			<div className="border-b border-primary pb-1 flex items-start justify-between gap-4">
 				<h2 className="text-xl font-medium ">{name}</h2>
 				<p className="border-primary bg-accent rounded-md text-primary border p-1 flex-shrink-0 flex items-center gap-2">
@@ -154,41 +126,13 @@ const DuAnCard = ({
 				<p className="text-danger font-medium">Chưa có phòng ban</p>
 			)}
 			<div className="flex items-center gap-2 justify-end cursor-pointer mt-auto">
-				<span className="group" role="button" onClick={onUpdate}>
-					<IconEditTwoTone className="group-hover:text-warning " />
-				</span>
 				<span role="button" onClick={onPropose}>
 					<IconSendTwoTone />
-				</span>
-				<span className="group" role="button" onClick={onAddResource}>
-					<IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
 				</span>
 				<span role="button" onClick={() => handleToProject(id)}>
 					<IconEyeTwoTone />
 				</span>
-				<span
-					role="button"
-					onClick={() => handleOpenModal('modalDoneProject', { id })}
-				>
-					<IconChecks />
-				</span>
 			</div>
-			<ModalConfirm
-				title="Bạn có muốn hoàn thành dự án này"
-				onAccept={() => doneProject(id)}
-				onClose={() => handleCloseModal('modalDoneProject')}
-				open={modal.modalDoneProject.open}
-				msgCTA="Hoàn thành dự án"
-				message={
-					<Alert className="border-warning text-warning">
-						<AlertCircle color="#fbbf24" className="w-4 h-4" />
-						<AlertTitle>Warning</AlertTitle>
-						<AlertDescription>
-							Sau khi hoàn thành, bạn sẽ không được chỉnh sửa!
-						</AlertDescription>
-					</Alert>
-				}
-			/>
 		</div>
 	);
 };

@@ -11,6 +11,19 @@ export const getList = (searchParams: string, accessToken?: string) =>
 		},
 	});
 
+export const getListByHeadOfDepartment = (
+	idProject: string,
+	accessToken?: string
+) =>
+	privateRequest.get(
+		`${PREFIX_URL}/list/head-department?idProject=${idProject}`,
+		{
+			headers: {
+				['x-authorization']: `Bearer ${accessToken}`,
+			},
+		}
+	);
+
 export const review = ({
 	id,
 	stateName,

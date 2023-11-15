@@ -8,6 +8,7 @@ import CalendarDauViec from './calendar-dau-viec/calendar-dau-viec';
 import DuyetDeXuat from './duyet-de-xuat';
 import NguonLuc from './nguon-luc';
 import NhanVienDuAn from './nhan-vien-du-an';
+import TableDuyetDXNV from './duyet-dx-tham-gia';
 
 interface IQuanLyDuAn {
 	data: { data: unknown[]; totalItems: number } | unknown[];
@@ -31,6 +32,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 		isEmployee: searchParams.tab === 'employee',
 		isPropose: searchParams.tab === 'propose',
 		isResource: searchParams.tab === 'resource',
+		isProject: searchParams.tab === 'project',
 	};
 
 	useEffect(() => {
@@ -73,6 +75,15 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 							onClick={() => handlePush({ tab: 'propose' })}
 						>
 							Duyệt đề xuất
+						</TabsTrigger>
+					) : null}
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
+							value="project"
+							onClick={() => handlePush({ tab: 'project' })}
+						>
+							Duyệt đề xuất tham gia
 						</TabsTrigger>
 					) : null}
 					{isHead ? (
@@ -124,6 +135,11 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 				{tabs.isPropose ? (
 					<TabsContent value="propose">
 						<DuyetDeXuat data={data as any} />
+					</TabsContent>
+				) : null}
+				{tabs.isProject ? (
+					<TabsContent value="project">
+						<TableDuyetDXNV data={data as any} />
 					</TabsContent>
 				) : null}
 				{tabs.isResource ? (

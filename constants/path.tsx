@@ -34,7 +34,7 @@ export const SIDE_BARS = [
 		title: 'Quản lý tài khoản',
 		prefixIcon: <IconAuth />,
 		href: '/quan-ly-tai-khoan',
-		roles: [Role.QUAN_LY_TRUONG_PHONG],
+		roles: [Role.QUAN_LY_TRUONG_PHONG, Role.TRUONG_PHONG],
 	},
 	{
 		id: 'quan-ly-chuc-vu',

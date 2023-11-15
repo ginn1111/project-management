@@ -49,3 +49,17 @@ export const inProject = (idProject: string, accessToken?: string) =>
 
 export const doneProject = (idProject: string) =>
 	privateRequest.post(`${PREFIX_URL}/${idProject}/done`);
+
+export const getManageOfProject = (idProject: string) =>
+	privateRequest.get(`${PREFIX_URL}/authorization/${idProject}/permission`);
+
+export const addManageProject = ({
+	idProject,
+	manageProject,
+}: {
+	idProject: string;
+	manageProject: { id: string; isAdd: boolean }[];
+}) =>
+	privateRequest.post(`${PREFIX_URL}/authorization/${idProject}/add-manage`, {
+		manageProject,
+	});
