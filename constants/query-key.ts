@@ -1,4 +1,7 @@
 export const QueryKeys = {
+	getProject: (...keys: string[]) => ['get-project', ...keys],
+	statisticWork: (...keys: string[]) => ['statistic-work', ...keys],
+	statisticProject: (...keys: string[]) => ['statistic-project', ...keys],
 	getRankEvaluationWork: (...keys: string[]) => [
 		'get-rank-evaluation-work',
 		...keys,

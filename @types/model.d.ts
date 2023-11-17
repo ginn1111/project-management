@@ -127,6 +127,7 @@ interface IWorksEmployee {
 	note: OrNull<string>;
 	tasksOfWork: ITaskOfWork[];
 	employee?: IEmployeeProject;
+	worksOfProject?: IWorkProject;
 }
 
 interface IWorkProject {
