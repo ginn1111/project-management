@@ -15,6 +15,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import { toast } from 'sonner';
 import Filter from './filter';
+import { isNil } from 'lodash';
+import LoadingInline from '@/components/ui/loading/loading-inline';
 
 dayjs.extend(LocalizedFormat);
 dayjs.locale(vi);
@@ -249,40 +251,6 @@ const Workload = () => {
 		},
 	});
 
-	const data = useMemo(() => {
-		return (
-			statisticData?.data?.workOfEmployee?.map((work: IWorksEmployee) => {
-				const worksOfProject = work.worksOfProject;
-
-				const isExpired =
-					(worksOfProject?.finishDate &&
-						dayjs(worksOfProject?.finishDate).isAfter(
-							worksOfProject?.finishDateET,
-							'D'
-						)) ||
-					dayjs().isAfter(worksOfProject?.finishDateET, 'D');
-
-				const evaluation =
-					worksOfProject?.workEvaluation?.[0]?.rankWorkEvaluation?.name;
-
-				return {
-					id: work.id,
-					name: worksOfProject?.work?.name,
-					data:
-						work.tasksOfWork?.map(
-							({ task, finishDate, finishDateET, startDate }) => ({
-								x: task.name,
-								y: [
-									new Date(startDate).getTime(),
-									new Date(finishDate ?? finishDateET ?? '').getTime(),
-								],
-							})
-						) ?? [],
-				};
-			}) ?? []
-		);
-	}, [statisticData?.data?.workOfEmployee]);
-
 	const _statisticData = useMemo(() => {
 		const _map: Record<string, Record<string, any>> = {
 			'Đúng hạn': {},
@@ -322,8 +290,6 @@ const Workload = () => {
 				});
 			}
 		);
-
-		console.log(_map);
 
 		return Object.entries(_map).map(([type, work]) => ({
 			name: type,
@@ -367,6 +333,7 @@ const Workload = () => {
 
 	return (
 		<div className="relative">
+			{isFetching ? <LoadingInline /> : null}
 			<FormProvider {...form}>
 				<Filter />
 			</FormProvider>
@@ -380,7 +347,7 @@ const Workload = () => {
 						{statisticData?.data?.workOfEmployee?.reduce(
 							(acc, work) => acc + work.tasksOfWork?.length ?? 0,
 							0
-						)}{' '}
+						)}
 						Công việc
 					</p>
 				</div>
@@ -408,58 +375,74 @@ const Workload = () => {
 					events={events}
 				/>
 			</div> */}
-			<Chart
-				type="rangeBar"
-				options={{
-					grid: {
-						xaxis: {
-							lines: {
-								show: true,
+			{isFetching ? null : (
+				<Chart
+					type="rangeBar"
+					options={{
+						grid: {
+							borderColor: '#E0E6ED',
+							strokeDashArray: 5,
+							xaxis: {
+								lines: {
+									show: true,
+								},
+							},
+							yaxis: {
+								lines: {
+									show: true,
+								},
+							},
+							padding: {
+								top: 0,
+								right: 0,
+								bottom: 0,
+								left: 0,
 							},
 						},
-					},
-					tooltip: {
-						custom: (opts) => {
-							const data =
-								_statisticData[opts.seriesIndex].data[opts.dataPointIndex];
-							return `<div class='px-2 py-1 border-primary2 bg-primary2-light'>
+						tooltip: {
+							custom: (opts) => {
+								const data =
+									_statisticData[opts.seriesIndex].data[opts.dataPointIndex];
+
+								return `<div class='px-2 py-1 border-primary2 bg-primary2-light'>
 							<p class='text-primary2 bg-primary2-light'>${
-								data?.percent + '%' ?? 'Chưa đánh giá'
-							}</p>
+								data?.percent ?? 'Chưa đánh giá'
+							} ${!isNil(data?.percent) ? '%' : ''}</p>
 							<p class='break-all text-primary2'>${data?.name}</p>
 							</div>`;
-						},
-					},
-					chart: {
-						id: 'statistic-work',
-					},
-					xaxis: {
-						type: 'datetime',
-						labels: {
-							format: 'dd/MM HH:mm',
-						},
-					},
-					plotOptions: {
-						bar: {
-							horizontal: true,
-							barHeight: '80%',
-							dataLabels: {
-								hideOverflowingLabels: false,
 							},
 						},
-					},
-					fill: {
-						type: 'solid',
-						opacity: 0.6,
-					},
-					colors: ['#2196f3', '#e7515a'],
-					legend: {
-						position: 'top',
-						horizontalAlign: 'left',
-					},
-				}}
-				series={_statisticData}
-			/>
+						chart: {
+							fontFamily: 'Nunito, sans-serif',
+						},
+						xaxis: {
+							type: 'datetime',
+							labels: {
+								format: 'dd/MM HH:mm',
+							},
+						},
+						plotOptions: {
+							bar: {
+								horizontal: true,
+								barHeight: '80%',
+								dataLabels: {
+									hideOverflowingLabels: false,
+								},
+							},
+						},
+						fill: {
+							type: 'solid',
+							opacity: 0.6,
+						},
+						colors: ['#2196f3', '#e7515a'],
+						legend: {
+							position: 'top',
+							horizontalAlign: 'left',
+						},
+					}}
+					series={_statisticData}
+				/>
+			)}
 		</div>
 	);
 };

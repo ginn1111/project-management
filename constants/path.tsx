@@ -6,6 +6,7 @@ import IconProject from '@/components/Icon/IconProject';
 import IconTools from '@/components/Icon/IconTools';
 import IconUser from '@/components/Icon/IconUser';
 import { Role } from './general';
+import IconStatistic from '@/components/Icon/IconStatistic';
 
 export const SIDE_BARS = [
 	{
@@ -60,7 +61,7 @@ export const SIDE_BARS = [
 	{
 		id: 'thong-ke',
 		title: 'Thống kê',
-		prefixIcon: <IconLockTwoTone />,
+		prefixIcon: <IconStatistic />,
 		href: '/thong-ke',
 		roles: [Role.QUAN_LY_TRUONG_PHONG],
 	},
@@ -74,4 +75,5 @@ export const ACTIVE_MENUS = {
 	'/quan-ly-phong-ban': 'quan-ly-phong-ban',
 	'/duyet-de-xuat-nhan-vien': 'duyet-de-xuat-nhan-vien',
 	'/du-an': 'du-an',
+	'/thong-ke': 'thong-ke',
 } as const;

@@ -213,6 +213,8 @@ interface IProject {
 	isSingle: OrNull<boolean>;
 	departments?: IDepartmentProject[];
 	manageProjects?: IManageProject[];
+	worksOfProject?: IWorkProject[];
+	projectResources?: IResourceProject[];
 }
 
 interface IWard {

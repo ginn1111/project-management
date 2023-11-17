@@ -7,11 +7,11 @@ import { ProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
 import { getTimeUnit } from '@/utils/helpers';
 import { AxiosError } from 'axios';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
 import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 interface IDuAnCard extends IProject {
