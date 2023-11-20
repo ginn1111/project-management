@@ -62,7 +62,7 @@ const ListDuAn = ({ data }: IListDuAn) => {
 	};
 
 	return (
-		<div className="grid grid-cols-fill-300 gap-3 m-2">
+		<div className="grid grid-cols-fill-300 gap-3 m-2 relative">
 			{data?.projects?.length ? (
 				data.projects.map((project, idx) => (
 					<DuAnCard

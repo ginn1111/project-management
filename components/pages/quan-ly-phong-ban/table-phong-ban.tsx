@@ -10,7 +10,7 @@ import {
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
-import { DataTable } from 'mantine-datatable';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
@@ -38,7 +38,7 @@ const TablePhongBan = (props: ITablePhongBan) => {
 		modalRM: { open: false, id: '' },
 	});
 
-	const columns = [
+	const columns: DataTableColumn<IDepartment>[] = [
 		{
 			accessor: 'name',
 			title: 'Tên phòng ban',
@@ -104,7 +104,7 @@ const TablePhongBan = (props: ITablePhongBan) => {
 									{(record?.employeesOfDepartment?.length ?? 0) > 0 ? (
 										<DataTable
 											className="min-h-[150px]"
-											records={record.employeesOfDepartment ?? []}
+											records={record?.employeesOfDepartment ?? []}
 											columns={[
 												{
 													accessor: 'employee.fullName',
@@ -130,7 +130,9 @@ const TablePhongBan = (props: ITablePhongBan) => {
 													render: (row: IEmployeesOfDepartment) => {
 														const position = row.employee?.positions?.[0];
 														return (
-															<p>{position ? position.position.name : 'N/A'}</p>
+															<p>
+																{position ? position?.position?.name : 'N/A'}
+															</p>
 														);
 													},
 												},

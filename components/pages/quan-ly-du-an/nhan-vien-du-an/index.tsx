@@ -100,9 +100,9 @@ const TableNhanVien = (props: ITableNhanVien) => {
 						<IconEllipsis />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="-translate-x-[10px]">
-						<DropdownMenuItem>Chỉnh sửa quyền</DropdownMenuItem>
+						{/* <DropdownMenuItem>Chỉnh sửa quyền</DropdownMenuItem>
 						<DropdownMenuItem>Giao việc</DropdownMenuItem>
-						<DropdownMenuItem>Xem workload</DropdownMenuItem>
+						<DropdownMenuItem>Xem workload</DropdownMenuItem> */}
 						<DropdownMenuItem
 							className="text-destructive hover:!text-destructive"
 							onClick={() => handleOpenModal('modalRM', { id: row.id })}

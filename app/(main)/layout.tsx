@@ -10,7 +10,7 @@ const MainLayout = async ({ children }: LayoutProps) => {
 	return (
 		<>
 			<Sidebar />
-			<div className="main-content flex flex-col min-h-screen">
+			<div className="main-content flex flex-col min-h-screen relative">
 				<Header />
 				{children}
 			</div>
