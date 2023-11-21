@@ -347,7 +347,7 @@ const Workload = () => {
 						{statisticData?.data?.workOfEmployee?.reduce(
 							(acc, work) => acc + work.tasksOfWork?.length ?? 0,
 							0
-						)}
+						)}{' '}
 						Công việc
 					</p>
 				</div>

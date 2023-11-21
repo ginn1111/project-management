@@ -3,6 +3,7 @@ import FilterDuAn from '@/components/pages/du-an/filter-du-an';
 import ListDuAn from '@/components/pages/du-an/list-du-an';
 import { Role } from '@/constants/general';
 import { ProjectServices } from '@/lib';
+import { getUserInfoFromNextAuth } from '@/utils/get-user-from-next-auth';
 import { getServerSession } from 'next-auth';
 
 const DuAn = async ({
@@ -14,8 +15,8 @@ const DuAn = async ({
 		idDepartment?: string;
 	};
 }) => {
-	const session = await getServerSession(authOptions);
-	const userInfo = session?.user?.info;
+	const user = await getUserInfoFromNextAuth();
+	const userInfo = user?.info;
 	const idDepartment = userInfo?.departments?.[0]?.idDepartment;
 	const isHead = userInfo?.role === Role.TRUONG_PHONG;
 	const isSuperHead = userInfo?.role === Role.QUAN_LY_TRUONG_PHONG;
@@ -30,7 +31,7 @@ const DuAn = async ({
 				}&finishDateET=${searchParams.finishDateET ?? ''}&idDepartment=${
 					isSuperHead ? '' : idDepartment
 				}`,
-				session?.user.accessToken
+				user?.accessToken
 		  );
 
 	return (

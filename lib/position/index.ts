@@ -19,8 +19,12 @@ export const addToEmployee = (
 		}
 	);
 
-export const getList = (searchParams: string) =>
-	privateRequest.get(`${PREFIX_URL}?${searchParams}`);
+export const getList = (searchParams: string, accessToken?: string) =>
+	privateRequest.get(`${PREFIX_URL}?${searchParams}`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});
 
 export const getListByEmployee = (idEmployee: string) =>
 	privateRequest.get(`${PREFIX_URL}/${idEmployee}/employee`);
