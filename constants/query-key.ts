@@ -13,6 +13,10 @@ export const QueryKeys = {
 	getWorkHistory: (...keys: string[]) => ['get-work-history', ...keys],
 	getDetailProject: (...keys: string[]) => ['get-detail-project', ...keys],
 	getEmployee: (...keys: string[]) => ['get-employee', ...keys],
+	getEmployeeByDepartmentAndProject: (...keys: string[]) => [
+		'get-employee-by-department-and-project',
+		...keys,
+	],
 	isInProject: (...keys: string[]) => ['is-in-project', ...keys],
 	getManageProject: (...keys: string[]) => ['get-project', ...keys],
 	getPermissionsOfWork: (...keys: string[]) => [

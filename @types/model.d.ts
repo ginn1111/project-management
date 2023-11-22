@@ -1,3 +1,12 @@
+interface IRole {
+	id: string;
+	idDepartmentEmp: string;
+	idQualification: string;
+	roleName: string;
+	startDate: string;
+	endDate: any;
+	note: string;
+}
 interface IWorkEvaluation {
 	id: string;
 	idEvaluation: string;
@@ -349,6 +358,7 @@ interface IEmployee {
 	account?: account;
 	accessToken?: string;
 	role?: string;
+	roles?: IRole[];
 }
 
 interface IProvince {

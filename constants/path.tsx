@@ -59,6 +59,13 @@ export const SIDE_BARS = [
 		roles: [Role.TRUONG_PHONG],
 	},
 	{
+		id: 'dieu-phoi-nhan-vien',
+		title: 'Điều phối nhân viên',
+		prefixIcon: <IconStatistic />,
+		href: '/dieu-phoi-nhan-vien',
+		roles: [Role.TRUONG_PHONG],
+	},
+	{
 		id: 'thong-ke',
 		title: 'Thống kê',
 		prefixIcon: <IconStatistic />,
@@ -76,4 +83,5 @@ export const ACTIVE_MENUS = {
 	'/duyet-de-xuat-nhan-vien': 'duyet-de-xuat-nhan-vien',
 	'/du-an': 'du-an',
 	'/thong-ke': 'thong-ke',
+	'/dieu-phoi-nhan-vien': 'dieu-phoi-nhan-vien',
 } as const;

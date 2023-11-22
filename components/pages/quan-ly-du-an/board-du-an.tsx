@@ -128,7 +128,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			);
 		}
 	}
-	if (!props.workEvaluation?.length && isDone) {
+	if (!props.workEvaluation?.length && isDone && isHead) {
 		dropdownItems.push(
 			<DropdownMenuItem
 				key="evaluate"

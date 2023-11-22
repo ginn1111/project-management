@@ -4,6 +4,7 @@ import ReactSelect from '@/components/ui/react-select';
 import { QueryKeys } from '@/constants/query-key';
 import { UtilsServices, WorkProjectServices } from '@/lib';
 import { AxiosError, AxiosResponse } from 'axios';
+import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ import { toast } from 'sonner';
 const ModalDanhGia = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 	const { data, ...rest } = props;
 	const form = useForm();
+	const { id } = useParams();
 
 	const { data: rankEvaluationWorkData, isFetching } = useQuery<
 		AxiosResponse<{ rankEvaluation: IRankEvaluationWork[] }>
@@ -41,6 +43,7 @@ const ModalDanhGia = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 		evaluate({
 			idWorkProject: data?.id!,
 			idEvaluation: form.getValues('idRank'),
+			idProject: id as string,
 		});
 	};
 

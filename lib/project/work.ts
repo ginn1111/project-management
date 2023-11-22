@@ -105,11 +105,12 @@ export const getWorkPermission = ({
 
 export const evaluation = ({
 	idWorkProject,
-	idEvaluation,
+	...payload
 }: {
 	idWorkProject: string;
 	idEvaluation: string;
+	idProject: string;
 }) =>
 	privateRequest.post(`${PREFIX_URL}/${idWorkProject}/evaluation`, {
-		idEvaluation,
+		...payload,
 	});

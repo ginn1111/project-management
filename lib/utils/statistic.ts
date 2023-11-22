@@ -12,3 +12,13 @@ export const statisticWork = ({
 
 export const statisticProject = (searchParams?: string) =>
 	privateRequest.get(`${PREFIX_URL}/project?${searchParams}`);
+
+export const statisticProjectByEmpOfDepartment = (
+	searchParams?: string,
+	accessToken?: string
+) =>
+	privateRequest.get(`${PREFIX_URL}/employee?${searchParams}`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});

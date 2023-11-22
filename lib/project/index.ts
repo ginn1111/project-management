@@ -63,3 +63,14 @@ export const addManageProject = ({
 	privateRequest.post(`${PREFIX_URL}/authorization/${idProject}/add-manage`, {
 		manageProject,
 	});
+
+export const addEmployees = ({
+	idProject,
+	employees,
+}: {
+	idProject: string;
+	employees: string[];
+}) =>
+	privateRequest.post(`${PREFIX_URL}/${idProject}/add/employees`, {
+		employees,
+	});

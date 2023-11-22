@@ -25,3 +25,8 @@ export const getDetail = (id: string, accessToken?: string) =>
 			['x-authorization']: `Bearer ${accessToken}`,
 		},
 	});
+
+export const getListByDepartmentAndProject = (
+	idProject: string,
+	idDepartment: string
+) => privateRequest(`employee/${idProject}/${idDepartment}`);
