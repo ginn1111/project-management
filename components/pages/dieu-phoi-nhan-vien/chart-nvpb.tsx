@@ -1,6 +1,7 @@
 'use client';
 import Chart from 'react-apexcharts';
 
+import useQueryParams from '@/hooks/useQueryParams';
 import { getTimeUnit } from '@/utils/helpers';
 import dayjs from 'dayjs';
 import vi from 'dayjs/locale/vi';
@@ -20,6 +21,12 @@ type ChartNVPBProps = {
 };
 
 const ChartNVPB = ({ data }: ChartNVPBProps) => {
+	const { searchParams } = useQueryParams({
+		initSearchParams: {
+			startDate: '',
+			finishDate: '',
+		},
+	});
 	const mapData: any = {};
 	data?.forEach((dataItem) => {
 		dataItem.projects.forEach(({ project }) => {
@@ -33,8 +40,14 @@ const ChartNVPB = ({ data }: ChartNVPBProps) => {
 			mapData[project.name].data.push({
 				x: dataItem.employee.fullName,
 				y: [
-					new Date(project.startDate).getTime(),
-					new Date(project.finishDateET).getTime(),
+					dayjs(searchParams.startDate).isValid() &&
+					!dayjs(searchParams.startDate).isBefore(project.startDate, 'D')
+						? new Date(searchParams.startDate).getTime()
+						: new Date(project.startDate).getTime(),
+					dayjs(searchParams.finishDate).isValid() &&
+					!dayjs(searchParams.finishDate).isAfter(project.finishDateET, 'D')
+						? new Date(searchParams.finishDate).getTime()
+						: new Date(project.finishDateET).getTime(),
 				],
 				...project,
 			});

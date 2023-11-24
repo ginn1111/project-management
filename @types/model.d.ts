@@ -1,3 +1,11 @@
+interface IReport {
+	id: string;
+	content: string;
+	createdDate: string;
+	idEmpProject: string;
+	empProject?: IEmployeeProject;
+}
+
 interface IRole {
 	id: string;
 	idDepartmentEmp: string;

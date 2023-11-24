@@ -74,3 +74,18 @@ export const addEmployees = ({
 	privateRequest.post(`${PREFIX_URL}/${idProject}/add/employees`, {
 		employees,
 	});
+
+export const getReport = (idProject: string, accessToken?: string) =>
+	privateRequest.get(`${PREFIX_URL}/report/${idProject}`, {
+		headers: {
+			['x-authorization']: `Bearer ${accessToken}`,
+		},
+	});
+
+export const createReport = ({
+	idProject,
+	content,
+}: {
+	content: string;
+	idProject: string;
+}) => privateRequest.post(`${PREFIX_URL}/report/${idProject}/add`, { content });

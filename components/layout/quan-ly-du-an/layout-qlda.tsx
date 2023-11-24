@@ -13,19 +13,20 @@ import ModalThemNguonLuc from '@/components/pages/du-an/modal/modal-them-nguon-l
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import LoadingInline from '@/components/ui/loading/loading-inline';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
+import { Role } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
 import useModal from '@/hooks/useModal';
 import { ProjectServices } from '@/lib';
 import { AxiosError } from 'axios';
 import { AlertCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useMutation, useQuery } from 'react-query';
 import { toast } from 'sonner';
+import ModalBaoCao from './modal-tool-bar/modal-bao-cao';
 import ModalPhanQuyenDA from './modal-tool-bar/modal-phan-quyen-da';
 import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalTaoDeXuat from './modal-tool-bar/modal-tao-de-xuat';
-import { useSession } from 'next-auth/react';
-import { Role } from '@/constants/general';
 
 const LayoutQLDA = () => {
 	const router = useRouter();
@@ -70,6 +71,7 @@ const LayoutQLDA = () => {
 		modalPJ: { open: false },
 		modalRS: { open: false },
 		modalDoneProject: { open: false },
+		modalReport: { open: false },
 	});
 
 	const isHeadOrCreator = isInProjectData?.data?.isHeadOrCreator;
@@ -130,10 +132,19 @@ const LayoutQLDA = () => {
 				</>
 			) : null}
 			{!isHeadOrCreator ? (
-				<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
-					<IconRecommend />
-					<span className="ml-2">Tạo đề xuất</span>
-				</Button>
+				<>
+					<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
+						<IconRecommend />
+						<span className="ml-2">Tạo đề xuất</span>
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => handleOpenModal('modalReport')}
+					>
+						<IconRecommend />
+						<span className="ml-2">Báo cáo</span>
+					</Button>
+				</>
 			) : null}
 
 			<ModalThemDuAn
@@ -191,6 +202,11 @@ const LayoutQLDA = () => {
 				}}
 				onClose={() => handleCloseModal('modalTDV')}
 				onRefresh={() => router.refresh()}
+			/>
+			<ModalBaoCao
+				title="Tạo báo cáo"
+				open={modal.modalReport.open}
+				onClose={() => handleCloseModal('modalReport')}
 			/>
 		</div>
 	);
