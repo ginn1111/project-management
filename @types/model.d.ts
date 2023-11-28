@@ -14,6 +14,7 @@ interface IRole {
 	startDate: string;
 	endDate: any;
 	note: string;
+	departmentOfEmp: IEmployeesOfDepartment;
 }
 interface IWorkEvaluation {
 	id: string;
@@ -308,6 +309,7 @@ interface IEmployeesOfDepartment {
 	note: any;
 	department?: Department;
 	employee?: IEmployee;
+	roleOfEmployees?: IRole[];
 }
 
 interface IQualificationEmployee {

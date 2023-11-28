@@ -97,6 +97,7 @@ const ModalDieuPhoi = (props: Omit<IModalProps, 'children'>) => {
 					<Label required>Dự án</Label>
 					<ReactSelect
 						name="idProject"
+						placeholder="Chọn dự án"
 						control={form.control}
 						title=""
 						options={
@@ -184,7 +185,7 @@ const DPItem = ({ nameInput, name, idEmployee, roles }: DPItemProps) => {
 			<label htmlFor={idEmployee} className="mb-0">
 				{name}
 			</label>
-			<p>{roles}</p>
+			<p>{roles ? <>[{roles}]</> : null}</p>
 		</div>
 	);
 };

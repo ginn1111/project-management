@@ -4,7 +4,7 @@ import ThongTin from './thong-tin';
 import Workload from './workload';
 
 const ChiTietNhanVien = ({ detail }: { detail: any }) => {
-	const { certificates, qualifications, ...employee } = detail.data;
+	const { certificates, ...employee } = detail.data;
 	return (
 		<div className="m-2 p-2">
 			<Tabs defaultValue="thong-tin">
@@ -23,11 +23,7 @@ const ChiTietNhanVien = ({ detail }: { detail: any }) => {
 					<ThongTin employee={employee} />
 				</TabsContent>
 				<TabsContent value="bc-cc">
-					<BangCapChungChi
-						idEmp={employee.id}
-						certificates={certificates}
-						qualifications={qualifications}
-					/>
+					<BangCapChungChi idEmp={employee.id} />
 				</TabsContent>
 				<TabsContent value="workload">
 					<Workload />

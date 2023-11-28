@@ -12,40 +12,31 @@ import useModal from '@/hooks/useModal';
 import { QualificationServices } from '@/lib';
 import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
-import { DataTable } from 'mantine-datatable';
-import { useMemo } from 'react';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useQuery } from 'react-query';
 import { useIsMounted } from 'usehooks-ts';
 import ModalThemBangCap from '../../modal/modal-them-bang-cap';
 import ModalChuyenMon from './modal/modal-chuyen-mon';
 
 interface IBangCap {
-	qualifications: IQualificationEmployee[];
 	idEmp: string;
 }
 
-const BangCap = ({ qualifications, idEmp }: IBangCap) => {
-	const { data, isLoading, refetch } = useQuery<
-		AxiosResponse<IQualificationEmployee[]>
-	>({
+const BangCap = ({ idEmp }: IBangCap) => {
+	const {
+		data: qualificationData,
+		isLoading,
+		refetch,
+	} = useQuery<AxiosResponse<IQualificationEmployee[]>>({
 		queryFn: () => QualificationServices.getList(idEmp),
 		queryKey: ['qualification', idEmp],
-		enabled: false,
 	});
-
-	const isMounted = useIsMounted();
-
-	const _qualifications = useMemo(() => {
-		return isMounted() ? data?.data : qualifications;
-	}, [data]);
-
-	console.log(_qualifications);
 
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
 		modalCM: { open: false, isEdit: false, role: {} },
 		modalCS: { open: false, isEdit: false, qualification: {} },
 	});
-	const columns = [
+	const columns: DataTableColumn<IQualificationEmployee>[] = [
 		{
 			accessor: '',
 			title: 'Tên',
@@ -121,7 +112,7 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
 					noRecordsText="Không có dữ liệu"
 					highlightOnHover
 					className="table-hover whitespace-nowrap"
-					records={_qualifications ?? []}
+					records={qualificationData?.data ?? []}
 					columns={columns}
 					minHeight={200}
 					fetching={isLoading}
@@ -156,7 +147,31 @@ const BangCap = ({ qualifications, idEmp }: IBangCap) => {
 												return (
 													<p>
 														{dayjs(row.endDate).isValid()
-															? dayjs(row.endDate).format('ddd, DD/MM/YYYY')
+															? dayjs(row.endDate).format('DD/MM/YYYY')
+															: 'N/A'}
+													</p>
+												);
+											},
+										},
+										{
+											accessor: '',
+											title: 'Phòng ban',
+											render: (row: IRole) => {
+												console.log(row);
+												return <p>{row.departmentOfEmp?.department?.name}</p>;
+											},
+										},
+										{
+											accessor: '',
+											title: 'Ngày bắt đầu phòng ban',
+											textAlignment: 'center',
+											render: (row: IRole) => {
+												return (
+													<p>
+														{dayjs(row.departmentOfEmp?.startDate).isValid()
+															? dayjs(row.departmentOfEmp?.startDate).format(
+																	'DD/MM/YYYY'
+															  )
 															: 'N/A'}
 													</p>
 												);

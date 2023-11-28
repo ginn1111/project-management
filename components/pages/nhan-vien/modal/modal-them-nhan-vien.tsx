@@ -41,14 +41,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 	const { setValue, handleSubmit, control, register, getValues, reset } =
 		useForm<Partial<IEmployee>>({
 			defaultValues: {
-				address: '',
-				birthday: '',
-				email: '',
 				gender: 'NAM',
-				note: '',
-				phone: '',
-				identifyNumber: '',
-				idWard: '',
 			},
 			resolver: yupResolver(EmployeeSchema) as any,
 		});

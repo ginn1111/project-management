@@ -7,7 +7,7 @@ export const EmployeeSchema = yup.object({
 		.required('Số điện thoại không được để trống')
 		.matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, 'Số điện thoại không hợp lệ!'),
 	gender: yup.string().required('Vui lòng chọn giới tính'),
-	email: yup.string().email('Email không hợp lệ!'),
+	email: yup.string().notRequired().email('Email không hợp lệ!'),
 	identifyNumber: yup
 		.string()
 		.notRequired()

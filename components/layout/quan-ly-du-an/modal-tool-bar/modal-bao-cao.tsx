@@ -30,7 +30,11 @@ const ModalBaoCao = (props: IModalBaoCao) => {
 			toast.error(error.response?.data as ReactNode);
 		},
 	});
-	const form = useForm();
+	const form = useForm({
+		defaultValues: {
+			content: '',
+		},
+	});
 
 	const handleSuccess: SubmitHandler<Partial<IReport>> = (values) => {
 		createReport({

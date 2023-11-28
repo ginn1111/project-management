@@ -16,7 +16,7 @@ import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import vi from 'dayjs/locale/vi';
 import { get } from 'lodash';
-import { DataTable } from 'mantine-datatable';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
@@ -58,7 +58,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
 
 	const employeePath = 'proposeProject.employeesOfDepartment.employee';
 
-	const columns = [
+	const columns: DataTableColumn<IEmployeeProject>[] = [
 		{
 			accessor: `${employeePath}.fullName`,
 			title: 'Họ tên',
@@ -70,6 +70,23 @@ const TableNhanVien = (props: ITableNhanVien) => {
 		{
 			accessor: 'proposeProject.employeesOfDepartment.department.name',
 			title: 'Phòng ban',
+		},
+		{
+			accessor:
+				'proposeProject.employeesOfDepartment.department.roleOfEmployees',
+			title: 'Chuyên môn',
+			render: (record) => (
+				<>
+					{(
+						get(
+							record,
+							'proposeProject.employeesOfDepartment.roleOfEmployees'
+						) as unknown as IRole[]
+					)?.map((role) => (
+						<p key={role.id}>{role.roleName}</p>
+					))}
+				</>
+			),
 		},
 		{
 			accessor: `${employeePath}.gender`,

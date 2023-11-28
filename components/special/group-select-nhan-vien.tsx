@@ -2,10 +2,12 @@ import { QueryKeys } from '@/constants/query-key';
 import { DepartmentServices, EmployeeProjectServices } from '@/lib';
 import { AxiosResponse } from 'axios';
 import { useParams } from 'next/navigation';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import ReactSelect from '../ui/react-select';
+import MyLabel from '../ui/my-label';
+import { get, isEmpty } from 'lodash';
 
 interface IGroupSelectNhanVien {
 	isMulti?: boolean;
@@ -39,7 +41,7 @@ const GroupSelectNhanVien = forwardRef(
 		const { data: employeeData } = useQuery<
 			AxiosResponse<{ employeesOfProject: IEmployeeProject[] }>
 		>({
-			queryKey: QueryKeys.getDepartment(
+			queryKey: QueryKeys.getEmployeeByDepartmentAndProject(
 				params.id as string,
 				form.getValues('departmentId')
 			),
@@ -50,6 +52,14 @@ const GroupSelectNhanVien = forwardRef(
 				}),
 			enabled: !!params.id && !!form.watch('departmentId'),
 		});
+
+		const rolesOfEmp = useMemo(() => {
+			if (!form.watch('idEmployee')) return;
+
+			return employeeData?.data?.employeesOfProject?.find(
+				(employee) => employee.id === form.watch('idEmployee')
+			)?.proposeProject?.employeesOfDepartment?.roleOfEmployees;
+		}, [form.watch('idEmployee')]);
 
 		useEffect(() => {
 			const sub = form.watch((_, { name }) => {
@@ -78,30 +88,8 @@ const GroupSelectNhanVien = forwardRef(
 							})) ?? []
 						}
 					/>
-					{/* <ReactSelect
-					title="Chuyên môn"
-					placeholder="chuyên môn"
-					containerClass="flex-1"
-					options={[
-						{
-							value: 'Test1',
-							label: 'Test label1',
-						},
-						{
-							value: 'Test2',
-							label: 'Test label2',
-						},
-						{
-							value: 'Test3',
-							label: 'Test label3',
-						},
-						{
-							value: 'Test4',
-							label: 'Test label4',
-						},
-					]}
-				/> */}
 				</div>
+
 				<div className="custom-select">
 					<ReactSelect
 						control={form.control}
@@ -120,6 +108,23 @@ const GroupSelectNhanVien = forwardRef(
 						}
 					/>
 				</div>
+
+				{rolesOfEmp?.length ? (
+					<div>
+						<MyLabel required>Chuyên môn</MyLabel>
+						<p className="font-md text-sm">
+							[{rolesOfEmp?.map((role: IRole) => role.roleName).join(', ')}]
+						</p>
+					</div>
+				) : (
+					<>
+						{form.watch('idEmployee') ? (
+							<p className="text-danger font-bold text-center text-sm">
+								Chưa có chuyên môn
+							</p>
+						) : null}
+					</>
+				)}
 			</>
 		);
 	}

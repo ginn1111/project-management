@@ -19,26 +19,18 @@ import { useIsMounted } from 'usehooks-ts';
 import ModalThemChungChi from '../../modal/modal-them-chung-chi';
 
 interface IChungChi {
-	certifications?: ICertsEmployee[];
 	idEmp: string;
 }
 
-const ChungChi = ({ certifications, idEmp }: IChungChi) => {
-	const { data, isLoading, refetch } = useQuery<
-		AxiosResponse<ICertsEmployee[]>
-	>({
+const ChungChi = ({ idEmp }: IChungChi) => {
+	const {
+		data: certificationData,
+		isLoading,
+		refetch,
+	} = useQuery<AxiosResponse<ICertsEmployee[]>>({
 		queryFn: () => CertificationServices.getList(idEmp),
 		queryKey: ['certificate', idEmp],
-		enabled: false,
 	});
-
-	const isMounted = useIsMounted();
-
-	const _certifications = useMemo(() => {
-		return isMounted() ? data?.data : certifications;
-	}, [data]);
-
-	console.log(_certifications);
 
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
 		modalCC: { open: false, isEdit: false, certification: {} },
@@ -120,7 +112,7 @@ const ChungChi = ({ certifications, idEmp }: IChungChi) => {
 					noRecordsText="Không có dữ liệu"
 					highlightOnHover
 					className="table-hover whitespace-nowrap"
-					records={_certifications ?? []}
+					records={certificationData?.data ?? []}
 					columns={columns}
 					minHeight={200}
 					fetching={isLoading}

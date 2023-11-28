@@ -18,7 +18,8 @@ import { ReviewProjectServices } from '@/lib';
 import { AxiosError } from 'axios';
 import { cx } from 'class-variance-authority';
 import dayjs from 'dayjs';
-import { DataTable } from 'mantine-datatable';
+import { get } from 'lodash';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 import { useMutation } from 'react-query';
@@ -79,7 +80,7 @@ const TableDuyetDXNV = ({ data }: ITableDuyetDXDA) => {
 		);
 	};
 
-	const columns = [
+	const columns: DataTableColumn<IReviewingProposeProject>[] = [
 		{
 			accessor: 'project',
 			title: 'Dự án tham gia',
@@ -91,7 +92,16 @@ const TableDuyetDXNV = ({ data }: ITableDuyetDXDA) => {
 			accessor: 'proposeProject.employeesOfDepartment.employee.fullName',
 			title: 'Nhân viên đề xuất',
 		},
-
+		{
+			accessor: 'proposeProject.employeesOfDepartment.roleOfEmployees',
+			title: 'Chuyên môn',
+			render: (record) => {
+				return get(
+					record,
+					'proposeProject.employeesOfDepartment.roleOfEmployees'
+				)?.map((role) => <p key={role.id}>{role.roleName}</p>);
+			},
+		},
 		{
 			accessor: 'proposeProject.createdDate',
 			title: 'Ngày giờ tạo',

@@ -9,6 +9,7 @@ import DuyetDeXuat from './duyet-de-xuat';
 import TableDuyetDXNV from './duyet-dx-tham-gia';
 import NguonLuc from './nguon-luc';
 import NhanVienDuAn from './nhan-vien-du-an';
+import BaoCao from './bao-cao';
 
 interface IQuanLyDuAn {
 	data: { data: unknown[]; totalItems: number } | unknown[];
@@ -35,6 +36,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 		isPropose: searchParams.tab === 'propose',
 		isResource: searchParams.tab === 'resource',
 		isProject: searchParams.tab === 'project',
+		isReport: searchParams.tab === 'report',
 	};
 
 	useEffect(() => {
@@ -91,6 +93,15 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 					{isHead ? (
 						<TabsTrigger
 							className="flex-1"
+							value="report"
+							onClick={() => handlePush({ tab: 'report' })}
+						>
+							Báo cáo
+						</TabsTrigger>
+					) : null}
+					{isHead ? (
+						<TabsTrigger
+							className="flex-1"
 							value="resource"
 							onClick={() => handlePush({ tab: 'resource' })}
 						>
@@ -142,6 +153,11 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 				{tabs.isProject ? (
 					<TabsContent value="project">
 						<TableDuyetDXNV data={data as any} />
+					</TabsContent>
+				) : null}
+				{tabs.isReport ? (
+					<TabsContent value="report">
+						<BaoCao data={data as any} />
 					</TabsContent>
 				) : null}
 				{tabs.isResource ? (

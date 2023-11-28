@@ -18,7 +18,8 @@ type Tab =
 	| 'employee'
 	| 'propose'
 	| 'project'
-	| 'resource';
+	| 'resource'
+	| 'report';
 
 const getData: Record<
 	Tab,
@@ -41,6 +42,8 @@ const getData: Record<
 		ResourceProjectServices.getList({ idProject, searchParams }, accessToken),
 	project: (idProject: string, _: string, accessToken?: string) =>
 		ReviewProjectServices.getListByHeadOfDepartment(idProject, accessToken),
+	report: (idProject: string, searchParams: string, accessToken?: string) =>
+		ProjectServices.getReport(idProject, searchParams, accessToken),
 };
 
 const DuAn = async ({

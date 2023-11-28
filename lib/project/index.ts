@@ -75,8 +75,12 @@ export const addEmployees = ({
 		employees,
 	});
 
-export const getReport = (idProject: string, accessToken?: string) =>
-	privateRequest.get(`${PREFIX_URL}/report/${idProject}`, {
+export const getReport = (
+	idProject: string,
+	searchParams: string,
+	accessToken?: string
+) =>
+	privateRequest.get(`${PREFIX_URL}/report/${idProject}?${searchParams}`, {
 		headers: {
 			['x-authorization']: `Bearer ${accessToken}`,
 		},
