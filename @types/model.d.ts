@@ -1,3 +1,22 @@
+interface ICustomer {
+	id: string;
+	fullName: string;
+	address: string;
+	phone: string;
+	fax: any;
+	email: string;
+	note: any;
+	isActive: boolean;
+	idProvince: any;
+	idDistrict: any;
+	idWard: any;
+	identityNumber: any;
+	gender: any;
+	province?: IProvince;
+	district?: IDistrict;
+	ward?: IWard;
+}
+
 interface IReport {
 	id: string;
 	content: string;

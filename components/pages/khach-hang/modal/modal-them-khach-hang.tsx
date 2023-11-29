@@ -5,11 +5,11 @@ import Label from '@/components/ui/my-label';
 import ReactSelect from '@/components/ui/react-select';
 import { generateOptions } from '@/constants/generate-options';
 import { GenderIndex } from '@/constants/indexes';
-import * as EmployeeServices from '@/lib/employee';
+import { CustomerServices } from '@/lib';
 import { getDistricts, getWards } from '@/lib/utils/address';
 import { EmployeeSchema } from '@/yup-schema/employee';
 import { yupResolver } from '@hookform/resolvers/yup';
-import dayjs from 'dayjs';
+import { AxiosError } from 'axios';
 import { omit } from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
@@ -17,11 +17,11 @@ import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 import { useToggle } from 'usehooks-ts';
 
-interface IModalThemNhanVien<T> extends Omit<IModalProps<T>, 'children'> {
+interface IModalThemKhachHang<T> extends Omit<IModalProps<T>, 'children'> {
 	isEdit?: boolean;
 }
 
-const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
+const ModalThemKhachHang = (props: IModalThemKhachHang<Partial<ICustomer>>) => {
 	const { data, onRefresh, isEdit = false, ...rest } = props;
 	const queryClient = useQueryClient();
 	const provinceData: IProvince[] = queryClient.getQueryData('provinces') ?? [];
@@ -30,16 +30,19 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 	const [wards, setWards] = useState<IWard[]>([]);
 
 	const { mutate, isLoading } = useMutation({
-		mutationFn: !isEdit ? EmployeeServices.create : EmployeeServices.update,
+		mutationFn: !isEdit ? CustomerServices.create : CustomerServices.update,
 		onSuccess: () => {
-			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} nhân viên thành công`);
+			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} khách hàng thành công`);
 			onRefresh?.();
 			rest.onClose();
+		},
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
 		},
 	});
 
 	const { setValue, handleSubmit, control, register, watch, reset } = useForm<
-		Partial<IEmployee>
+		Partial<ICustomer>
 	>({
 		defaultValues: {
 			gender: 'NAM',
@@ -55,9 +58,6 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 				const initialValue = omit(data, ['isActive']);
 				reset({
 					...initialValue,
-					birthday: data?.birthday
-						? dayjs(data?.birthday).format('YYYY-MM-DD')
-						: undefined,
 				});
 				if (initialValue.idDistrict) {
 					handleGetWards(initialValue.idDistrict);
@@ -91,19 +91,13 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 		}
 	};
 
-	const handleSuccess: SubmitHandler<Partial<IEmployee>> = (values) => {
-		const payload = omit(values, [
-			'departments',
-			'district',
-			'positions',
-			'province',
-			'ward',
-		]);
+	const handleSuccess: SubmitHandler<Partial<ICustomer>> = (values) => {
+		const payload = omit(values, ['district', 'province', 'ward']);
 		mutate(payload);
 	};
 
-	const handleError: SubmitErrorHandler<Partial<IEmployee>> = (errors) => {
-		const keys = Object.keys(errors) as (keyof IEmployee)[];
+	const handleError: SubmitErrorHandler<Partial<ICustomer>> = (errors) => {
+		const keys = Object.keys(errors) as (keyof ICustomer)[];
 		toast.error(errors[keys[0]]?.message as ReactNode);
 	};
 
@@ -114,13 +108,13 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 				onSubmit={handleSubmit(handleSuccess, handleError)}
 			>
 				<div>
-					<Label required>Tên nhân viên</Label>
-					<Input {...register('fullName')} placeholder="tên nhân viên" />
+					<Label required>Tên khách hàng</Label>
+					<Input {...register('fullName')} placeholder="tên khách hàng" />
 				</div>
 				<div className="flex items-center gap-4">
 					<ReactSelect
 						labelProps={{ required: true }}
-						containerClass="flex-1"
+						containerClass="min-w-[100px]"
 						control={control}
 						name="gender"
 						title="Giới tính"
@@ -129,12 +123,8 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 					/>
 
 					<div className="flex-1">
-						<Label>Ngày sinh</Label>
-						<Input
-							{...register('birthday')}
-							type="date"
-							placeholder="ngày sinh"
-						/>
+						<Label>Fax</Label>
+						<Input {...register('fax')} placeholder="+1 (555) 123-4567" />
 					</div>
 				</div>
 				<div>
@@ -210,7 +200,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 
 				<div>
 					<Label>CMND/ CCCD</Label>
-					<Input {...register('identifyNumber')} placeholder="cmnd/ cccc" />
+					<Input {...register('identityNumber')} placeholder="cmnd/ cccc" />
 				</div>
 
 				<div className="flex items-center justify-end gap-4 mt-4">
@@ -224,4 +214,4 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 	);
 };
 
-export default ModalThemNhanVien;
+export default ModalThemKhachHang;

@@ -195,7 +195,7 @@ const TableNhanVien = (props: ITableNhanVien) => {
 													title: 'Tên chức vụ',
 													width: 200,
 													render: (row: IPositionsEmployee) => (
-														<p>{row.position.name}</p>
+														<p>{row.position?.name}</p>
 													),
 												},
 												{

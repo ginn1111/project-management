@@ -24,6 +24,13 @@ export const SIDE_BARS = [
 		roles: [Role.QUAN_LY_TRUONG_PHONG, Role.TRUONG_PHONG],
 	},
 	{
+		id: 'quan-ly-khach-hang',
+		title: 'Quản lý khách hàng',
+		prefixIcon: <IconUser />,
+		href: '/khach-hang',
+		roles: [Role.QUAN_LY_TRUONG_PHONG],
+	},
+	{
 		id: 'quan-ly-nguon-luc',
 		title: 'Quản lý nguồn lực',
 		prefixIcon: <IconTools />,
@@ -76,6 +83,7 @@ export const SIDE_BARS = [
 
 export const ACTIVE_MENUS = {
 	'/nhan-vien': 'quan-ly-nhan-vien',
+	'/khach-hang': 'quan-ly-khach-hang',
 	'/quan-ly-tai-khoan': 'quan-ly-tai-khoan',
 	'/quan-ly-chuc-vu': 'quan-ly-chuc-vu',
 	'/quan-ly-nguon-luc': 'quan-ly-nguon-luc',
