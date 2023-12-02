@@ -6,7 +6,12 @@ import ReactSelect from '@/components/ui/react-select';
 import { Textarea } from '@/components/ui/textarea';
 import { Role } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
-import { DepartmentServices, EmployeeServices, ProjectServices } from '@/lib';
+import {
+	CustomerServices,
+	DepartmentServices,
+	EmployeeServices,
+	ProjectServices,
+} from '@/lib';
 import { ProjectSchema } from '@/yup-schema/project';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -40,7 +45,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 	const isManage = user?.info?.role === Role.QUAN_LY_TRUONG_PHONG;
 	const isSingleProject = data?.isSingle;
 
-	const { data: employeeListData } = useQuery<
+	const { data: employeeListData, isLoading: fetchingEmployees } = useQuery<
 		AxiosResponse<{ employees: IEmployee[]; totalItems: number }>
 	>({
 		queryKey: QueryKeys.getEmployee(),
@@ -49,12 +54,69 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		enabled: rest.open,
 	});
 
+	const { data: customerData, isLoading: fetchingCustomers } = useQuery<
+		AxiosResponse<{ customers: ICustomer[]; totalItems: number }>
+	>({
+		queryKey: QueryKeys.getCustomers(),
+		queryFn: ({}) => CustomerServices.getList(''),
+		enabled: rest.open,
+	});
+
+	const customerOptions = useMemo(() => {
+		const currCustomer = data?.customers?.[0]?.customer;
+		const options =
+			customerData?.data?.customers?.reduce((acc, { id, fullName }) => {
+				if (currCustomer?.id === id) {
+					return acc;
+				}
+				acc.push({
+					value: id,
+					label: fullName,
+				});
+
+				return acc;
+			}, [] as { value: string; label: string }[]) ?? [];
+
+		if (currCustomer) {
+			options.push({
+				value: currCustomer.id,
+				label: currCustomer.fullName,
+			});
+		}
+
+		return options;
+	}, [
+		JSON.stringify(customerData?.data?.customers ?? {}),
+		JSON.stringify(data?.customers?.[0]),
+	]);
+
 	const employeeOptions = useMemo(() => {
-		return employeeListData?.data?.employees?.map(({ id, fullName }) => ({
-			value: id,
-			label: fullName,
-		}));
-	}, [JSON.stringify(employeeListData?.data?.employees ?? {})]);
+		const empHead = data?.manageProjects?.[0]?.employee;
+		console.log(empHead);
+		const options =
+			employeeListData?.data?.employees?.reduce((acc, { id, fullName }) => {
+				if (empHead?.id === id) {
+					return acc;
+				}
+				acc.push({
+					value: id,
+					label: fullName,
+				});
+				return acc;
+			}, [] as { value: string; label: string }[]) ?? [];
+
+		if (empHead) {
+			options.push({
+				value: empHead.id,
+				label: empHead.fullName,
+			});
+		}
+
+		return options;
+	}, [
+		JSON.stringify(employeeListData?.data?.employees ?? {}),
+		JSON.stringify(data?.manageProjects?.[0]?.employee),
+	]);
 
 	const departmentOptions = useMemo(() => {
 		const departments = departmentData?.data?.departments;
@@ -87,7 +149,6 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 
 	useEffect(() => {
 		if (rest.open && isEdit) {
-			console.log(data);
 			const _payload = omit(data, [
 				'startDate',
 				'finishDateET',
@@ -96,6 +157,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 			]);
 
 			const idEmpHead = data?.manageProjects?.[0]?.idEmpHead;
+			const idCustomer = data?.customers?.[0]?.idCustomer;
 
 			const dates = {
 				startDate: dayjs(data?.startDate).isValid()
@@ -109,6 +171,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 				..._payload,
 				...dates,
 				idEmpHead,
+				idCustomer,
 			});
 		} else {
 			form.reset();
@@ -160,6 +223,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 
 				{isManage && !isSingleProject ? (
 					<ReactSelect
+						isLoading={fetchingEmployees}
 						labelProps={{ required: true }}
 						name="idEmpHead"
 						control={form.control}
@@ -168,13 +232,15 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 						options={employeeOptions ?? []}
 					/>
 				) : null}
-				{/* <ReactSelect
-					name="customer"
+				<ReactSelect
+					isLoading={fetchingCustomers}
+					name="idCustomer"
 					control={form.control}
 					placeholder="khách hàng"
 					title="Khách hàng"
-					options={[{ value: 'kh1', label: 'Khách hàng 1' }]}
-				/> */}
+					options={customerOptions}
+					isClearable
+				/>
 				{isEdit ? (
 					data?.departments?.length ? (
 						<div>

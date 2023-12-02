@@ -1,12 +1,14 @@
 import IconAuth from '@/components/Icon/IconAuth';
+import IConCustomer from '@/components/Icon/IconCustomer';
 import IconDepartment from '@/components/Icon/IconDepartment';
 import IconLockTwoTone from '@/components/Icon/IconLockTwoTone';
 import IconPosition from '@/components/Icon/IconPosition';
 import IconProject from '@/components/Icon/IconProject';
+import IconStatistic from '@/components/Icon/IconStatistic';
+import IconStatisticProj from '@/components/Icon/IconStatisticProj';
 import IconTools from '@/components/Icon/IconTools';
 import IconUser from '@/components/Icon/IconUser';
 import { Role } from './general';
-import IconStatistic from '@/components/Icon/IconStatistic';
 
 export const SIDE_BARS = [
 	{
@@ -26,7 +28,7 @@ export const SIDE_BARS = [
 	{
 		id: 'quan-ly-khach-hang',
 		title: 'Quản lý khách hàng',
-		prefixIcon: <IconUser />,
+		prefixIcon: <IConCustomer />,
 		href: '/khach-hang',
 		roles: [Role.QUAN_LY_TRUONG_PHONG],
 	},
@@ -68,7 +70,7 @@ export const SIDE_BARS = [
 	{
 		id: 'dieu-phoi-nhan-vien',
 		title: 'Điều phối nhân viên',
-		prefixIcon: <IconStatistic />,
+		prefixIcon: <IconStatisticProj />,
 		href: '/dieu-phoi-nhan-vien',
 		roles: [Role.TRUONG_PHONG],
 	},

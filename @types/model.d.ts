@@ -1,3 +1,9 @@
+interface ICustomerProject {
+	idCustomer?: string;
+	idProject?: string;
+	customer?: ICustomer;
+}
+
 interface ICustomer {
 	id: string;
 	fullName: string;
@@ -252,6 +258,7 @@ interface IProject {
 	manageProjects?: IManageProject[];
 	worksOfProject?: IWorkProject[];
 	projectResources?: IResourceProject[];
+	customers?: ICustomerProject[];
 }
 
 interface IWard {

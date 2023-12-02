@@ -25,9 +25,14 @@ const DuAnCard = ({
 	finishDateET,
 	finishDate,
 	departments,
+	customers,
+	manageProjects,
 	onPropose,
 }: IDuAnCard) => {
 	const router = useRouter();
+
+	const { employee: headEmp } = manageProjects?.[0] ?? {};
+	const { customer } = customers?.[0] ?? {};
 
 	const { mutate: handleToProject, isLoading } = useMutation({
 		mutationFn: ProjectServices.inProject,
@@ -102,10 +107,37 @@ const DuAnCard = ({
 					)}
 				</p>
 			</div>
-			{/* <div className="flex items-center gap-4 justify-between">
+			<div className="flex items-center gap-4 justify-between">
+				<Label className="text-md mb-0">Trạng thái</Label>
+				<p
+					className={cn(
+						'text-primary2 bg-primary2-light px-3 py-1 rounded-md text-[14px] font-medium',
+						{
+							['text-success bg-success-light']: isDone,
+							['text-danger bg-danger-light']: isExpired,
+							['text-warning bg-warning-light']: isDoneExpired,
+						}
+					)}
+				>
+					{isDoneExpired
+						? 'Hoàn thành - quá hạn'
+						: isDone
+						? 'Hoàn thành'
+						: isExpired
+						? 'Quá hạn'
+						: 'Đang thực hiện'}
+				</p>
+			</div>
+			<div className="flex items-center gap-4 justify-between">
+				<Label className="text-md mb-0">Phụ trách</Label>
+				<p>
+					{headEmp?.fullName ? headEmp.fullName : 'Chưa có người phụ trách'}
+				</p>
+			</div>
+			<div className="flex items-center gap-4 justify-between">
 				<Label className="text-md mb-0">Khách hàng</Label>
-				<p>Tên khách hàng</p>
-			</div> */}
+				<p>{customer?.fullName ? customer.fullName : 'Không có khách hàng'}</p>
+			</div>
 			{departments?.length ? (
 				<div>
 					<Label className="text-md">Phòng ban</Label>

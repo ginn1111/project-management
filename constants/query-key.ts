@@ -27,4 +27,5 @@ export const QueryKeys = {
 		'get-permission-of-work-of-emp',
 		...keys,
 	],
+	getCustomers: (...keys: string[]) => ['get-customer-list', ...keys],
 };

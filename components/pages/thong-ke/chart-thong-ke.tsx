@@ -184,6 +184,8 @@ const ChartThongKe = () => {
 									)
 								);
 
+								const customer = data?.customers?.[0]?.customer;
+
 								const resource = data.projectResources
 									?.reduce((acc, r) => {
 										if (!r.amount) return acc;
@@ -215,6 +217,9 @@ const ChartThongKe = () => {
 							}</p>
 							<p class='break-all text-primary2'> Phụ trách: ${
 								data?.manageProjects?.[0]?.employee?.fullName
+							}</p>
+							<p class='break-all text-primary2'> Khách hàng: ${
+								customer?.fullName ?? 'Không có khách hàng'
 							}</p>
 							<p class='break-all text-primary2'>Số lượng đầu việc: ${numOfWorks}</p>
 							<p class='break-all text-primary2'>Số lượng công việc: ${numOfTask}</p>

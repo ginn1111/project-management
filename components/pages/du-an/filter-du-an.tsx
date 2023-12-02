@@ -45,7 +45,7 @@ const FilterDuAn = () => {
 					? dayjs(finishDateET).toISOString()
 					: '',
 			});
-		});
+		}, 300);
 
 		return () => clearTimeout(timerId);
 	}, [JSON.stringify(filter)]);

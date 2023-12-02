@@ -83,9 +83,10 @@ const ReactSelect = <
 							className={cn('!border-none', className)}
 							{...rest}
 							onChange={(e: any) => {
-								const value = rest.isMulti
-									? e.map(({ value }: { value: string }) => value)
-									: e.value;
+								const value =
+									(rest.isMulti
+										? e.map(({ value }: { value: string }) => value)
+										: e?.value) ?? null;
 								if (!allowChange || allowChange?.(field.value, value)) {
 									field.onChange(value);
 								}
