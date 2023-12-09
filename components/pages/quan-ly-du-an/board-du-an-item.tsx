@@ -23,7 +23,6 @@ import { useMutation } from 'react-query';
 import { toast } from 'sonner';
 import ModalChiTietCongViec from './modal-du-an-item/modal-chi-tiet-cong-viec';
 import ModalLichSu from './modal-du-an-item/modal-lich-su';
-import ModalPhanQuyen from './modal-du-an-item/modal-phan-quyen';
 import ModalThemNguonLuc from './modal-du-an-item/modal-them-nguon-luc';
 import ModalTaoCongViec from './modal-du-an/modal-tao-cong-viec';
 
@@ -64,7 +63,7 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 			toast.error(error.response?.data as string);
 		},
 		onSuccess: () => {
-			toast.success('Đã đánh dấu công việc là hoàn thành');
+			toast.success('Đã hoàn thành công việc');
 			router.refresh();
 		},
 		onSettled: () => {
@@ -167,12 +166,6 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				</DropdownMenu>
 			</div>
 
-			<ModalPhanQuyen
-				data={{}}
-				open={modalState.modalPQ.open}
-				title="Phân quyền"
-				onClose={() => handleCloseModal('modalPQ')}
-			/>
 			<ModalTaoCongViec
 				isEdit
 				data={modalState.modalCS.task}

@@ -32,13 +32,18 @@ const ModalThemNguonLuc = (
 	const refNL = useRef<UseFormReturn>();
 
 	const handleAddResource = () => {
+		const resource = formatResourceForm(
+			refNL.current?.getValues() as Record<
+				string,
+				{ active?: boolean; number?: number }
+			>
+		);
+		if (!resource?.length) {
+			toast.error('Bạn cần chọn ít nhất một nguồn lực!');
+			return;
+		}
 		addResourceForTask({
-			resource: formatResourceForm(
-				refNL.current?.getValues() as Record<
-					string,
-					{ active?: boolean; number?: number }
-				>
-			),
+			resource,
 			idTask: data?.idTask!,
 			idTaskOfWork: data?.id!,
 			idProject: id as string,

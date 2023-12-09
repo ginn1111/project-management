@@ -30,6 +30,10 @@ const ModalGiaoViec = <T,>(
 
 	const handleAssign = () => {
 		const { idEmployee } = refNv.current?.getValues() ?? {};
+		if (!idEmployee) {
+			toast.error('Vui lòng chọn nhân viên cần giao việc');
+			return;
+		}
 		const payload = {
 			idEmployee,
 			id: data?.id,

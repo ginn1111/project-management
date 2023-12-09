@@ -36,14 +36,19 @@ const ModalTaoDeXuat = <T,>(props: IModalTaoDeXuat<T>) => {
 	});
 
 	const handleAddPropose = () => {
+		const resource = formatResourceForm(
+			refNL.current?.getValues() as Record<
+				string,
+				{ active?: boolean; number?: number }
+			>
+		);
+		if (!resource?.length) {
+			toast.error('Bạn cần chọn ít nhất một nguồn lực!');
+			return;
+		}
 		const payload = {
 			idProject: params.id as string,
-			resource: formatResourceForm(
-				refNL.current?.getValues() as Record<
-					string,
-					{ active?: boolean; number?: number }
-				>
-			),
+			resource,
 			description: refDescription.current?.value,
 		};
 

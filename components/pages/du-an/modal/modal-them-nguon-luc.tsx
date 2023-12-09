@@ -30,14 +30,19 @@ const ModalThemNguonLuc = (
 	});
 
 	const handleThemNL = () => {
+		const resource = formatResourceForm(
+			themNLRef.current?.getValues() as Record<
+				string,
+				{ active?: boolean; number?: number }
+			>
+		);
+		if (!resource?.length) {
+			toast.error('Bạn cần chọn ít nhất một nguồn lực!');
+			return;
+		}
 		const payload = {
 			id: data?.id!,
-			resource: formatResourceForm(
-				themNLRef.current?.getValues() as Record<
-					string,
-					{ active?: boolean; number?: number }
-				>
-			),
+			resource,
 		};
 		addResource(payload);
 	};
