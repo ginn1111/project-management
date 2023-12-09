@@ -9,6 +9,7 @@ import * as EmployeeServices from '@/lib/employee';
 import { getDistricts, getWards } from '@/lib/utils/address';
 import { EmployeeSchema } from '@/yup-schema/employee';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { omit } from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
@@ -35,6 +36,9 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} nhân viên thành công`);
 			onRefresh?.();
 			rest.onClose();
+		},
+		onError: (error) => {
+			toast.error((error as AxiosError).response?.data as string);
 		},
 	});
 
