@@ -188,7 +188,7 @@ const TableDuyetDXNV = ({ data }: ITableDuyetDXDA) => {
 		},
 	];
 	return (
-		<div className="rounded-sm">
+		<div className="rounded-sm mx-2">
 			<div className="datatables">
 				<DataTable
 					noRecordsText="Không có dữ liệu"

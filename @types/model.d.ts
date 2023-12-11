@@ -1,3 +1,9 @@
+interface IState {
+	id: string;
+	name: string;
+	isActive: string;
+}
+
 interface ICustomerProject {
 	idCustomer?: string;
 	idProject?: string;
@@ -259,6 +265,7 @@ interface IProject {
 	worksOfProject?: IWorkProject[];
 	projectResources?: IResourceProject[];
 	customers?: ICustomerProject[];
+	state?: IState;
 }
 
 interface IWard {

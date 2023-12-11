@@ -161,22 +161,6 @@ const BangCap = ({ idEmp }: IBangCap) => {
 												return <p>{row.departmentOfEmp?.department?.name}</p>;
 											},
 										},
-										{
-											accessor: '',
-											title: 'Ngày bắt đầu phòng ban',
-											textAlignment: 'center',
-											render: (row: IRole) => {
-												return (
-													<p>
-														{dayjs(row.departmentOfEmp?.startDate).isValid()
-															? dayjs(row.departmentOfEmp?.startDate).format(
-																	'DD/MM/YYYY'
-															  )
-															: 'N/A'}
-													</p>
-												);
-											},
-										},
 									]}
 								/>
 							);

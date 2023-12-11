@@ -3,14 +3,16 @@
 import IconRefresh from '@/components/Icon/IconRefresh';
 import IconSearch from '@/components/Icon/IconSearch';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { DatePicker } from '@/components/ui/date-picker';
 import useQueryParams from '@/hooks/useQueryParams';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
 const FilterThongKe = () => {
-	const form = useForm();
-	const { register } = form;
+	const [dates, setDates] = useState({
+		startDate: '',
+		finishDate: '',
+	});
+
 	const { searchParams, handlePush, handleReset } = useQueryParams({
 		initSearchParams: {
 			startDate: '',
@@ -19,13 +21,21 @@ const FilterThongKe = () => {
 	});
 
 	useEffect(() => {
-		form.reset(searchParams);
+		setDates(searchParams as any);
 	}, [JSON.stringify(searchParams)]);
 
 	return (
 		<div className="flex items-center justify-between gap-4 relative">
-			<Input type="date" {...register('startDate')} />
-			<Input type="date" {...register('finishDate')} />
+			<DatePicker
+				placeholder="Ngày bắt đầu"
+				value={dates.startDate}
+				onChange={(value: any) => setDates({ ...dates, startDate: value })}
+			/>
+			<DatePicker
+				placeholder="Ngày kết thúc"
+				value={dates.finishDate}
+				onChange={(value: any) => setDates({ ...dates, finishDate: value })}
+			/>
 			<div className="flex items-center gap-2">
 				<Button variant="outline" onClick={() => handleReset()}>
 					<IconRefresh />
@@ -33,7 +43,7 @@ const FilterThongKe = () => {
 				<Button
 					onClick={() => {
 						handlePush({
-							...form.getValues(),
+							...dates,
 						});
 					}}
 				>

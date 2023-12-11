@@ -60,6 +60,15 @@ const ModalThemChungChi = (
 	}, [rest.open]);
 
 	const handleSubmitForm = () => {
+		const expiredDate = getValues('expiredDate');
+		const startDate = getValues('date');
+
+		const isValid = dayjs(expiredDate).isAfter(startDate, 'd');
+		if (!isValid) {
+			toast.error('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+			return;
+		}
+
 		const payload = {
 			...pickBy(getValues(), identity),
 			...(!isEdit

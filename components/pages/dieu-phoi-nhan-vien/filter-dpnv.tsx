@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import ModalDieuPhoi from './modal-dieu-phoi';
+import { DatePicker } from '@/components/ui/date-picker';
 
 const FilterDPNV = () => {
 	const { handlePush, handleReset, searchParams } = useQueryParams({
@@ -50,28 +51,16 @@ const FilterDPNV = () => {
 
 	return (
 		<div className="flex items-center justify-end gap-4 m-2">
-			<div className="flex items-center gap-2">
-				<Input
-					type="date"
-					value={
-						dayjs(filter.startDate).isValid()
-							? dayjs(filter.startDate).format('YYYY-MM-DD')
-							: ''
-					}
-					onChange={(e) =>
-						setFilter((old) => ({ ...old, startDate: e.target.valueAsDate }))
-					}
+			<div className="flex items-center gap-2 flex-1">
+				<DatePicker
+					placeholder="Ngày bắt đầu"
+					value={filter.startDate}
+					onChange={(e: any) => setFilter((old) => ({ ...old, startDate: e }))}
 				/>
-				<Input
-					type="date"
-					value={
-						dayjs(filter.finishDate).isValid()
-							? dayjs(filter.finishDate).format('YYYY-MM-DD')
-							: ''
-					}
-					onChange={(e) =>
-						setFilter((old) => ({ ...old, finishDate: e.target.valueAsDate }))
-					}
+				<DatePicker
+					placeholder="Ngày kết thúc dự kiến"
+					value={filter.finishDate}
+					onChange={(e: any) => setFilter((old) => ({ ...old, finishDate: e }))}
 				/>
 			</div>
 			<Button

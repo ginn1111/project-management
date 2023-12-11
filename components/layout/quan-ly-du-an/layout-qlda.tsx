@@ -72,6 +72,7 @@ const LayoutQLDA = () => {
 		modalRS: { open: false },
 		modalDoneProject: { open: false },
 		modalReport: { open: false },
+		modalCancelProj: { open: false },
 	});
 
 	const isHeadOrCreator = isInProjectData?.data?.isHeadOrCreator;
@@ -81,56 +82,66 @@ const LayoutQLDA = () => {
 
 	return (
 		<div className="p-2 rounded-md bg-primary2-light m-2 flex items-center gap-2 justify-end sticky top-2 z-10">
-			{isFetching || isFetchingInfoPrj ? <LoadingInline /> : null}
-			{isHeadOrCreator ? (
-				<>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => handleOpenModal('modalDoneProject')}
-					>
-						<IconChecks />
-						<span className="ml-2">Hoàn thành dự án</span>
-					</Button>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => handleOpenModal('modalRS')}
-					>
-						<IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
-						<span className="ml-2">Thêm nguồn lực</span>
-					</Button>
-
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => handleOpenModal('modalPJ')}
-					>
-						<IconEditTwoTone className="group-hover:text-warning " />
-						<span className="ml-2">Chỉnh sửa dự án</span>
-					</Button>
-
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => handleOpenModal('modalTDV')}
-					>
-						<IconWork />
-						<span className="ml-2">Tạo đầu việc</span>
-					</Button>
-
-					{isSingleProject && isHeadOfDepartment ? (
+			<>
+				{isHeadOrCreator ? (
+					<>
 						<Button
 							variant="outline"
 							size="sm"
-							onClick={() => handleOpenModal('modalPQDA')}
+							onClick={() => handleOpenModal('modalDoneProject')}
 						>
-							<IconAuthenTool />
-							<span className="ml-2">Phân quyền dự án</span>
+							<IconChecks />
+							<span className="ml-2">Hoàn thành dự án</span>
 						</Button>
-					) : null}
-				</>
-			) : null}
+
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => handleOpenModal('modalRS')}
+						>
+							<IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
+							<span className="ml-2">Thêm nguồn lực</span>
+						</Button>
+
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => handleOpenModal('modalPJ')}
+						>
+							<IconEditTwoTone className="group-hover:text-warning " />
+							<span className="ml-2">Chỉnh sửa dự án</span>
+						</Button>
+
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => handleOpenModal('modalTDV')}
+						>
+							<IconWork />
+							<span className="ml-2">Tạo đầu việc</span>
+						</Button>
+
+						{isSingleProject && isHeadOfDepartment ? (
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => handleOpenModal('modalPQDA')}
+							>
+								<IconAuthenTool />
+								<span className="ml-2">Phân quyền dự án</span>
+							</Button>
+						) : null}
+					</>
+				) : null}
+			</>
+			{isHeadOrCreator && (
+				<Button
+					onClick={() => handleOpenModal('modalCancelProj')}
+					variant="destructive"
+				>
+					Huỷ dự án
+				</Button>
+			)}
 			{!isHeadOrCreator ? (
 				<>
 					<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
@@ -146,6 +157,7 @@ const LayoutQLDA = () => {
 					</Button>
 				</>
 			) : null}
+			{isFetching || isFetchingInfoPrj ? <LoadingInline /> : null}
 
 			<ModalThemDuAn
 				open={modal.modalPJ.open}
@@ -154,6 +166,15 @@ const LayoutQLDA = () => {
 				onRefresh={() => refetch()}
 				data={projectData?.data ?? {}}
 				isEdit
+			/>
+
+			<ModalConfirm
+				title="Huỷ dự án"
+				onAccept={() => {}}
+				onClose={() => handleCloseModal('modalCancelProj')}
+				open={modal.modalCancelProj.open}
+				msgCTA="Huỷ dự án"
+				message="Bạn có chắc muốn huỷ dự án"
 			/>
 
 			<ModalConfirm

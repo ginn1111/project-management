@@ -89,6 +89,14 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		</DropdownMenuItem>,
 	];
 
+	if (isHead) {
+		dropdownItems.push(
+			<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
+				Phân quyền
+			</DropdownMenuItem>
+		);
+	}
+
 	if (!isDone) {
 		dropdownItems.push(
 			<DropdownMenuItem
@@ -100,12 +108,6 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		);
 		if (isHead) {
 			dropdownItems.push(
-				<DropdownMenuItem
-					key="author"
-					onClick={() => handleOpenModal('modalPQ')}
-				>
-					Phân quyền
-				</DropdownMenuItem>,
 				<DropdownMenuItem
 					key="update"
 					onClick={() => handleOpenModal('modalCS')}
@@ -254,7 +256,16 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			</ul>
 			<ModalConfirm
 				loading={isLoading}
-				onAccept={() => doneWork(props.id)}
+				onAccept={() => {
+					if (props.startDate && dayjs().isBefore(dayjs(props.startDate))) {
+						toast.error(
+							'Thời gian hoàn thành không thể nhỏ hơn thời gian bắt đầu!'
+						);
+						return;
+					}
+					console.log(props.startDate);
+					doneWork(props.id);
+				}}
 				open={modalState.modalDone.open}
 				onClose={() => handleCloseModal('modalDone')}
 				message={

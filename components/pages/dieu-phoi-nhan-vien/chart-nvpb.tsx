@@ -30,7 +30,6 @@ const ChartNVPB = ({ data }: ChartNVPBProps) => {
 	const mapData: any = {};
 	data?.forEach((dataItem) => {
 		dataItem.projects.forEach(({ project }) => {
-			console.log(project);
 			if (!mapData[project.name]) {
 				mapData[project.name] = {
 					data: [],
@@ -129,7 +128,6 @@ const ChartNVPB = ({ data }: ChartNVPBProps) => {
 							const timeUnit = getTimeUnit(
 								dayjs(val[1]).diff(val[0], 'second')
 							);
-							console.log(val);
 							const data: IProject =
 								_statisticData[opts.seriesIndex].data[opts.dataPointIndex];
 							return (

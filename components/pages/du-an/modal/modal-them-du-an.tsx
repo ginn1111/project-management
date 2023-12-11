@@ -141,9 +141,11 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		onSettled: () => rest.onClose(),
 	});
 
+	const hasWorks = (data?.worksOfProject?.length ?? 1) > 0;
+
 	const form = useForm({
 		resolver: yupResolver(
-			ProjectSchema(isEdit, isManage && !isSingleProject)
+			ProjectSchema(hasWorks, isManage && !isSingleProject)
 		) as any,
 	});
 
@@ -186,8 +188,10 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 	const handleSuccess: SubmitHandler<Partial<IProject>> = (values) => {
 		if (isEdit) {
 			values.id = data?.id;
-			delete values.startDate;
-			delete values.finishDateET;
+			if (hasWorks) {
+				delete values.startDate;
+				delete values.finishDateET;
+			}
 		}
 		addProject(pickBy(values, identity) as IProject);
 	};
@@ -208,7 +212,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 						<Input
 							{...form.register('startDate')}
 							type="date"
-							disabled={isEdit}
+							disabled={hasWorks}
 						/>
 					</div>
 					<div className="flex-1">
@@ -216,7 +220,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 						<Input
 							{...form.register('finishDateET')}
 							type="date"
-							disabled={isEdit}
+							disabled={hasWorks}
 						/>
 					</div>
 				</div>
@@ -233,13 +237,13 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 					/>
 				) : null}
 				<ReactSelect
+					labelProps={{ required: true }}
 					isLoading={fetchingCustomers}
 					name="idCustomer"
 					control={form.control}
 					placeholder="khách hàng"
 					title="Khách hàng"
 					options={customerOptions}
-					isClearable
 				/>
 				{isEdit ? (
 					data?.departments?.length ? (

@@ -13,6 +13,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ModalThemDuAn from './modal/modal-them-du-an';
+import { DatePicker } from '@/components/ui/date-picker';
 
 const FilterDuAn = () => {
 	const { handlePush, handleReset, searchParams } = useQueryParams({
@@ -58,27 +59,20 @@ const FilterDuAn = () => {
 					setFilter((old) => ({ ...old, search: e.target.value }));
 				}}
 			/>
-			<div className="flex items-center gap-2">
-				<Input
-					type="date"
-					value={
-						dayjs(filter.startDate).isValid()
-							? dayjs(filter.startDate).format('YYYY-MM-DD')
-							: ''
-					}
-					onChange={(e) =>
-						setFilter((old) => ({ ...old, startDate: e.target.valueAsDate }))
+			<div className="flex items-center gap-2 flex-1">
+				<DatePicker
+					placeholder="Ngày bắt đầu"
+					value={filter.startDate}
+					onChange={(date: any) =>
+						setFilter((old) => ({ ...old, startDate: date }))
 					}
 				/>
-				<Input
-					type="date"
-					value={
-						dayjs(filter.finishDateET).isValid()
-							? dayjs(filter.finishDateET).format('YYYY-MM-DD')
-							: ''
-					}
-					onChange={(e) =>
-						setFilter((old) => ({ ...old, finishDateET: e.target.valueAsDate }))
+
+				<DatePicker
+					placeholder="Ngày kết thúc"
+					value={filter.finishDateET}
+					onChange={(date: any) =>
+						setFilter((old) => ({ ...old, finishDateET: date }))
 					}
 				/>
 			</div>

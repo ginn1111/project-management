@@ -14,3 +14,10 @@ export const Role = {
 	NHAN_VIEN: 'NHAN_VIEN',
 	ALL: 'ALL',
 };
+
+export const WorkState = {
+	Planing: 'Lên kế hoạch',
+	Processing: 'Đang thực hiện',
+	Canceled: 'Huỷ bỏ',
+	Done: 'Hoàn thành',
+};

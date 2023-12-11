@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as yup from 'yup';
 
-export const ProjectSchema = (isEdit?: boolean, isManage?: boolean) =>
+export const ProjectSchema = (hasWork?: boolean, isManage?: boolean) =>
 	yup.object({
 		name: yup.string().required('Tên dự án không được để trống'),
 		...(isManage
@@ -14,7 +14,7 @@ export const ProjectSchema = (isEdit?: boolean, isManage?: boolean) =>
 				'more-than-now',
 				'Ngày bắt đầu không thể trong quá khứ',
 				(value) => {
-					if (isEdit) return true;
+					if (hasWork) return true;
 					return (
 						dayjs(value).isSame(dayjs().format('YYYY-MM-DD')) ||
 						dayjs(value).isAfter(dayjs())
@@ -28,8 +28,10 @@ export const ProjectSchema = (isEdit?: boolean, isManage?: boolean) =>
 				'more-than-start-date',
 				'Ngày hoàn thành dự kiến phải lớn hơn ngày bắt đầu dự án',
 				function (value) {
-					if (isEdit) return true;
+					if (hasWork) return true;
 					return dayjs(value).isAfter((this.options as any).parent.startDate);
 				}
 			),
+
+		idCustomer: yup.string().required('Khách hàng không được để trống'),
 	});

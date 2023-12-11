@@ -82,7 +82,7 @@ const GroupSelectNhanVien = forwardRef(
 						title="Phòng ban"
 						placeholder="phòng ban"
 						options={
-							departmentData?.data.departments.map(({ id, name }) => ({
+							departmentData?.data?.departments?.map(({ id, name }) => ({
 								label: name,
 								value: id,
 							})) ?? []
@@ -99,7 +99,7 @@ const GroupSelectNhanVien = forwardRef(
 						placeholder="nhân viên"
 						isMulti={isMulti}
 						options={
-							employeeData?.data.employeesOfProject.map(
+							employeeData?.data?.employeesOfProject?.map(
 								({ id, proposeProject: { employeesOfDepartment } }) => ({
 									value: id,
 									label: employeesOfDepartment?.employee?.fullName ?? '',
