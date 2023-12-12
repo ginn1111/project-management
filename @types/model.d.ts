@@ -198,6 +198,7 @@ interface IWork {
 	id: string;
 	name: string;
 	note: OrNull<string>;
+	state?: IState;
 }
 
 interface IResource {
@@ -258,6 +259,7 @@ interface IProject {
 	startDate: string;
 	finishDateET: string;
 	finishDate: any;
+	canceledDate: OrNull<string>;
 	note: string;
 	isSingle: OrNull<boolean>;
 	departments?: IDepartmentProject[];

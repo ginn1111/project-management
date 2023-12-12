@@ -64,7 +64,7 @@ const ModalThemChungChi = (
 		const startDate = getValues('date');
 
 		const isValid = dayjs(expiredDate).isAfter(startDate, 'd');
-		if (!isValid) {
+		if (!isValid && expiredDate && startDate) {
 			toast.error('Ngày kết thúc phải lớn hơn ngày bắt đầu');
 			return;
 		}

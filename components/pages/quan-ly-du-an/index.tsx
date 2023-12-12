@@ -142,7 +142,10 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 				) : null}
 				{tabs.isEmployee ? (
 					<TabsContent value="employee">
-						<NhanVienDuAn data={data as any} />
+						<NhanVienDuAn
+							data={data as any}
+							projectData={project as IProject}
+						/>
 					</TabsContent>
 				) : null}
 				{tabs.isPropose ? (

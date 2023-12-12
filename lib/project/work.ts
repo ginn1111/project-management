@@ -114,3 +114,8 @@ export const evaluation = ({
 	privateRequest.post(`${PREFIX_URL}/${idWorkProject}/evaluation`, {
 		...payload,
 	});
+
+export const cancelWork = (idWorkOfProj: string) =>
+	privateRequest.put(`${PREFIX_URL}/${idWorkOfProj}/cancel`);
+export const startWork = (idWorkOfProj: string) =>
+	privateRequest.put(`${PREFIX_URL}/${idWorkOfProj}/start`);

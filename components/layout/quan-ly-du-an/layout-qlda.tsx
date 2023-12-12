@@ -27,6 +27,7 @@ import ModalBaoCao from './modal-tool-bar/modal-bao-cao';
 import ModalPhanQuyenDA from './modal-tool-bar/modal-phan-quyen-da';
 import ModalTaoDauViec from './modal-tool-bar/modal-tao-dau-viec';
 import ModalTaoDeXuat from './modal-tool-bar/modal-tao-de-xuat';
+import { workerData } from 'worker_threads';
 
 const LayoutQLDA = () => {
 	const router = useRouter();
@@ -92,11 +93,10 @@ const LayoutQLDA = () => {
 
 	const isCanceled = projectData?.data?.canceledDate;
 	const isDone = projectData?.data?.finishDate;
-	const isProcessing = projectData?.data?.worksOfProject?.some(
-		(wOfP) =>
-			![WorkState.Planing, WorkState.Canceled].includes(
-				wOfP.work?.state?.name ?? ''
-			)
+	const isProcessing = projectData?.data?.worksOfProject?.some((wOfP) =>
+		[WorkState.Done, WorkState.Processing].includes(
+			wOfP.work?.state?.name ?? ''
+		)
 	);
 	const isHeadOrCreator = isInProjectData?.data?.isHeadOrCreator;
 	const isSingleProject = projectData?.data?.isSingle;
@@ -108,6 +108,10 @@ const LayoutQLDA = () => {
 			{isCanceled ? (
 				<p className="text-danger text-center w-full font-bold text-lg">
 					Dự án đã bị huỷ
+				</p>
+			) : isDone ? (
+				<p className="text-success text-center w-full font-bold text-lg">
+					Dự án đã hoàn thành
 				</p>
 			) : (
 				<>
@@ -163,7 +167,7 @@ const LayoutQLDA = () => {
 							</>
 						) : null}
 					</>
-					{isHeadOrCreator && (!isDone || !isProcessing) && (
+					{isHeadOrCreator && !isDone && !isProcessing && (
 						<Button
 							onClick={() => handleOpenModal('modalCancelProj')}
 							variant="destructive"

@@ -62,6 +62,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		modalStart: { open: false },
 	});
 
+	// done work
 	const { mutate: doneWork, isLoading } = useMutation({
 		mutationFn: WorkProjectServices.done,
 		onError: (error: AxiosError) => {
@@ -73,6 +74,35 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		},
 		onSettled: () => {
 			handleCloseModal('modalDone');
+		},
+	});
+
+	// cancel work
+	const { mutate: cancelWork, isLoading: canceling } = useMutation({
+		mutationFn: WorkProjectServices.cancelWork,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Huỷ đầu việc thành công');
+		},
+		onSettled: () => {
+			handleCloseModal('modalCanceled');
+			router.refresh();
+		},
+	});
+	// start work
+	const { mutate: startWork, isLoading: starting } = useMutation({
+		mutationFn: WorkProjectServices.startWork,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Đầu việc đã được bắt đầu');
+		},
+		onSettled: () => {
+			handleCloseModal('modalStart');
+			router.refresh();
 		},
 	});
 	const isExpired =
@@ -95,7 +125,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		</DropdownMenuItem>,
 	];
 
-	if (isHead && !isCanceled) {
+	if (isHead) {
 		dropdownItems.push(
 			<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
 				Phân quyền
@@ -103,7 +133,19 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		);
 	}
 
-	if (!isDone && !isCanceled) {
+	if (isHead && !isDone && !isCanceled) {
+		dropdownItems.push(
+			<DropdownMenuItem key="update" onClick={() => handleOpenModal('modalCS')}>
+				Chỉnh sửa
+			</DropdownMenuItem>,
+
+			<DropdownMenuItem key="assign" onClick={() => handleOpenModal('modalGV')}>
+				Giao việc
+			</DropdownMenuItem>
+		);
+	}
+
+	if (isProcessing) {
 		dropdownItems.push(
 			<DropdownMenuItem
 				key="create"
@@ -114,19 +156,6 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		);
 		if (isHead) {
 			dropdownItems.push(
-				<DropdownMenuItem
-					key="update"
-					onClick={() => handleOpenModal('modalCS')}
-				>
-					Chỉnh sửa
-				</DropdownMenuItem>,
-
-				<DropdownMenuItem
-					key="assign"
-					onClick={() => handleOpenModal('modalGV')}
-				>
-					Giao việc
-				</DropdownMenuItem>,
 				<DropdownMenuItem
 					key="done"
 					onClick={() => handleOpenModal('modalDone')}
@@ -206,14 +235,14 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 							</>
 						)}
 					</div>
-					{isPlaning ? (
+					{isPlaning && isHead ? (
 						<div className="flex items-center justify-end gap-2 flex-1">
 							<Button
 								size="sm"
 								className="text-[12px] h-[2rem] bg-primary2-light text-primary2 hover:text-primary2-light hover:bg-primary2"
 								onClick={() => handleOpenModal('modalStart')}
 							>
-								Start
+								Bắt đầu
 							</Button>
 							<Button
 								size="sm"
@@ -296,8 +325,8 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			</ul>
 
 			<ModalConfirm
-				loading={false}
-				onAccept={() => {}}
+				loading={starting}
+				onAccept={() => startWork(props.id)}
 				open={modalState.modalStart.open}
 				onClose={() => handleCloseModal('modalStart')}
 				message="Bắt đầu thực hiện đầu việc"
@@ -306,8 +335,8 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 				title="Bắt đầu đầu việc"
 			/>
 			<ModalConfirm
-				loading={false}
-				onAccept={() => {}}
+				loading={canceling}
+				onAccept={() => cancelWork(props.id)}
 				open={modalState.modalCanceled.open}
 				onClose={() => handleCloseModal('modalCanceled')}
 				message="Bạn có muốn huỷ đầu việc này"

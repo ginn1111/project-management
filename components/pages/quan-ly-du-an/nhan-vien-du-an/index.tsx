@@ -25,14 +25,17 @@ dayjs.locale(vi);
 
 interface ITableNhanVien {
 	data: { employeesOfProject: IEmployeeProject[]; totalItems: number };
+	projectData: IProject;
 }
 
 const TableNhanVien = (props: ITableNhanVien) => {
 	const router = useRouter();
-	const { data } = props;
+	const { data, projectData } = props;
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: { page: 1, limit: 10 },
 	});
+
+	const isDisable = projectData?.finishDate || projectData?.canceledDate;
 
 	const { modal, handleOpenModal, handleCloseModal } = useModal({
 		modalNV: { open: false, employee: {} },
@@ -117,9 +120,6 @@ const TableNhanVien = (props: ITableNhanVien) => {
 						<IconEllipsis />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="-translate-x-[10px]">
-						{/* <DropdownMenuItem>Chỉnh sửa quyền</DropdownMenuItem>
-						<DropdownMenuItem>Giao việc</DropdownMenuItem>
-						<DropdownMenuItem>Xem workload</DropdownMenuItem> */}
 						<DropdownMenuItem
 							className="text-destructive hover:!text-destructive"
 							onClick={() => handleOpenModal('modalRM', { id: row.id })}
@@ -131,6 +131,8 @@ const TableNhanVien = (props: ITableNhanVien) => {
 			),
 		},
 	];
+
+	if (isDisable) columns.pop();
 
 	return (
 		<>
