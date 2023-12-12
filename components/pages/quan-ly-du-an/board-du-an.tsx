@@ -35,6 +35,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from '@radix-ui/react-collapsible';
+import { WorkState } from '@/constants/general';
 
 const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	const router = useRouter();
@@ -57,6 +58,8 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		modalGV: { open: false },
 		modalDone: { open: false },
 		modalDG: { open: false },
+		modalCanceled: { open: false },
+		modalStart: { open: false },
 	});
 
 	const { mutate: doneWork, isLoading } = useMutation({
@@ -78,6 +81,9 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			dayjs(props.finishDateET).isBefore(props?.finishDate, 'd'));
 
 	const isDone = !!props.finishDate;
+	const isPlaning = props.work?.state?.name === WorkState.Planing;
+	const isProcessing = props?.work?.state?.name === WorkState.Processing;
+	const isCanceled = props?.work?.state?.name === WorkState.Canceled;
 
 	let dropdownItems = [
 		<DropdownMenuItem key="detail" onClick={() => handleOpenModal('modalDV')}>
@@ -89,7 +95,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		</DropdownMenuItem>,
 	];
 
-	if (isHead) {
+	if (isHead && !isCanceled) {
 		dropdownItems.push(
 			<DropdownMenuItem key="author" onClick={() => handleOpenModal('modalPQ')}>
 				Phân quyền
@@ -97,7 +103,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		);
 	}
 
-	if (!isDone) {
+	if (!isDone && !isCanceled) {
 		dropdownItems.push(
 			<DropdownMenuItem
 				key="create"
@@ -130,6 +136,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			);
 		}
 	}
+
 	if (!props.workEvaluation?.length && isDone && isHead) {
 		dropdownItems.push(
 			<DropdownMenuItem
@@ -178,13 +185,46 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 							'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 ml-auto',
 							{
 								['text-success bg-success-light']: isDone,
-								['text-danger bg-danger-light']: isExpired,
+								['text-danger bg-danger-light']: isExpired || isCanceled,
 							}
 						)}
 					>
-						{isDone ? 'Hoàn thành' : isExpired ? '' : 'Đang thực hiện'}
-						{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
+						{isPlaning ? (
+							'Lên kế hoạch'
+						) : isProcessing ? (
+							'Đang thực hiện'
+						) : isCanceled ? (
+							'Huỷ'
+						) : (
+							<>
+								{isDone ? 'Hoàn thành' : isExpired ? '' : ''}
+								{isExpired && isDone
+									? ' - quá hạn'
+									: isExpired
+									? 'Quá hạn'
+									: ''}
+							</>
+						)}
 					</div>
+					{isPlaning ? (
+						<div className="flex items-center justify-end gap-2 flex-1">
+							<Button
+								size="sm"
+								className="text-[12px] h-[2rem] bg-primary2-light text-primary2 hover:text-primary2-light hover:bg-primary2"
+								onClick={() => handleOpenModal('modalStart')}
+							>
+								Start
+							</Button>
+							<Button
+								size="sm"
+								variant="destructive"
+								className="text-[12px] h-[2rem]"
+								onClick={() => handleOpenModal('modalCanceled')}
+							>
+								Huỷ
+							</Button>
+						</div>
+					) : null}
 					<div className="ml-2">
 						<DropdownMenu>
 							<DropdownMenuTrigger>
@@ -254,6 +294,26 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 					</p>
 				)}
 			</ul>
+
+			<ModalConfirm
+				loading={false}
+				onAccept={() => {}}
+				open={modalState.modalStart.open}
+				onClose={() => handleCloseModal('modalStart')}
+				message="Bắt đầu thực hiện đầu việc"
+				msgCTA="Bắt đầu"
+				variant="default"
+				title="Bắt đầu đầu việc"
+			/>
+			<ModalConfirm
+				loading={false}
+				onAccept={() => {}}
+				open={modalState.modalCanceled.open}
+				onClose={() => handleCloseModal('modalCanceled')}
+				message="Bạn có muốn huỷ đầu việc này"
+				msgCTA="Xác nhận huỷ"
+				title="Huỷ đầu việc"
+			/>
 			<ModalConfirm
 				loading={isLoading}
 				onAccept={() => {

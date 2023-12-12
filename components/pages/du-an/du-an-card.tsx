@@ -18,18 +18,22 @@ interface IDuAnCard extends IProject {
 	onPropose: () => void;
 }
 
-const DuAnCard = ({
-	id,
-	name,
-	startDate,
-	finishDateET,
-	finishDate,
-	departments,
-	customers,
-	manageProjects,
-	onPropose,
-}: IDuAnCard) => {
+const DuAnCard = (props: IDuAnCard) => {
 	const router = useRouter();
+	const {
+		id,
+		name,
+		startDate,
+		finishDateET,
+		finishDate,
+		canceledDate,
+		departments,
+		customers,
+		manageProjects,
+		onPropose,
+	} = props;
+
+	console.log(props);
 
 	const { employee: headEmp } = manageProjects?.[0] ?? {};
 	const { customer } = customers?.[0] ?? {};
@@ -49,6 +53,7 @@ const DuAnCard = ({
 		(finishDate && dayjs(finishDateET).isBefore(finishDate, 'd'));
 
 	const isDone = !!finishDate;
+	const isCancel = !!canceledDate;
 
 	const isDoneExpired = isExpired && isDone;
 
@@ -62,7 +67,7 @@ const DuAnCard = ({
 				'relative rounded-sm p-2 bg-gradient-from-tl bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-2 hover:border-muted-foreground border-transparent hover:from-primary2-light hover:to-accent flex flex-col gap-2',
 				{
 					['shadow-[0_0_0_4px_success] shadow-success/50']: isDone,
-					['shadow-[0_0_0_4px_danger] shadow-danger/50']: isExpired,
+					['shadow-[0_0_0_4px_danger] shadow-danger/50']: isExpired || isCancel,
 					['shadow-[0_0_0_4px_warning] shadow-warning/50']: isDoneExpired,
 				}
 			)}
@@ -85,28 +90,43 @@ const DuAnCard = ({
 					</span>
 				</p>
 			</div>
-			<div className="flex items-center gap-4 justify-between">
-				<Label className="text-md mb-0">Ngày bắt đầu</Label>
-				<p>
-					{dayjs(startDate).isValid() ? (
-						dayjs(startDate).format('DD/MM/YYYY')
-					) : (
-						<span className="text-danger font-medium">N/A</span>
-					)}
-				</p>
-			</div>
-			<div className="flex items-center gap-4 justify-between">
-				<Label className="text-md mb-0">
-					Ngày kết thúc {finishDate ? '' : ' dự kiến'}
-				</Label>
-				<p>
-					{dayjs(finishDate ?? finishDateET).isValid() ? (
-						dayjs(finishDate ?? finishDateET).format('DD/MM/YYYY')
-					) : (
-						<span className="text-danger font-medium">N/A</span>
-					)}
-				</p>
-			</div>
+			{isCancel ? (
+				<div className="flex items-center gap-4 justify-between">
+					<Label className="text-md mb-0">Ngày Huỷ</Label>
+					<p>
+						{dayjs(canceledDate).isValid() ? (
+							dayjs(canceledDate).format('DD/MM/YYYY')
+						) : (
+							<span className="text-danger font-medium">N/A</span>
+						)}
+					</p>
+				</div>
+			) : (
+				<>
+					<div className="flex items-center gap-4 justify-between">
+						<Label className="text-md mb-0">Ngày bắt đầu</Label>
+						<p>
+							{dayjs(startDate).isValid() ? (
+								dayjs(startDate).format('DD/MM/YYYY')
+							) : (
+								<span className="text-danger font-medium">N/A</span>
+							)}
+						</p>
+					</div>
+					<div className="flex items-center gap-4 justify-between">
+						<Label className="text-md mb-0">
+							Ngày kết thúc {finishDate ? '' : ' dự kiến'}
+						</Label>
+						<p>
+							{dayjs(finishDate ?? finishDateET).isValid() ? (
+								dayjs(finishDate ?? finishDateET).format('DD/MM/YYYY')
+							) : (
+								<span className="text-danger font-medium">N/A</span>
+							)}
+						</p>
+					</div>
+				</>
+			)}
 			<div className="flex items-center gap-4 justify-between">
 				<Label className="text-md mb-0">Trạng thái</Label>
 				<p
@@ -114,7 +134,7 @@ const DuAnCard = ({
 						'text-primary2 bg-primary2-light px-3 py-1 rounded-md text-[14px] font-medium',
 						{
 							['text-success bg-success-light']: isDone,
-							['text-danger bg-danger-light']: isExpired,
+							['text-danger bg-danger-light']: isExpired || isCancel,
 							['text-warning bg-warning-light']: isDoneExpired,
 						}
 					)}
@@ -125,6 +145,8 @@ const DuAnCard = ({
 						? 'Hoàn thành'
 						: isExpired
 						? 'Quá hạn'
+						: isCancel
+						? 'Đã huỷ'
 						: 'Đang thực hiện'}
 				</p>
 			</div>
@@ -158,9 +180,11 @@ const DuAnCard = ({
 				<p className="text-danger font-medium">Chưa có phòng ban</p>
 			)}
 			<div className="flex items-center gap-2 justify-end cursor-pointer mt-auto">
-				<span role="button" onClick={onPropose}>
-					<IconSendTwoTone />
-				</span>
+				{!isCancel && !isDone && (
+					<span role="button" onClick={onPropose}>
+						<IconSendTwoTone />
+					</span>
+				)}
 				<span role="button" onClick={() => handleToProject(id)}>
 					<IconEyeTwoTone />
 				</span>

@@ -93,3 +93,6 @@ export const createReport = ({
 	content: string;
 	idProject: string;
 }) => privateRequest.post(`${PREFIX_URL}/report/${idProject}/add`, { content });
+
+export const cancelProject = (idProject: string) =>
+	privateRequest.put(`${PREFIX_URL}/${idProject}/cancel`);

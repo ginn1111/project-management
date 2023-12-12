@@ -2,6 +2,7 @@
 
 import ModalTaoDauViec from '@/components/layout/quan-ly-du-an/modal-tool-bar/modal-tao-dau-viec';
 import LoadingInline from '@/components/ui/loading/loading-inline';
+import { WorkState } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
 import useModal from '@/hooks/useModal';
 import { ProjectServices, WorkProjectServices } from '@/lib';
@@ -9,7 +10,7 @@ import { betweenTime, getMonth, hasTask, now } from '@/utils/helpers';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
-import { AxiosError } from 'axios';
+import { AxiosError, isCancel } from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -165,6 +166,8 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 
 			const isDone = !!finishDate;
 
+			const isCancel = work?.state?.name === WorkState.Canceled;
+
 			return {
 				id,
 				start: startDate,
@@ -177,7 +180,7 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						? 'bg-warning'
 						: isDone
 						? 'bg-success'
-						: isExpired
+						: isExpired || isCancel
 						? 'bg-danger'
 						: 'bg-primary2',
 			};
@@ -198,6 +201,9 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 				</span>
 				<span className="rounded-md text-danger bg-danger-light px-2 py-1">
 					Quá hạn
+				</span>
+				<span className="rounded-md text-danger bg-danger-light px-2 py-1">
+					Huỷ
 				</span>
 			</div>
 			{isLoading || isFetching ? <LoadingInline /> : null}
@@ -245,7 +251,11 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 				eventClick={(event: any) => {
 					const selectedWork: Partial<IWorkProject> =
 						data.find((work) => event.event.id === work.id) ?? {};
-					if (selectedWork.finishDate) return;
+					if (
+						selectedWork.finishDate ||
+						selectedWork.work?.state?.name === WorkState.Canceled
+					)
+						return;
 
 					handleOpenModal('modalDV', {
 						isEdit: true,

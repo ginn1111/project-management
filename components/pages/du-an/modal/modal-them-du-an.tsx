@@ -92,7 +92,6 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 
 	const employeeOptions = useMemo(() => {
 		const empHead = data?.manageProjects?.[0]?.employee;
-		console.log(empHead);
 		const options =
 			employeeListData?.data?.employees?.reduce((acc, { id, fullName }) => {
 				if (empHead?.id === id) {
@@ -141,7 +140,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		onSettled: () => rest.onClose(),
 	});
 
-	const hasWorks = (data?.worksOfProject?.length ?? 1) > 0;
+	const hasWorks = (data?.worksOfProject?.length ?? 0) > 0;
 
 	const form = useForm({
 		resolver: yupResolver(

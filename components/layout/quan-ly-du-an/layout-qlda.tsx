@@ -13,11 +13,11 @@ import ModalThemNguonLuc from '@/components/pages/du-an/modal/modal-them-nguon-l
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import LoadingInline from '@/components/ui/loading/loading-inline';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
-import { Role } from '@/constants/general';
+import { Role, WorkState } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
 import useModal from '@/hooks/useModal';
 import { ProjectServices } from '@/lib';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { AlertCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
@@ -38,9 +38,9 @@ const LayoutQLDA = () => {
 		data: projectData,
 		isFetching,
 		refetch,
-	} = useQuery({
+	} = useQuery<AxiosResponse<IProject>>({
 		queryKey: QueryKeys.getDetailProject(id as string),
-		queryFn: ({ queryKey }) => ProjectServices.getDetail(queryKey[1]),
+		queryFn: ({ queryKey }) => ProjectServices.getDetail(queryKey[1] as string),
 		enabled: !!id,
 	});
 
@@ -64,6 +64,21 @@ const LayoutQLDA = () => {
 		},
 	});
 
+	const { mutate: cancelProj, isLoading: canceling } = useMutation({
+		mutationFn: ProjectServices.cancelProject,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Huỷ dự án thành công');
+			refetch();
+			router.refresh();
+		},
+		onSettled: () => {
+			handleCloseModal('modalCancelProj');
+		},
+	});
+
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
 		modalTDV: { open: false },
 		modalPQDA: { open: false },
@@ -75,6 +90,14 @@ const LayoutQLDA = () => {
 		modalCancelProj: { open: false },
 	});
 
+	const isCanceled = projectData?.data?.canceledDate;
+	const isDone = projectData?.data?.finishDate;
+	const isProcessing = projectData?.data?.worksOfProject?.some(
+		(wOfP) =>
+			![WorkState.Planing, WorkState.Canceled].includes(
+				wOfP.work?.state?.name ?? ''
+			)
+	);
 	const isHeadOrCreator = isInProjectData?.data?.isHeadOrCreator;
 	const isSingleProject = projectData?.data?.isSingle;
 	const isHeadOfDepartment =
@@ -82,81 +105,93 @@ const LayoutQLDA = () => {
 
 	return (
 		<div className="p-2 rounded-md bg-primary2-light m-2 flex items-center gap-2 justify-end sticky top-2 z-10">
-			<>
-				{isHeadOrCreator ? (
+			{isCanceled ? (
+				<p className="text-danger text-center w-full font-bold text-lg">
+					Dự án đã bị huỷ
+				</p>
+			) : (
+				<>
 					<>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => handleOpenModal('modalDoneProject')}
-						>
-							<IconChecks />
-							<span className="ml-2">Hoàn thành dự án</span>
-						</Button>
+						{isHeadOrCreator ? (
+							<>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => handleOpenModal('modalDoneProject')}
+								>
+									<IconChecks />
+									<span className="ml-2">Hoàn thành dự án</span>
+								</Button>
 
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => handleOpenModal('modalRS')}
-						>
-							<IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
-							<span className="ml-2">Thêm nguồn lực</span>
-						</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => handleOpenModal('modalRS')}
+								>
+									<IconDesign className="group-hover:text-destructive h-[20px] w-[20px]" />
+									<span className="ml-2">Thêm nguồn lực</span>
+								</Button>
 
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => handleOpenModal('modalPJ')}
-						>
-							<IconEditTwoTone className="group-hover:text-warning " />
-							<span className="ml-2">Chỉnh sửa dự án</span>
-						</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => handleOpenModal('modalPJ')}
+								>
+									<IconEditTwoTone className="group-hover:text-warning " />
+									<span className="ml-2">Chỉnh sửa dự án</span>
+								</Button>
 
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => handleOpenModal('modalTDV')}
-						>
-							<IconWork />
-							<span className="ml-2">Tạo đầu việc</span>
-						</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => handleOpenModal('modalTDV')}
+								>
+									<IconWork />
+									<span className="ml-2">Tạo đầu việc</span>
+								</Button>
 
-						{isSingleProject && isHeadOfDepartment ? (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => handleOpenModal('modalPQDA')}
-							>
-								<IconAuthenTool />
-								<span className="ml-2">Phân quyền dự án</span>
-							</Button>
+								{isSingleProject && isHeadOfDepartment ? (
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => handleOpenModal('modalPQDA')}
+									>
+										<IconAuthenTool />
+										<span className="ml-2">Phân quyền dự án</span>
+									</Button>
+								) : null}
+							</>
 						) : null}
 					</>
-				) : null}
-			</>
-			{isHeadOrCreator && (
-				<Button
-					onClick={() => handleOpenModal('modalCancelProj')}
-					variant="destructive"
-				>
-					Huỷ dự án
-				</Button>
-			)}
-			{!isHeadOrCreator ? (
-				<>
-					<Button variant="outline" onClick={() => handleOpenModal('modalTDX')}>
-						<IconRecommend />
-						<span className="ml-2">Tạo đề xuất</span>
-					</Button>
-					<Button
-						variant="outline"
-						onClick={() => handleOpenModal('modalReport')}
-					>
-						<IconRecommend />
-						<span className="ml-2">Báo cáo</span>
-					</Button>
+					{isHeadOrCreator && (!isDone || !isProcessing) && (
+						<Button
+							onClick={() => handleOpenModal('modalCancelProj')}
+							variant="destructive"
+						>
+							Huỷ dự án
+						</Button>
+					)}
+					{!isHeadOrCreator ? (
+						<>
+							<Button
+								variant="outline"
+								onClick={() => handleOpenModal('modalTDX')}
+							>
+								<IconRecommend />
+								<span className="ml-2">Tạo đề xuất</span>
+							</Button>
+							<Button
+								variant="outline"
+								onClick={() => handleOpenModal('modalReport')}
+							>
+								<IconRecommend />
+								<span className="ml-2">Báo cáo</span>
+							</Button>
+						</>
+					) : null}
 				</>
-			) : null}
+			)}
+
 			{isFetching || isFetchingInfoPrj ? <LoadingInline /> : null}
 
 			<ModalThemDuAn
@@ -170,7 +205,8 @@ const LayoutQLDA = () => {
 
 			<ModalConfirm
 				title="Huỷ dự án"
-				onAccept={() => {}}
+				loading={canceling}
+				onAccept={() => cancelProj(id as string)}
 				onClose={() => handleCloseModal('modalCancelProj')}
 				open={modal.modalCancelProj.open}
 				msgCTA="Huỷ dự án"
