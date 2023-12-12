@@ -71,20 +71,33 @@ const ChartThongKe = () => {
 			'Đã hoàn thành - quá hạn': {},
 			'Chưa hoàn thành - quá hạn': {},
 			'Chưa hoàn thành': {},
+			Huỷ: {},
 		};
 
 		statisticData?.data?.projects?.forEach((project) => {
-			const { name, startDate, finishDate, finishDateET } = project;
+			const { name, canceledDate, startDate, finishDate, finishDateET } =
+				project;
 			_map['Đúng hạn'][name] = [];
 			_map['Đã hoàn thành - quá hạn'][name] = [];
 			_map['Chưa hoàn thành'][name] = [];
 			_map['Chưa hoàn thành - quá hạn'][name] = [];
+			_map['Huỷ'][name] = [];
 
 			const isExpired =
 				(finishDate && dayjs(finishDate).isAfter(finishDateET, 'D')) ||
 				(!finishDate && dayjs().isAfter(finishDateET, 'D'));
 
-			if (!finishDate) {
+			const isCancel = !!canceledDate;
+
+			if (isCancel) {
+				_map['Huỷ'][name].push({
+					timeArr: [
+						new Date(startDate).getTime(),
+						new Date(finishDateET ?? '').getTime(),
+					],
+					...project,
+				});
+			} else if (!finishDate) {
 				if (isExpired) {
 					_map['Chưa hoàn thành - quá hạn'][name].push({
 						timeArr: [
@@ -177,6 +190,12 @@ const ChartThongKe = () => {
 							custom: (opts) => {
 								const data: IProject =
 									_statisticData[opts.seriesIndex].data[opts.dataPointIndex];
+
+								const isCancel = data.canceledDate;
+								const cancelDate = dayjs(data.canceledDate).format(
+									'DD/MM/YYYY'
+								);
+
 								const timeUnit = getTimeUnit(
 									dayjs(data?.finishDate ?? data?.finishDateET).diff(
 										data?.startDate,
@@ -206,15 +225,19 @@ const ChartThongKe = () => {
 								);
 								return `<div class='px-2 py-1 border-primary2 bg-primary2-light'>
 							<p class='break-all text-primary2'>Tên: ${data?.name}</p>
-							<p class='text-primary2 bg-primary2-light'> Thời gian: ${
-								(
-									dayjs.duration(
-										dayjs(
-											new Date(data?.finishDate ?? data?.finishDateET)
-										).diff(new Date(data?.startDate))
-									) as any
-								)?.[timeUnit.type as any]() + timeUnit.unit
-							}</p>
+							${
+								isCancel
+									? `<p class='text-primary2 bg-primary2-light'> Ngày huỷ: ${cancelDate}</p>`
+									: `<p class='text-primary2 bg-primary2-light'> Thời gian: ${
+											(
+												dayjs.duration(
+													dayjs(
+														new Date(data?.finishDate ?? data?.finishDateET)
+													).diff(new Date(data?.startDate))
+												) as any
+											)?.[timeUnit.type as any]() + timeUnit.unit
+									  }</p>`
+							}
 							<p class='break-all text-primary2'> Phụ trách: ${
 								data?.manageProjects?.[0]?.employee?.fullName
 							}</p>
@@ -252,7 +275,7 @@ const ChartThongKe = () => {
 							type: 'solid',
 							opacity: 0.6,
 						},
-						colors: ['#2196f3', '#fbbf24', '#e7515a', '#3b3f5c'],
+						colors: ['#2196f3', '#fbbf24', '#e7515a', '#3b3f5c', '#ff6666'],
 						legend: {
 							position: 'top',
 							horizontalAlign: 'left',
