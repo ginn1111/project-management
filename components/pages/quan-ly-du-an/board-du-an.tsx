@@ -43,7 +43,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		props;
 	const dates = {
 		startDateJs: dayjs(startDate),
-		endDateJs: dayjs(finishDate ?? finishDateET),
+		endDateJs: dayjs(finishDateET),
 	};
 	const {
 		modal: modalState,
@@ -105,6 +105,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			router.refresh();
 		},
 	});
+
 	const isExpired =
 		(!props?.finishDate && dayjs(props?.finishDateET).isBefore(dayjs(), 'd')) ||
 		(props?.finishDate &&
@@ -214,24 +215,26 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 							'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 ml-auto',
 							{
 								['text-success bg-success-light']: isDone,
-								['text-danger bg-danger-light']: isExpired || isCanceled,
+								['text-danger bg-danger-light']: isExpired,
+								['text-danger bg-waring-light']: isCanceled,
+								['text-warning bg-warning-light']: isExpired && isDone,
 							}
 						)}
 					>
 						{isPlaning ? (
 							'Lên kế hoạch'
-						) : isProcessing ? (
-							'Đang thực hiện'
 						) : isCanceled ? (
 							'Huỷ'
 						) : (
 							<>
-								{isDone ? 'Hoàn thành' : isExpired ? '' : ''}
-								{isExpired && isDone
-									? ' - quá hạn'
+								{isDone
+									? 'Hoàn thành'
 									: isExpired
 									? 'Quá hạn'
+									: isProcessing
+									? 'Đang thực hiện'
 									: ''}
+								{isExpired && isDone ? ' - quá hạn' : ''}
 							</>
 						)}
 					</div>

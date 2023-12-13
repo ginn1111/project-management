@@ -10,7 +10,7 @@ import { betweenTime, getMonth, hasTask, now } from '@/utils/helpers';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
-import { AxiosError, isCancel } from 'axios';
+import { AxiosError } from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -217,7 +217,11 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 
 					const selectedWork: Partial<IWorkProject> =
 						data.find((work) => eventData.id === work.id) ?? {};
-					if (selectedWork.finishDate) {
+
+					const isCancel =
+						selectedWork?.work?.state?.name === WorkState.Canceled;
+
+					if (selectedWork.finishDate || isCancel) {
 						info.revert();
 						return;
 					}

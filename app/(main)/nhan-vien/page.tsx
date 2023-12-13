@@ -31,7 +31,11 @@ const NhanVien = async ({ searchParams }: { searchParams: ISearchParams }) => {
 		<div className="m-2 rounded-sm p-2">
 			<FilterNhanVien />
 			<div className="mt-4">
-				<TableNhanVien provinces={provinces} data={employeeData.data} />
+				<TableNhanVien
+					provinces={provinces}
+					data={employeeData.data}
+					isSuperHead={isSuperHead}
+				/>
 			</div>
 		</div>
 	);

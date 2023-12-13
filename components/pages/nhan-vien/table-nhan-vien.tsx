@@ -35,11 +35,12 @@ interface ITableNhanVien {
 		name: string;
 	};
 	data: { employees: IEmployee[]; totalItems: number };
+	isSuperHead: boolean;
 }
 
 const TableNhanVien = (props: ITableNhanVien) => {
 	const router = useRouter();
-	const { provinces, data } = props;
+	const { provinces, data, isSuperHead } = props;
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: { page: 1, limit: 10, search: '' },
 	});
@@ -117,24 +118,30 @@ const TableNhanVien = (props: ITableNhanVien) => {
 								Chi tiết
 							</Link>
 						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() =>
-								handleOpenModal('modalCV', {
-									employee: { positions: row.positions, id: row.id },
-								})
-							}
-						>
-							Chức vụ mới
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() =>
-								handleOpenModal('modalPB', {
-									employee: { departments: row.departments, id: row.id },
-								})
-							}
-						>
-							Chuyển phòng ban
-						</DropdownMenuItem>
+
+						{isSuperHead ? (
+							<>
+								<DropdownMenuItem
+									onClick={() =>
+										handleOpenModal('modalCV', {
+											employee: { positions: row.positions, id: row.id },
+										})
+									}
+								>
+									Chức vụ mới
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() =>
+										handleOpenModal('modalPB', {
+											employee: { departments: row.departments, id: row.id },
+										})
+									}
+								>
+									Chuyển phòng ban
+								</DropdownMenuItem>
+							</>
+						) : null}
+
 						<DropdownMenuItem
 							disabled={!isEmpty(row.account)}
 							onClick={() =>
