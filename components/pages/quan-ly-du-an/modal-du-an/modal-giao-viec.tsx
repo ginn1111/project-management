@@ -34,6 +34,7 @@ const ModalGiaoViec = <T,>(
 		},
 		onSettled: () => {
 			rest.onClose();
+			rest.onRefresh?.();
 		},
 	});
 

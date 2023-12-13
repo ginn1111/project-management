@@ -74,10 +74,10 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		},
 		onSuccess: () => {
 			toast.success('Đã đánh dấu đầu việc là hoàn thành');
-			router.refresh();
 		},
 		onSettled: () => {
 			handleCloseModal('modalDone');
+			router.refresh();
 		},
 	});
 
@@ -367,13 +367,15 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 			<ModalConfirm
 				loading={isLoading}
 				onAccept={() => {
-					if (props.startDate && dayjs().isBefore(dayjs(props.startDate))) {
+					if (
+						props.startDate &&
+						dayjs().isBefore(dayjs(props.startDate), 'D')
+					) {
 						toast.error(
 							'Thời gian hoàn thành không thể nhỏ hơn thời gian bắt đầu!'
 						);
 						return;
 					}
-					console.log(props.startDate);
 					doneWork(props.id);
 				}}
 				open={modalState.modalDone.open}

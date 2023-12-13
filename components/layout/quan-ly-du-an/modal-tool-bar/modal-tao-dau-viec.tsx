@@ -33,13 +33,15 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 
 	const { mutate: addWork, isLoading } = useMutation({
 		mutationFn: isEdit ? WorkProjectServices.update : WorkProjectServices.add,
-		onSettled: () => rest.onClose(),
 		onSuccess: () => {
 			toast.success(`${isEdit ? 'Cập nhật' : 'Thêm'} đầu việc thành công`);
-			rest.onRefresh?.();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as ReactNode);
+		},
+		onSettled: () => {
+			rest.onClose();
+			rest.onRefresh?.();
 		},
 	});
 	const form = useForm({

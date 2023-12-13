@@ -165,8 +165,8 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 flex-shrink-0',
 						{
 							['text-success bg-success-light']: isDone,
-							['text-danger bg-danger-light']: isCancel,
 							['text-warning bg-warning-light']: isExpired,
+							['text-danger bg-danger-light']: isCancel,
 						}
 					)}
 				>
