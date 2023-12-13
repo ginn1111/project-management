@@ -117,5 +117,19 @@ export const evaluation = ({
 
 export const cancelWork = (idWorkOfProj: string) =>
 	privateRequest.put(`${PREFIX_URL}/${idWorkOfProj}/cancel`);
+
 export const startWork = (idWorkOfProj: string) =>
 	privateRequest.put(`${PREFIX_URL}/${idWorkOfProj}/start`);
+
+export const cancelTask = ({
+	idProject,
+	idTask,
+	idTaskOfWork,
+}: {
+	idProject: string;
+	idTask: string;
+	idTaskOfWork: string;
+}) =>
+	privateRequest.put(`${PREFIX_URL}/${idProject}/${idTask}/task/cancel`, {
+		idTaskOfWork,
+	});

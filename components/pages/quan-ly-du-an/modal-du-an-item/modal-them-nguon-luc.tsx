@@ -20,13 +20,13 @@ const ModalThemNguonLuc = (
 		mutationFn: WorkProjectServices.addResourceForTask,
 		onSuccess: () => {
 			toast.success('Thêm nguồn lực thành công');
-			router.refresh();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
 			rest.onClose();
+			router.refresh();
 		},
 	});
 	const refNL = useRef<UseFormReturn>();

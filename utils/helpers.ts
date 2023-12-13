@@ -83,7 +83,9 @@ export const betweenTime = (
 };
 
 export const hasTask = (worksOfEmployee: IWorksEmployee[]) => {
-	const tasksOfWork = worksOfEmployee.flatMap((work) => work.tasksOfWork);
+	const tasksOfWork = worksOfEmployee
+		.flatMap((work) => work.tasksOfWork)
+		.filter((task) => task.task.isActive);
 
 	return tasksOfWork?.length > 0;
 };

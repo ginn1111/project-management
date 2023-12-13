@@ -168,6 +168,7 @@ interface ITaskOfWork {
 	startDateWork?: string;
 	note: OrNull<string>;
 	task: ITask;
+	isActive: boolean;
 }
 interface IWorksEmployee {
 	id: string;

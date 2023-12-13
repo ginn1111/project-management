@@ -117,12 +117,12 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 						{(data as IWorkProject[])?.length ? (
 							(data as IWorkProject[])?.map((workPj) => (
 								<BoardDuAn
+									key={workPj.idWork}
 									{...{
 										...workPj,
 										finishDateETProject: project?.finishDateET,
 										isHead,
 									}}
-									key={workPj.idWork}
 								/>
 							))
 						) : (

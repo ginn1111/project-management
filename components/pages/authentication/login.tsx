@@ -38,7 +38,6 @@ const Login = () => {
 					alt="image"
 					className="h-full w-full object-cover"
 				/>
-				L A
 			</div>
 
 			<div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">

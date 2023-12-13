@@ -40,13 +40,13 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 		mutationFn: WorkProjectServices.createTask,
 		onSuccess: () => {
 			toast.success(`${isEdit ? 'Chỉnh sửa' : 'Thêm'} công việc thành công`);
-			rest.onRefresh?.();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
 			rest.onClose();
+			rest.onRefresh?.();
 		},
 	});
 
@@ -54,13 +54,13 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 		mutationFn: WorkProjectServices.updateTask,
 		onSuccess: () => {
 			toast.success(`${isEdit ? 'Chỉnh sửa' : 'Thêm'} công việc thành công`);
-			rest.onRefresh?.();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
 			rest.onClose();
+			rest.onRefresh?.();
 		},
 	});
 

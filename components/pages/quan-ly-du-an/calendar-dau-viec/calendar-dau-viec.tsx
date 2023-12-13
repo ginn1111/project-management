@@ -245,12 +245,20 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						return;
 					}
 
-					updateWork({
-						id: eventData.id,
-						startDate: eventData.startStr,
-						finishDateET: eventData.endStr || eventData.startStr,
-						idProject: id as string,
-					});
+					updateWork(
+						{
+							id: eventData.id,
+							startDate: eventData.startStr,
+							finishDateET: eventData.endStr || eventData.startStr,
+							idProject: id as string,
+						},
+						{
+							onError: () => {
+								info.revert();
+								router.refresh();
+							},
+						}
+					);
 				}}
 				eventClick={(event: any) => {
 					const selectedWork: Partial<IWorkProject> =

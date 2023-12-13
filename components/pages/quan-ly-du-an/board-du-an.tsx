@@ -19,9 +19,9 @@ import { cn } from '@/lib/utils';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { AlertCircle, ChevronsUpDown } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 import BoardDuAnItem from './board-du-an-item';
 import ModalGiaoViec from './modal-du-an/modal-giao-viec';
@@ -36,9 +36,13 @@ import {
 	CollapsibleTrigger,
 } from '@radix-ui/react-collapsible';
 import { WorkState } from '@/constants/general';
+import { QueryKeys } from '@/constants/query-key';
 
 const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 	const router = useRouter();
+	const params = useParams();
+
+	const queryClient = useQueryClient();
 	const { isHead, work, worksOfEmployee, startDate, finishDate, finishDateET } =
 		props;
 	const dates = {
@@ -85,6 +89,10 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		},
 		onSuccess: () => {
 			toast.success('Huỷ đầu việc thành công');
+
+			queryClient.refetchQueries(
+				QueryKeys.getDetailProject(params.id as string)
+			);
 		},
 		onSettled: () => {
 			handleCloseModal('modalCanceled');
@@ -99,6 +107,9 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 		},
 		onSuccess: () => {
 			toast.success('Đầu việc đã được bắt đầu');
+			queryClient.refetchQueries(
+				QueryKeys.getDetailProject(params.id as string)
+			);
 		},
 		onSettled: () => {
 			handleCloseModal('modalStart');
@@ -289,10 +300,17 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 						const employee =
 							worksOfEmployee.employee?.proposeProject.employeesOfDepartment
 								?.employee?.fullName;
+
 						const hasTask = worksOfEmployee.tasksOfWork?.length;
 
 						return (
-							<li key={worksOfEmployee.id}>
+							<li
+								key={
+									worksOfEmployee.idWorksProject +
+									worksOfEmployee.idEmployee +
+									worksOfEmployee.id
+								}
+							>
 								<Collapsible defaultOpen>
 									{hasTask ? (
 										<CollapsibleTrigger className="bg-white text-primary px-4 py-2 rounded-sm flex items-center w-full justify-between mb-2">
@@ -306,7 +324,7 @@ const BoardDuAn = (props: IWorkProject & { isHead: boolean }) => {
 										<div className="space-y-3 pl-3">
 											{worksOfEmployee.tasksOfWork?.map((taskOfWork) => (
 												<BoardDuAnItem
-													key={taskOfWork.idTask}
+													key={taskOfWork.id}
 													{...{
 														...taskOfWork,
 														finishDateETWork: props.finishDateET,

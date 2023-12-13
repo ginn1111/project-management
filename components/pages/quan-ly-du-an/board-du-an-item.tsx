@@ -56,7 +56,23 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		modalCT: { open: false },
 		modalDone: { open: false },
 		modalNL: { open: false },
+		modalCancel: { open: false },
 	});
+
+	const { mutate: cancelTask, isLoading: canceling } = useMutation({
+		mutationFn: WorkProjectServices.cancelTask,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Đã huỷ công việc');
+		},
+		onSettled: () => {
+			handleCloseModal('modalCancel');
+			router.refresh();
+		},
+	});
+
 	const { mutate: doneTask, isLoading } = useMutation({
 		mutationFn: WorkProjectServices.doneTask,
 		onError: (error: AxiosError) => {
@@ -64,10 +80,10 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		},
 		onSuccess: () => {
 			toast.success('Đã hoàn thành công việc');
-			router.refresh();
 		},
 		onSettled: () => {
 			handleCloseModal('modalDone');
+			router.refresh();
 		},
 	});
 
@@ -86,7 +102,9 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		(!props?.finishDate && dayjs(props?.finishDateET).isBefore(dayjs(), 'm')) ||
 		(props?.finishDate &&
 			dayjs(props.finishDateET).isBefore(props?.finishDate, 'm'));
+
 	const isDone = !!props.finishDate;
+	const isCancel = !props.task.isActive;
 
 	let dropdownItems = [
 		<DropdownMenuItem onClick={() => handleOpenModal('modalCT')} key="detail">
@@ -97,12 +115,13 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 		</DropdownMenuItem>,
 	];
 
-	if (!isDone) {
+	if (!isDone && !isCancel) {
 		dropdownItems = dropdownItems.concat(
-			<DropdownMenuItem onClick={() => handleOpenModal('modalDone')}>
+			<DropdownMenuItem key="done" onClick={() => handleOpenModal('modalDone')}>
 				Hoàn thành
 			</DropdownMenuItem>,
 			<DropdownMenuItem
+				key="update"
 				onClick={() =>
 					handleOpenModal('modalCS', {
 						task: { ...props, finishDateETWork, startDateWork },
@@ -111,14 +130,28 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 			>
 				Chỉnh sửa
 			</DropdownMenuItem>,
-			<DropdownMenuItem onClick={() => handleOpenModal('modalNL')}>
+			<DropdownMenuItem
+				key="resource"
+				onClick={() => handleOpenModal('modalNL')}
+			>
 				Thêm nguồn lực
 			</DropdownMenuItem>
 		);
 	}
 
+	if (!isDone && !isCancel) {
+		dropdownItems.push(
+			<DropdownMenuItem
+				onClick={() => handleOpenModal('modalCancel')}
+				className="text-destructive hover:!text-destructive"
+			>
+				Huỷ
+			</DropdownMenuItem>
+		);
+	}
+
 	return (
-		<li className="w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light p-5 justify-start">
+		<div className="w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light p-5 justify-start">
 			<p className="text-end text-muted-foreground text-[12px] font-medium mb-2">
 				{dates.startDateJs.format('ddd DD/MM/YYYY HH:mm')} <span> - </span>
 				{dates.endDateJs.format('ddd DD/MM/YYYY HH:mm')}
@@ -132,12 +165,19 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 						'uppercase badge bg-primary/10 py-1.5 bg-primary2-light text-primary2 flex-shrink-0',
 						{
 							['text-success bg-success-light']: isDone,
-							['text-danger bg-danger-light']: isExpired,
+							['text-danger bg-danger-light']: isCancel,
+							['text-warning bg-warning-light']: isExpired,
 						}
 					)}
 				>
-					{isDone ? 'Hoàn thành' : isExpired ? '' : 'Đang thực hiện'}
-					{isExpired && isDone ? ' - quá hạn' : isExpired ? 'Quá hạn' : ''}
+					{isDone
+						? 'Hoàn thành'
+						: isCancel
+						? 'Huỷ'
+						: isExpired
+						? 'Quá hạn'
+						: 'Đang thực hiện'}
+					{isExpired && isDone ? ' - quá hạn' : ''}
 				</span>
 			</div>
 			<p>{note}</p>
@@ -186,7 +226,25 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				title="Lịch sử"
 				onClose={() => handleCloseModal('modalLS')}
 			/>
+
 			<ModalConfirm
+				key="cancel"
+				loading={canceling}
+				msgCTA="Xác nhận huỷ"
+				title="Huỷ công việc"
+				message="Bạn có chắc chắn muốn huỷ công việc"
+				open={modalState.modalCancel.open}
+				onAccept={() =>
+					cancelTask({
+						idProject: id as string,
+						idTask: props.idTask,
+						idTaskOfWork: props.id,
+					})
+				}
+				onClose={() => handleCloseModal('modalCancel')}
+			/>
+			<ModalConfirm
+				key="done"
 				loading={isLoading}
 				msgCTA="Xác nhận hoàn thành"
 				title="Bạn chắc chắn muốn hoàn thành?"
@@ -236,7 +294,7 @@ const BoardDuAnItem = (props: ITaskOfWork) => {
 				onClose={() => handleCloseModal('modalNL')}
 				title="Thêm nguồn lực cho công việc"
 			/>
-		</li>
+		</div>
 	);
 };
 
