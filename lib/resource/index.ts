@@ -29,3 +29,14 @@ export const update = ({ id, name, idResourceType, amount, note }: IResource) =>
 		amount,
 		note,
 	});
+
+export const toggleUsing = ({
+	isActive,
+	idResource,
+}: {
+	idResource: string;
+	isActive: boolean;
+}) =>
+	privateRequest.put(`${PREFIX_URL}/${idResource}/toggle-using`, {
+		isActive,
+	});

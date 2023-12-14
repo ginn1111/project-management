@@ -165,7 +165,7 @@ const QuanLyDuAn = (props: IQuanLyDuAn) => {
 				) : null}
 				{tabs.isResource ? (
 					<TabsContent value="resource">
-						<NguonLuc data={data as any} />
+						<NguonLuc data={data as any} projectData={project as IProject} />
 					</TabsContent>
 				) : null}
 			</Tabs>

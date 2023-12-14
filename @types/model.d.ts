@@ -209,6 +209,7 @@ interface IResource {
 	amount: number;
 	note: any;
 	resourceType?: IResourceType;
+	isActive: boolean;
 }
 
 interface IResourceType {

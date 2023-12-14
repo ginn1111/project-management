@@ -1,23 +1,27 @@
+import { Button } from '@/components/ui/button';
+import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
+import { cn } from '@/lib/utils';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
-import { useParams } from 'next/navigation';
 
 interface INguonLuc {
 	data: {
 		projectResource: IResourceProject[];
 		totalItems: number;
 	};
+	projectData: IProject;
 }
 
-const NguonLuc = ({ data }: INguonLuc) => {
-	const { id } = useParams();
+const NguonLuc = ({ data, projectData }: INguonLuc) => {
+	const { modal, handleCloseModal, handleOpenModal } = useModal({
+		modalReturn: { open: false },
+	});
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: { page: 1, limit: 10, tab: 'resource' },
 	});
-	const { modal, handleCloseModal, handleOpenModal } = useModal({
-		modalNL: { open: false },
-	});
+	const isDoneOrCancel = projectData.finishDate || projectData.canceledDate;
+
 	const columns: DataTableColumn<IResourceProject>[] = [
 		{
 			accessor: 'resource.name',
@@ -26,6 +30,17 @@ const NguonLuc = ({ data }: INguonLuc) => {
 		{
 			accessor: 'resource.resourceType.name',
 			title: 'Loại',
+		},
+		{
+			accessor: 'resource.isActive',
+			title: 'Sử dụng',
+			render: (row: IResourceProject) => {
+				return (
+					<p className={cn({ ['text-destructive']: !row.resource.isActive })}>
+						{row.resource.isActive ? 'Đang sử dụng' : 'Tạm dừng'}
+					</p>
+				);
+			},
 		},
 		{
 			accessor: 'resource',
@@ -39,6 +54,22 @@ const NguonLuc = ({ data }: INguonLuc) => {
 					) ?? 0;
 				return <p>{`${usedAmount}/${record.amount + usedAmount}`}</p>;
 			},
+		},
+		{
+			accessor: '',
+			textAlignment: 'right',
+			render: (row: IResourceProject) => (
+				<Button
+					variant="outline"
+					size="sm"
+					disabled={
+						(!isDoneOrCancel && row.resource.isActive) || row.amount === 0
+					}
+					onClick={() => handleOpenModal('modalReturn', { id: row.idResource })}
+				>
+					Hoàn tác
+				</Button>
+			),
 		},
 	];
 	return (
@@ -66,6 +97,15 @@ const NguonLuc = ({ data }: INguonLuc) => {
 					}
 				/>
 			</div>
+			<ModalConfirm
+				title="Hoàn tác nguồn lực"
+				message="Hoàn tác số lượng nguồn lực còn lại?"
+				onAccept={() => {}}
+				onClose={() => handleCloseModal('modalReturn')}
+				open={modal.modalReturn.open}
+				variant="default"
+				msgCTA="Xác nhận"
+			/>
 		</div>
 	);
 };

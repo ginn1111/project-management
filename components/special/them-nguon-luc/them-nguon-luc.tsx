@@ -69,7 +69,10 @@ const ThemNguonLuc = forwardRef((props: IThemNguonLuc, ref) => {
 	const resourceList =
 		type === 'resource'
 			? resourceData?.data?.resource
-			: resourceOfProjData?.data?.projectResource;
+			: resourceOfProjData?.data?.projectResource.map((pResource) => ({
+					...pResource,
+					isActive: pResource.resource.isActive,
+			  }));
 
 	useEffect(() => {
 		setSelectedTab(resourceTypeData?.data?.[0]?.id ?? '');
