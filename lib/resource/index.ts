@@ -40,3 +40,6 @@ export const toggleUsing = ({
 	privateRequest.put(`${PREFIX_URL}/${idResource}/toggle-using`, {
 		isActive,
 	});
+
+export const returnResource = (idResourceProj: string) =>
+	privateRequest.put(`${PREFIX_URL}/${idResourceProj}/return`);

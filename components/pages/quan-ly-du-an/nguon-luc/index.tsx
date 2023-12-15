@@ -2,8 +2,13 @@ import { Button } from '@/components/ui/button';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import useModal from '@/hooks/useModal';
 import useQueryParams from '@/hooks/useQueryParams';
+import { ResourceServices } from '@/lib';
 import { cn } from '@/lib/utils';
+import { AxiosError } from 'axios';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
+import { useRouter } from 'next/navigation';
+import { useMutation } from 'react-query';
+import { toast } from 'sonner';
 
 interface INguonLuc {
 	data: {
@@ -14,13 +19,28 @@ interface INguonLuc {
 }
 
 const NguonLuc = ({ data, projectData }: INguonLuc) => {
+	const router = useRouter();
 	const { modal, handleCloseModal, handleOpenModal } = useModal({
-		modalReturn: { open: false },
+		modalReturn: { open: false, id: '' },
 	});
 	const { handlePush, searchParams } = useQueryParams({
 		initSearchParams: { page: 1, limit: 10, tab: 'resource' },
 	});
 	const isDoneOrCancel = projectData.finishDate || projectData.canceledDate;
+
+	const { mutate: returnResource, isLoading } = useMutation({
+		mutationFn: ResourceServices.returnResource,
+		onError: (error: AxiosError) => {
+			toast.error(error.response?.data as string);
+		},
+		onSuccess: () => {
+			toast.success('Hoàn tác thành công');
+			router.refresh();
+		},
+		onSettled: () => {
+			handleCloseModal('modalReturn');
+		},
+	});
 
 	const columns: DataTableColumn<IResourceProject>[] = [
 		{
@@ -65,13 +85,14 @@ const NguonLuc = ({ data, projectData }: INguonLuc) => {
 					disabled={
 						(!isDoneOrCancel && row.resource.isActive) || row.amount === 0
 					}
-					onClick={() => handleOpenModal('modalReturn', { id: row.idResource })}
+					onClick={() => handleOpenModal('modalReturn', { id: row.id })}
 				>
 					Hoàn tác
 				</Button>
 			),
 		},
 	];
+
 	return (
 		<div className="mx-2">
 			<div className="datatables">
@@ -98,9 +119,10 @@ const NguonLuc = ({ data, projectData }: INguonLuc) => {
 				/>
 			</div>
 			<ModalConfirm
+				loading={isLoading}
 				title="Hoàn tác nguồn lực"
 				message="Hoàn tác số lượng nguồn lực còn lại?"
-				onAccept={() => {}}
+				onAccept={() => returnResource(modal.modalReturn.id)}
 				onClose={() => handleCloseModal('modalReturn')}
 				open={modal.modalReturn.open}
 				variant="default"
