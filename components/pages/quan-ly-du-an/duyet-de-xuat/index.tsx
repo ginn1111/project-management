@@ -105,8 +105,10 @@ const DuyetDeXuat = ({ data }: IDuyetDeXuat) => {
 			render: (record) => {
 				return (
 					<p>
-						{dayjs(record.createdDate).isValid()
-							? dayjs(record.createdDate).format('DD/MM/YYYY - HH:mm')
+						{dayjs(record.proposeResource.createdDate).isValid()
+							? dayjs(record.proposeResource.createdDate).format(
+									'DD/MM/YYYY - HH:mm'
+							  )
 							: 'N/A'}
 					</p>
 				);

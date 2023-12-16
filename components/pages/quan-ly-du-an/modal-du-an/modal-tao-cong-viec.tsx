@@ -87,21 +87,31 @@ const ModalTaoCongViec = (props: IModalTaoCongViec) => {
 			dayjs(data?.startDateWork),
 			dayjs(data?.finishDateETWork),
 		];
+		const startDateChange = !dayjs(data?.startDate).isSame(startDate, 'm');
+		const endDateChange = !dayjs(data?.finishDateET).isSame(finishDateET, 'm');
+
 		const errorMsg1 = betweenTime(
 			dayjs(startDate as any),
 			workTimes,
 			'm',
 			'đầu việc'
 		);
+
 		const errorMsg2 = betweenTime(
 			dayjs(finishDateET as any),
 			workTimes,
 			'm',
-			'đầu việc'
+			'đầu việc',
+			'kết thúc dự kiến'
 		);
 
-		if (errorMsg1 || errorMsg2) {
-			toast.error(errorMsg1 || errorMsg2);
+		if (startDateChange && errorMsg1) {
+			toast.error(errorMsg1);
+			return;
+		}
+
+		if (endDateChange && errorMsg2) {
+			toast.error(errorMsg2);
 			return;
 		}
 

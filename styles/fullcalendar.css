@@ -233,15 +233,33 @@
 	color: #888ea8;
 }
 
+.bg-warning .fc-event-title {
+	@apply !text-warning;
+}
+.bg-success .fc-event-title {
+	@apply !text-success;
+}
+
+.bg-primary2 .fc-event-title {
+	@apply !text-primary2;
+}
+.bg-danger .fc-event-title {
+	@apply !text-danger;
+}
+
 .bg-warning {
-	@apply !bg-warning !border-warning;
+	@apply !bg-warning-light !border-warning-light;
 }
 .bg-success {
-	@apply !bg-success !border-success;
+	@apply !bg-success-light !border-success-light;
 }
 .bg-danger {
-	@apply !bg-danger !border-danger;
+	@apply !bg-danger-light !border-danger-light;
 }
 .bg-primary2 {
-	@apply !bg-primary2 !border-primary2;
+	@apply !bg-primary2-light !border-primary2-light;
+}
+
+.bg-cancel {
+	@apply !bg-danger !border-danger;
 }

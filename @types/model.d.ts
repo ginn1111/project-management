@@ -103,7 +103,6 @@ interface IReviewProposeResource {
 	id: string;
 	idProposeResource: string;
 	idState: string;
-	createdDate: string;
 	reviewingDate: OrNull<string>;
 	note: OrNull<string>;
 	state: IStatePropose;
@@ -117,6 +116,7 @@ interface IProposeResource {
 	employeesOfProject?: EmployeesOfProject;
 	resourcesProposes: IResourcesPropose[];
 	manageProjects?: IP;
+	createdDate: string;
 }
 interface IResourceProject {
 	id: string;
@@ -270,6 +270,7 @@ interface IProject {
 	projectResources?: IResourceProject[];
 	customers?: ICustomerProject[];
 	state?: IState;
+	isAlreadyDone: boolean;
 }
 
 interface IWard {

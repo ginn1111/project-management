@@ -33,8 +33,6 @@ const DuAnCard = (props: IDuAnCard) => {
 		onPropose,
 	} = props;
 
-	console.log(props);
-
 	const { employee: headEmp } = manageProjects?.[0] ?? {};
 	const { customer } = customers?.[0] ?? {};
 
@@ -64,14 +62,24 @@ const DuAnCard = (props: IDuAnCard) => {
 	return (
 		<div
 			className={cn(
-				'relative rounded-sm p-2 bg-gradient-from-tl bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-2 hover:border-muted-foreground border-transparent hover:from-primary2-light hover:to-accent flex flex-col gap-2',
+				`relative rounded-md p-2 bg-gradient-from-tl 
+				bg-gradient-to-br from-accent to-primary2-light col-span-1 min-h-[200px] transition-all border-4
+				hover:border-muted-foreground/50 border-transparent hover:from-primary2-light
+				hover:to-accent flex flex-col gap-2`,
 				{
-					['shadow-[0_0_0_4px_success] shadow-success/50']: isDone,
-					['shadow-[0_0_0_4px_danger] shadow-danger/50']: isExpired || isCancel,
-					['shadow-[0_0_0_4px_warning] shadow-warning/50']: isDoneExpired,
+					['border-4 border-success/50']: isDone,
+					['border-4 border-danger/50']: isExpired || isCancel,
+					['border-4 border-warning/50']: isDoneExpired,
+					['pt-7']: props.isAlreadyDone,
 				}
 			)}
 		>
+			{props.isAlreadyDone && (
+				<span className="absolute -left-3 -top-1 bg-success-light text-success px-2 py-1 text-md animate-pulse">
+					<span className="absolute bottom-0 left-0 border-solid border-[6px] border-transparent  border-t-success border-r-success translate-y-[100%]" />
+					Sẵn sàng hoàn thành
+				</span>
+			)}
 			{isLoading ? <LoadingInline /> : null}
 			<div className="border-b border-primary pb-1 flex items-start justify-between gap-4">
 				<h2 className="text-xl font-medium ">{name}</h2>
@@ -143,10 +151,10 @@ const DuAnCard = (props: IDuAnCard) => {
 						? 'Hoàn thành - quá hạn'
 						: isDone
 						? 'Hoàn thành'
-						: isExpired
-						? 'Quá hạn'
 						: isCancel
 						? 'Đã huỷ'
+						: isExpired
+						? 'Quá hạn'
 						: 'Đang thực hiện'}
 				</p>
 			</div>

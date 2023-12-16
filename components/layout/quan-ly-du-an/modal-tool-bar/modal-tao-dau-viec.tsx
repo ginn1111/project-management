@@ -44,13 +44,14 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 			rest.onRefresh?.();
 		},
 	});
+
+	const _hasTask = hasTask(data?.worksOfEmployee ?? []);
+
 	const form = useForm({
 		resolver: yupResolver(
 			WorkSchema(isEdit, projectData?.data?.finishDateET)
 		) as any,
 	});
-
-	const _hasTask = hasTask(data?.worksOfEmployee ?? []);
 
 	useEffect(() => {
 		if (rest.open && isEdit) {
@@ -80,20 +81,50 @@ const ModalTaoDauViec = (props: IModalTaoDauViec) => {
 			dayjs(projectData?.data.finishDateET),
 		];
 		const errorMsg1 = betweenTime(dayjs(values.startDate), projectTimes);
-		const errorMsg2 = betweenTime(dayjs(values.finishDateET), projectTimes);
-		if (errorMsg1 || errorMsg2) {
-			toast.error(errorMsg1 || errorMsg2);
+		const errorMsg2 = betweenTime(
+			dayjs(values.finishDateET),
+			projectTimes,
+			undefined,
+			undefined,
+			'hoàn thành dự kiến'
+		);
+
+		const startDateChange = !dayjs(data?.startDate).isSame(
+			values.startDate,
+			'd'
+		);
+		const endDateChange = !dayjs(data?.finishDateET).isSame(
+			values.finishDateET,
+			'd'
+		);
+
+		if (startDateChange && errorMsg1) {
+			toast.error(errorMsg1);
 			return;
 		}
+
+		if (endDateChange && errorMsg2) {
+			toast.error(errorMsg2);
+
+			return;
+		}
+
+		if (!dayjs(values.finishDateET).isBefore(projectTimes[1], 'day')) {
+			toast.error('Ngày hoàn thành dự kiến đầu việc phải trước dự án');
+			return;
+		}
+
 		const payload = {
 			...values,
 			id: data?.id,
 			idProject: id as string,
 		};
+
 		if (isEdit && _hasTask) {
 			delete payload.startDate;
 			delete payload.finishDateET;
 		}
+
 		addWork(payload);
 	};
 

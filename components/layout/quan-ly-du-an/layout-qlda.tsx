@@ -59,6 +59,7 @@ const LayoutQLDA = () => {
 		onSuccess: () => {
 			toast.success('Đã hoàn thành dự án!');
 			router.refresh();
+			refetch();
 		},
 		onSettled: () => {
 			handleCloseModal('modalDoneProject');

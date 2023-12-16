@@ -1,4 +1,4 @@
-import { Dayjs, OpUnitType } from 'dayjs';
+import dayjs, { Dayjs, OpUnitType } from 'dayjs';
 import { get, isNil } from 'lodash';
 
 export const IS_BROWSER = typeof window !== 'undefined';
@@ -69,10 +69,14 @@ export const betweenTime = (
 	time: Dayjs,
 	timeRange: [Dayjs, Dayjs],
 	unit: OpUnitType = 'd',
-	type = 'dự án'
+	type = 'dự án',
+	type2 = 'bắt đầu'
 ) => {
 	const isValid = time.isValid() && timeRange.every((day) => day.isValid());
 	if (!isValid) return 'Ngày không hợp lệ';
+	if (dayjs(time).isBefore(dayjs(), unit)) {
+		return `Ngày ${type2} không thể trong quá khứ`;
+	}
 	if (time.isBefore(timeRange[0], unit) && !time.isSame(timeRange[0], 'd')) {
 		return `Ngày bắt đầu không thể nhỏ hơn ngày bắt đầu ${type}!`;
 	}

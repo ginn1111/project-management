@@ -25,7 +25,7 @@ export const WorkSchema = (
 			.required('Ngày hoàn thành dự kiến của đầu việc không được để trống')
 			.test(
 				'less-equal-than-project',
-				`Ngày hoàn thành dự kiến đầu việc phải trước hoặc bằng dự án ${dayjs(
+				`Ngày hoàn thành dự kiến đầu việc phải trước dự án ${dayjs(
 					finishDateETProject
 				).format('DD/MM/YYYY')}`,
 				function (value) {

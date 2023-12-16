@@ -180,7 +180,9 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						? 'bg-warning'
 						: isDone
 						? 'bg-success'
-						: isExpired || isCancel
+						: isCancel
+						? 'bg-cancel'
+						: isExpired
 						? 'bg-danger'
 						: 'bg-primary2',
 			};
@@ -202,7 +204,7 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 				<span className="rounded-md text-danger bg-danger-light px-2 py-1">
 					Quá hạn
 				</span>
-				<span className="rounded-md text-danger bg-danger-light px-2 py-1">
+				<span className="rounded-md text-danger-light !bg-danger px-2 py-1">
 					Huỷ
 				</span>
 			</div>
@@ -233,11 +235,21 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						dayjs(projectData?.data.startDate),
 						dayjs(projectData?.data?.finishDateET),
 					];
+
 					const errorMsg1 = betweenTime(dayjs(eventData.start), arrTimes);
-					const errorMsg2 = betweenTime(
+					let errorMsg2 = betweenTime(
 						dayjs(eventData.end ?? eventData.start),
 						arrTimes
 					);
+
+					if (
+						!dayjs(eventData.end ?? eventData.start).isBefore(
+							arrTimes[1],
+							'day'
+						)
+					) {
+						errorMsg2 = 'Ngày hoàn thành dự kiến đầu việc phải trước dự án';
+					}
 
 					if (errorMsg1 || errorMsg2) {
 						info.revert();
@@ -284,7 +296,12 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 						dayjs(projectData?.data?.finishDateET),
 					];
 					const errorMsg1 = betweenTime(dayjs(startDate), arrTimes);
-					const errorMsg2 = betweenTime(dayjs(endDate), arrTimes);
+					let errorMsg2 = betweenTime(dayjs(endDate), arrTimes);
+
+					if (!dayjs(endDate).isBefore(arrTimes[1], 'day')) {
+						errorMsg2 =
+							'Ngày hoàn thành dự kiến đầu việc phải trước hoặc bằng dự án';
+					}
 
 					if (errorMsg1 || errorMsg2) {
 						toast.error(errorMsg1 || errorMsg2);
