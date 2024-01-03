@@ -68,9 +68,9 @@ const DuAnCard = (props: IDuAnCard) => {
 				hover:to-accent flex flex-col gap-2`,
 				{
 					['border-4 border-success/50']: isDone,
+					['pt-7']: props.isAlreadyDone,
 					['border-4 border-danger/50']: isExpired || isCancel,
 					['border-4 border-warning/50']: isDoneExpired,
-					['pt-7']: props.isAlreadyDone,
 				}
 			)}
 		>

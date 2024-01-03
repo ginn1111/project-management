@@ -236,6 +236,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 					/>
 				) : null}
 				<ReactSelect
+					isDisabled={isEdit}
 					labelProps={{ required: true }}
 					isLoading={fetchingCustomers}
 					name="idCustomer"

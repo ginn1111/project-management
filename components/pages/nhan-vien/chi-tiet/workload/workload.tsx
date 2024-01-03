@@ -255,6 +255,7 @@ const Workload = () => {
 		const _map: Record<string, Record<string, any>> = {
 			'Đúng hạn': {},
 			'Quá hạn': {},
+			Huỷ: {},
 		};
 
 		statisticData?.data?.workOfEmployee?.forEach(
@@ -262,13 +263,25 @@ const Workload = () => {
 				const workName = worksOfProject?.work?.name ?? ('' as string);
 				_map['Đúng hạn'][workName] = [];
 				_map['Quá hạn'][workName] = [];
+				_map['Huỷ'][workName] = [];
 
 				tasksOfWork?.forEach((task) => {
 					const isExpired =
 						(task.finishDate &&
 							dayjs(task.finishDate).isAfter(task.finishDateET, 'D')) ||
 						(!task.finishDate && dayjs().isAfter(task.finishDateET));
-					if (isExpired) {
+
+					if (!task.task.isActive) {
+						_map['Huỷ'][workName].push({
+							name: task.task.name,
+							percent: task.percentOfDone,
+							timeArr: [
+								new Date(task.startDate).getTime(),
+								new Date(task.finishDateET ?? '').getTime(),
+							],
+							isCancel: true,
+						});
+					} else if (isExpired) {
 						_map['Quá hạn'][workName].push({
 							name: task.task.name,
 							percent: task.percentOfDone,
@@ -352,29 +365,6 @@ const Workload = () => {
 					</p>
 				</div>
 			) : null}
-			{/* <div className="calendar-wrapper rounded-sm border mt-2 p-2">
-				<div className="flex items-center gap-4 mt-2">
-					{searchParams?.idProject ? (
-						<p className="text-primary2 bg-primary2-light px-2 py-1 rounded-sm w-max">
-							{events?.length} Đầu việc
-						</p>
-					) : null}
-					<p className="text-danger bg-danger-light px-2 py-1 rounded-sm">
-						Quá hạn
-					</p>
-					<p className="text-success bg-success-light px-2 py-1 rounded-sm">
-						Đúng hạn
-					</p>
-				</div>
-				{isFetching ? <LoadingInline /> : null}
-				<FullCalendar
-					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-					initialView="dayGridMonth"
-					selectable={true}
-					eventClick={(evt) => console.log(evt.event.id)}
-					events={events}
-				/>
-			</div> */}
 			{isFetching ? null : (
 				<Chart
 					type="rangeBar"
@@ -404,9 +394,11 @@ const Workload = () => {
 								const data =
 									_statisticData[opts.seriesIndex].data[opts.dataPointIndex];
 
+								console.log(data);
+
 								return `<div class='px-2 py-1 border-primary2 bg-primary2-light'>
 							<p class='text-primary2 bg-primary2-light'>${
-								data?.percent ?? 'Chưa đánh giá'
+								data.isCancel ? '' : data?.percent ?? 'Chưa đánh giá'
 							} ${!isNil(data?.percent) ? '%' : ''}</p>
 							<p class='break-all text-primary2'>${data?.name}</p>
 							</div>`;
@@ -434,7 +426,7 @@ const Workload = () => {
 							type: 'solid',
 							opacity: 0.6,
 						},
-						colors: ['#2196f3', '#e7515a'],
+						colors: ['#2196f3', '#fbbf24', '#e7515a'],
 						legend: {
 							position: 'top',
 							horizontalAlign: 'left',
