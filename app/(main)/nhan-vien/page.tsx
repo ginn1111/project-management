@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import authOptions from '@/app/api/auth/[...nextauth]/options';
 import FilterNhanVien from '@/components/pages/nhan-vien/filter-nhan-vien';
 import TableNhanVien from '@/components/pages/nhan-vien/table-nhan-vien';
 import { Role } from '@/constants/general';

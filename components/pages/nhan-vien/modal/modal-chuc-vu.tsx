@@ -86,8 +86,8 @@ const ModalChucVu = (
 						name="nowPosition"
 						options={[
 							{
-								value: nowPosition?.position.id,
-								label: nowPosition?.position.name,
+								value: nowPosition?.position?.id ?? '',
+								label: nowPosition?.position?.name ?? '',
 							},
 						]}
 					/>

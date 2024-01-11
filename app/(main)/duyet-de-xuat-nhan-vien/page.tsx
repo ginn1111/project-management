@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import authOptions from '@/app/api/auth/[...nextauth]/options';
 import FilterDuyetDXNV from '@/components/pages/duyet-de-xuat-nhan-vien/filter-duyet-de-xuat-nhan-vien';
 import TableDuyetDXNV from '@/components/pages/duyet-de-xuat-nhan-vien/table-duyet-de-xuat-nhan-vien';
 import { ProjectServices, ReviewProjectServices } from '@/lib';

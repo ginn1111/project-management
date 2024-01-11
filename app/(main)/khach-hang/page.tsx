@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import authOptions from '@/app/api/auth/[...nextauth]/options';
 import FilterKhachHang from '@/components/pages/khach-hang/filter-khach-hang';
 import TableKhachHang from '@/components/pages/khach-hang/table-khach-hang';
 import { Role } from '@/constants/general';

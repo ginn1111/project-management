@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import authOptions from '@/app/api/auth/[...nextauth]/options';
 import FilterDuAn from '@/components/pages/du-an/filter-du-an';
 import ListDuAn from '@/components/pages/du-an/list-du-an';
 import { Role } from '@/constants/general';

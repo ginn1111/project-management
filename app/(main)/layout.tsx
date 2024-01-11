@@ -1,7 +1,7 @@
 import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import authOptions from '../api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
 
 const MainLayout = async ({ children }: LayoutProps) => {

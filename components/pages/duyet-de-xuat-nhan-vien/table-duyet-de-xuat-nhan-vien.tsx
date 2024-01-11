@@ -211,7 +211,7 @@ const TableDuyetDXNV = ({ data }: ITableDuyetDXDA) => {
 					totalRecords={data.totalItems}
 					recordsPerPage={parseInt(searchParams.limit)}
 					page={parseInt(searchParams.page)}
-					onPageChange={(p) => {
+					onPageChange={(p: number) => {
 						handlePush({ page: p });
 					}}
 					recordsPerPageOptions={[10, 20, 30, 50, 100]}

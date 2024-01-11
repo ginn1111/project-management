@@ -1,24 +1,24 @@
 'use client';
 import dayjs from 'dayjs';
-import { DataTable } from 'mantine-datatable';
+import { DataTable, DataTableColumn } from 'mantine-datatable';
 
 interface ILichSuPB {
 	departments?: IEmployeesOfDepartment[];
 }
 
 const LichSuPB = ({ departments }: ILichSuPB) => {
-	const columns = [
+	const columns: DataTableColumn<IEmployeesOfDepartment>[] = [
 		{
 			accessor: '',
 			title: 'Tên phòng ban',
-			render: (row: IEmployeesOfDepartment) => {
+			render: (row) => {
 				return <p>{row.department.name}</p>;
 			},
 		},
 		{
 			accessor: 'startDate',
 			title: 'Ngày bắt đầu',
-			render: ({ startDate }: IEmployeesOfDepartment) => {
+			render: ({ startDate }) => {
 				return (
 					<p>{startDate ? dayjs(startDate).format('DD/MM/YYYY') : 'N/A'}</p>
 				);
@@ -27,7 +27,7 @@ const LichSuPB = ({ departments }: ILichSuPB) => {
 		{
 			accessor: 'endDate',
 			title: 'Ngày kết thúc',
-			render: ({ endDate }: IEmployeesOfDepartment) => {
+			render: ({ endDate }) => {
 				return <p>{endDate ? dayjs(endDate).format('DD/MM/YYYY') : 'N/A'}</p>;
 			},
 		},
@@ -38,10 +38,8 @@ const LichSuPB = ({ departments }: ILichSuPB) => {
 			<div className="datatables">
 				<DataTable
 					noRecordsText="Không có dữ liệu"
-					highlightOnHover
 					className="table-hover whitespace-nowrap"
-					records={departments}
-					totalRecords={departments?.length}
+					records={departments ?? []}
 					columns={columns}
 					minHeight={200}
 				/>

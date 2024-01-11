@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import authOptions from '@/app/api/auth/[...nextauth]/options';
 import QuanLyDuAn from '@/components/pages/quan-ly-du-an';
 import {
 	EmployeeProjectServices,
