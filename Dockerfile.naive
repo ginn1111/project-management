@@ -1,0 +1,22 @@
+FROM node:20-slim AS base
+# set up for pnpm package manager
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /my-app
+COPY package.json pnpm-lock.yaml ./
+
+FROM base as builder
+RUN pnpm install 
+
+COPY . .
+RUN pnpm run build
+
+FROM base as runner
+COPY --from=builder /my-app/.next /my-app/server.js ./
+
+
+EXPOSE 3000
+
+CMD [ "pnpm", "start" ]

@@ -1,19 +1,27 @@
 FROM node:20-slim AS base
+# set up for pnpm package manager
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY . /app
-WORKDIR /app
 
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+WORKDIR /client
+COPY package.json pnpm-lock.yaml ./
 
-FROM base AS build
+FROM base as deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+FROM base as builder
+WORKDIR /client
+COPY . .
+COPY --from=deps /client/node_modules ./node_modules/
 RUN pnpm run build
 
-FROM base
-COPY --from=prod-deps /app/node_modules /app/node_modules
-COPY --from=build /app /app
-EXPOSE 8000
-CMD [ "pnpm", "start" ]
+FROM base as runner
+WORKDIR /client
+
+COPY --from=builder /client/public ./public
+COPY --from=builder /client/.next/standalone ./
+COPY --from=builder /client/.next/static ./.next/static
+
+EXPOSE 3000
+CMD [ "node", "server.js" ]
