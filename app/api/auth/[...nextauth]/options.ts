@@ -21,13 +21,13 @@ const authOptions: NextAuthOptions = {
 				},
 			},
 			async authorize(credentials) {
-				try {
-					const user = await AuthenticationServices.login(
-						credentials as Record<'username' | 'password', string>,
-					);
+				const user = await AuthenticationServices.login(
+					credentials as Record<'username' | 'password', string>,
+				);
+				if (user) {
 					return user.data;
-				} catch (error) {
-					console.log(error);
+				} else {
+					return null;
 				}
 			},
 		}),
