@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 // const BASE_URL = 'http://localhost:8080';
-const BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080';
 
 export const publicRequest = axios.create({
 	baseURL: BASE_URL,
@@ -32,7 +32,7 @@ const initialPrivateRequest = () => {
 			}
 
 			return Promise.reject(error);
-		}
+		},
 	);
 
 	return privateRequest;
