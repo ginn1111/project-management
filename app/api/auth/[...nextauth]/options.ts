@@ -22,11 +22,9 @@ const authOptions: NextAuthOptions = {
 			},
 			async authorize(credentials) {
 				try {
-					console.log(credentials);
 					const user = await AuthenticationServices.login(
 						credentials as Record<'username' | 'password', string>,
 					);
-					console.log('user.data', user.data);
 					return user.data;
 				} catch (error) {
 					console.log(error);
