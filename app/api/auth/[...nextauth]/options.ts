@@ -49,6 +49,7 @@ const authOptions: NextAuthOptions = {
 	},
 	pages: {
 		signIn: '/authen',
+		error: '/authen',
 	},
 };
 
