@@ -7,7 +7,6 @@ import useModal from '@/hooks/useModal';
 import { ProjectServices } from '@/lib';
 import { AxiosError } from 'axios';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { toast } from 'sonner';
@@ -18,7 +17,6 @@ interface IListDuAn {
 }
 
 const ListDuAn = ({ data }: IListDuAn) => {
-	const router = useRouter();
 	const { data: session } = useSession();
 	const { user } = session ?? {};
 
