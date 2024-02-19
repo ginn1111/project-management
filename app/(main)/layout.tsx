@@ -2,11 +2,12 @@ import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { getServerSession } from 'next-auth';
 import authOptions from '../api/auth/[...nextauth]/options';
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
 const MainLayout = async ({ children }: LayoutProps) => {
 	const session = await getServerSession(authOptions);
-	if (!session) redirect('/authen');
+	if (!session) permanentRedirect('/authen');
+
 	return (
 		<>
 			<Sidebar />

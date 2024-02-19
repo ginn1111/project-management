@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
 // const BASE_URL = 'http://localhost:8080';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080';
@@ -28,11 +28,11 @@ const initialPrivateRequest = () => {
 		},
 		async (error: AxiosError) => {
 			if (error.response?.status === 401 || error.response?.status === 403) {
-				redirect('/api/logout');
+				permanentRedirect('/api/logout');
 			}
 
 			return Promise.reject(error);
-		},
+		}
 	);
 
 	return privateRequest;

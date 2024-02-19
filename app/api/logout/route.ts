@@ -1,9 +1,14 @@
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
 
-const handler = () => {
+const handler = (req: Request) => {
+	const url = new URL(req.url);
 	cookies().delete('next-auth.session-token');
-	return NextResponse.redirect(process.env.NEXTAUTH_URL as string);
+	return new Response(undefined, {
+		status: 308,
+		headers: {
+			location: `${url.origin}/authen`,
+		},
+	});
 };
 
 export { handler as GET, handler as POST };
