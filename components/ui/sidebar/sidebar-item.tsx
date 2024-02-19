@@ -56,21 +56,24 @@ const SidebarItem = (props: ISidebarItem) => {
 
 	return (
 		<li className="group nav-item">
-			<button
-				className={cn('flex items-center nav-link !justify-start', {
+			<Link
+				className={cn('text-start', {
 					active: isActive,
 				})}
-				{...buttonProps}
+				href={href ?? '#'}
 			>
-				{prefixIcon ?? (
-					<IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
-				)}
-				<Link className="w-full text-start" href={href ?? '#'}>
+				<button
+					className="flex items-center w-full nav-link !justify-start"
+					{...buttonProps}
+				>
+					{prefixIcon ?? (
+						<IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+					)}
 					<span className="text-black pl-3 dark:group-hover:text-white-dark">
 						{title}
 					</span>
-				</Link>
-			</button>
+				</button>
+			</Link>
 		</li>
 	);
 };
