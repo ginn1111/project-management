@@ -26,7 +26,7 @@ const Login = () => {
 			username: value.username,
 			password: value.password,
 			redirect: true,
-			callbackUrl: '/du-an',
+			callbackUrl: '/nhan-vien',
 		});
 	};
 

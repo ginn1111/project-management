@@ -1,20 +1,35 @@
 import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { getServerSession } from 'next-auth';
+import { ReactNode } from 'react';
 import authOptions from '../api/auth/[...nextauth]/options';
 import { permanentRedirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
-const MainLayout = async ({ children }: LayoutProps) => {
+// export const dynamic = 'force-dynamic';
+
+const MainLayout = async ({
+	children,
+	test,
+}: {
+	children: ReactNode;
+	test: ReactNode;
+}) => {
 	const session = await getServerSession(authOptions);
-	if (!session) permanentRedirect('/authen');
 
 	return (
 		<>
-			<Sidebar />
-			<div className="main-content flex flex-col min-h-screen relative">
-				<Header />
-				{children}
-			</div>
+			{session ? (
+				<>
+					<Sidebar />
+					<div className="main-content flex flex-col min-h-screen relative">
+						<Header />
+						{children}
+					</div>
+				</>
+			) : (
+				test
+			)}
 		</>
 	);
 };
