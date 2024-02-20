@@ -3,7 +3,7 @@ import React from 'react';
 async function fakeFetchNonCriticalContent() {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			const randomError = Math.random() < 0.5;
+			const randomError = false;
 			if (randomError) {
 				reject('fakeFetchNonCriticalContent error');
 			} else {

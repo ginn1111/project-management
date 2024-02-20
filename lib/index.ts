@@ -15,3 +15,4 @@ export * as ReviewProjectServices from './review-project';
 export * as UtilsServices from './utils/index';
 export * as StatisticServices from './utils/statistic';
 export * as CustomerServices from './customer';
+export * as PluginServices from './plugins';
