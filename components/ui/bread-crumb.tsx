@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 type BreadCrumbProps = {
 	pathname: string;
@@ -15,8 +15,8 @@ const BreadCrumb = (props: BreadCrumbProps) => {
 			<ul className="flex gap-2">
 				{paths.map((path, idx) => {
 					return (
-						<>
-							<li key={path}>
+						<Fragment key={path}>
+							<li>
 								<Link
 									className="text-base font-medium italic"
 									href={`/${
@@ -29,7 +29,7 @@ const BreadCrumb = (props: BreadCrumbProps) => {
 							{idx + 1 >= paths.length ? null : (
 								<span className="text-gray-500">/</span>
 							)}
-						</>
+						</Fragment>
 					);
 				})}
 			</ul>
