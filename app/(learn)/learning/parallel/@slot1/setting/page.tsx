@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Slot1SettingPage = () => {
-	return <div>Slot1SettingPage</div>;
+	return <div>Setting</div>;
 };
 
 export default Slot1SettingPage;

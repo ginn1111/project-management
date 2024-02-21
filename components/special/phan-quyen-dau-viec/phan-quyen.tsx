@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import { QueryKeys } from '@/constants/query-key';
 import { UtilsServices } from '@/lib';
 import { AxiosResponse } from 'axios';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { FormProvider, useForm } from 'react-hook-form';
 
 const PhanQuyen = forwardRef(
@@ -29,7 +29,7 @@ const PhanQuyen = forwardRef(
 
 		return (
 			<>
-				{isFetching ? <LoadingInline /> : null}
+				{isFetching ? <Loading /> : null}
 				<ScrollArea
 					className={cn('h-[200px] w-full rounded-md border p-2', className)}
 					{...restProps}

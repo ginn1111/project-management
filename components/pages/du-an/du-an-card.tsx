@@ -2,7 +2,7 @@ import IconCalendar from '@/components/Icon/IconCalendar';
 import IconEyeTwoTone from '@/components/Icon/IconEyeTwoTone';
 import IconSendTwoTone from '@/components/Icon/IconSendTwoTone';
 import { Label } from '@/components/ui/label';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { ProjectServices } from '@/lib';
 import { cn } from '@/lib/utils';
 import { getTimeUnit } from '@/utils/helpers';
@@ -80,7 +80,7 @@ const DuAnCard = (props: IDuAnCard) => {
 					Sẵn sàng hoàn thành
 				</span>
 			)}
-			{isLoading ? <LoadingInline /> : null}
+			{isLoading ? <Loading /> : null}
 			<div className="border-b border-primary pb-1 flex items-start justify-between gap-4">
 				<h2 className="text-xl font-medium ">{name}</h2>
 				<p className="border-primary bg-accent rounded-md text-primary border p-1 flex-shrink-0 flex items-center gap-2">

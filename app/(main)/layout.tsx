@@ -3,16 +3,12 @@ import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { getServerSession } from 'next-auth';
 import { ReactNode } from 'react';
 import authOptions from '../api/auth/[...nextauth]/options';
-import { permanentRedirect } from 'next/navigation';
-import { headers } from 'next/headers';
-
-// export const dynamic = 'force-dynamic';
 
 const MainLayout = async ({
-	children,
 	test,
+	feature,
 }: {
-	children: ReactNode;
+	feature: ReactNode;
 	test: ReactNode;
 }) => {
 	const session = await getServerSession(authOptions);
@@ -24,7 +20,7 @@ const MainLayout = async ({
 					<Sidebar />
 					<div className="main-content flex flex-col min-h-screen relative">
 						<Header />
-						{children}
+						{feature}
 					</div>
 				</>
 			) : (

@@ -15,7 +15,11 @@ async function fakeFetchNonCriticalContent() {
 
 const NonCriticalContent = async () => {
 	const nonCriticalContentData = await fakeFetchNonCriticalContent();
-	return <div className="text-xl">NonCriticalContent</div>;
+	return (
+		<div className="w-8/12 card title grid place-items-center bg-card">
+			NonCriticalContent
+		</div>
+	);
 };
 
 export default NonCriticalContent;

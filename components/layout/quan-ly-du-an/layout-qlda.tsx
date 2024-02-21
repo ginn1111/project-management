@@ -11,7 +11,7 @@ import IconEditTwoTone from '@/components/Icon/IconEditTwoTone';
 import ModalThemDuAn from '@/components/pages/du-an/modal/modal-them-du-an';
 import ModalThemNguonLuc from '@/components/pages/du-an/modal/modal-them-nguon-luc';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import ModalConfirm from '@/components/ui/modal/modal-confirm';
 import { Role, WorkState } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
@@ -197,7 +197,7 @@ const LayoutQLDA = () => {
 				</>
 			)}
 
-			{isFetching || isFetchingInfoPrj ? <LoadingInline /> : null}
+			{isFetching || isFetchingInfoPrj ? <Loading /> : null}
 
 			<ModalThemDuAn
 				open={modal.modalPJ.open}

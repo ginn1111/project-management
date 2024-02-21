@@ -1,7 +1,7 @@
 'use client';
 
 import ModalTaoDauViec from '@/components/layout/quan-ly-du-an/modal-tool-bar/modal-tao-dau-viec';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { WorkState } from '@/constants/general';
 import { QueryKeys } from '@/constants/query-key';
 import useModal from '@/hooks/useModal';
@@ -208,7 +208,7 @@ const CalendarDauViec = ({ data }: ICalendarDauViec) => {
 					Huỷ
 				</span>
 			</div>
-			{isLoading || isFetching ? <LoadingInline /> : null}
+			{isLoading || isFetching ? <Loading /> : null}
 			<FullCalendar
 				plugins={[dayGridPlugin, interactionPlugin]}
 				initialView="dayGridMonth"

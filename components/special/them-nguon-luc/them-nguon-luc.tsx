@@ -8,7 +8,7 @@ import { useQuery } from 'react-query';
 import { QueryKeys } from '@/constants/query-key';
 import { getResourceTypeList } from '@/lib/utils/resource-type';
 import { AxiosResponse } from 'axios';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { ResourceProjectServices, ResourceServices } from '@/lib';
 import { debounce } from 'lodash';
@@ -81,7 +81,7 @@ const ThemNguonLuc = forwardRef((props: IThemNguonLuc, ref) => {
 	return (
 		<div>
 			<Tabs className="mb-2 relative" value={selectedTab}>
-				{isFetching ? <LoadingInline /> : null}
+				{isFetching ? <Loading /> : null}
 				<TabsList className="w-full">
 					{resourceTypeData?.data?.map(({ id, name }) => (
 						<TabsTrigger
@@ -108,7 +108,7 @@ const ThemNguonLuc = forwardRef((props: IThemNguonLuc, ref) => {
 				)}
 				{...restScrollAreaProps}
 			>
-				{fetchingResource || fetchingResourceOfProj ? <LoadingInline /> : null}
+				{fetchingResource || fetchingResourceOfProj ? <Loading /> : null}
 				<FormProvider {...form}>
 					{resourceList?.map((resource, idx) => {
 						let payload: Partial<IResource | IResourceProject> = {};

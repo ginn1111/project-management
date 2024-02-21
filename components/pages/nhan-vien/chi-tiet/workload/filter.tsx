@@ -3,7 +3,7 @@ import IconSearch from '@/components/Icon/IconSearch';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import ReactSelect from '@/components/ui/react-select';
 import { QueryKeys } from '@/constants/query-key';
 import useQueryParams from '@/hooks/useQueryParams';
@@ -39,7 +39,7 @@ const Filter = () => {
 	return (
 		<>
 			<div className="flex items-center justify-between gap-4 relative">
-				{isFetching ? <LoadingInline /> : null}
+				{isFetching ? <Loading /> : null}
 				<ReactSelect
 					control={form.control}
 					name="idProject"

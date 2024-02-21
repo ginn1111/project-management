@@ -16,7 +16,7 @@ import { useQuery } from 'react-query';
 import { toast } from 'sonner';
 import Filter from './filter';
 import { isNil } from 'lodash';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 
 dayjs.extend(LocalizedFormat);
 dayjs.locale(vi);
@@ -346,7 +346,7 @@ const Workload = () => {
 
 	return (
 		<div className="relative">
-			{isFetching ? <LoadingInline /> : null}
+			{isFetching ? <Loading /> : null}
 			<FormProvider {...form}>
 				<Filter />
 			</FormProvider>

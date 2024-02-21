@@ -1,7 +1,7 @@
 'use client';
 import Chart from 'react-apexcharts';
 
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { QueryKeys } from '@/constants/query-key';
 import useQueryParams from '@/hooks/useQueryParams';
 import { StatisticServices } from '@/lib';
@@ -158,7 +158,7 @@ const ChartThongKe = () => {
 
 	return (
 		<div className="relative">
-			{isFetching ? <LoadingInline /> : null}
+			{isFetching ? <Loading /> : null}
 			<p className="text-primary2 bg-primary2-light px-2 py-1 rounded-sm w-max mt-2">
 				{statisticData?.data?.projects?.length} Dự án
 			</p>

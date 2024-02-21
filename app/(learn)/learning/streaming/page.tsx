@@ -1,5 +1,6 @@
 import CriticalContent from '@/components/learning/critical-content';
 import NonCriticalContent from '@/components/learning/non-critical-content';
+import Loading from '@/components/ui/loading';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 
@@ -11,12 +12,11 @@ async function fakeFetchCriticalContent() {
 	});
 }
 
-function StreamingPage() {
-	// const criticalContentData = await fakeFetchCriticalContent();
+async function StreamingPage() {
+	const criticalContentData = await fakeFetchCriticalContent();
 
 	return (
-		<section>
-			<Link href="/learning/parallel/setting">Goto Parallel</Link>
+		<section className="flex gap-4 w-full">
 			<CriticalContent />
 			<Suspense fallback={<div>Loading ...</div>}>
 				<NonCriticalContent />

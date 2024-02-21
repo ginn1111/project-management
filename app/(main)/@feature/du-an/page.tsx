@@ -1,6 +1,6 @@
 import FilterDuAn from '@/components/pages/du-an/filter-du-an';
 import ListDuAn from '@/components/pages/du-an/list-du-an';
-import LoadingInline from '@/components/ui/loading/loading-inline';
+import Loading from '@/components/ui/loading/loading-inline';
 import { Role } from '@/constants/general';
 import { ProjectServices } from '@/lib';
 import { getUserInfoFromNextAuth } from '@/utils/get-user-from-next-auth';
@@ -37,7 +37,7 @@ const DuAn = async ({
 	return (
 		<div>
 			<FilterDuAn />
-			<Suspense fallback={<LoadingInline />}>
+			<Suspense fallback={<Loading />}>
 				<ListDuAn data={projectListData.data} />
 			</Suspense>
 		</div>
