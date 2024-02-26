@@ -11,5 +11,9 @@ const TOCS = [
 		title: 'Intercepting route',
 		href: '/learning/intercepting',
 	},
+	{
+		title: 'I18N',
+		href: '/learning/i18n',
+	},
 ];
 export default TOCS;

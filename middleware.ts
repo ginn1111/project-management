@@ -1,19 +1,29 @@
-import { redirect } from 'next/navigation';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { SupportLangs } from './constants/general';
+import { getLangFromHeader } from './lib/utils/get-lang-from-header';
 
 export const middleware = (request: NextRequest, event: NextFetchEvent) => {
-	console.log(request.nextUrl.pathname);
+	const pathname = request.nextUrl.pathname;
 
-	event.waitUntil(
-		new Promise((resolve) =>
-			setTimeout(() => {
-				resolve('middleware resolve');
-				console.log('middleware resolve');
-			}, 4000)
-		)
+	const hasLocale = SupportLangs.some((lang) =>
+		pathname.startsWith(`/${lang}`)
 	);
 
-	NextResponse.next();
+	if (hasLocale) return;
+
+	const lang = getLangFromHeader(request);
+	request.nextUrl.pathname = `/${lang}${pathname}`;
+
+	// event.waitUntil(
+	// 	new Promise((resolve) =>
+	// 		setTimeout(() => {
+	// 			resolve('middleware resolve');
+	// 			console.log('middleware resolve');
+	// 		}, 4000)
+	// 	)
+	// );
+
+	return NextResponse.redirect(request.nextUrl);
 };
 
 export const config = {

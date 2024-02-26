@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@faker-js/faker": "^8.1.0",
+		"@formatjs/intl-localematcher": "^0.5.4",
 		"@fullcalendar/core": "^6.1.4",
 		"@fullcalendar/daygrid": "^6.1.4",
 		"@fullcalendar/interaction": "^6.1.1",
@@ -42,6 +43,7 @@
 		"lodash": "^4.17.21",
 		"lucide-react": "^0.279.0",
 		"mantine-datatable": "^6.0.0",
+		"negotiator": "^0.6.3",
 		"next": "14.0.4",
 		"next-auth": "^4.24.4",
 		"react": "latest",
@@ -62,6 +64,7 @@
 		"zustand": "^4.4.1"
 	},
 	"devDependencies": {
+		"@types/negotiator": "^0.6.3",
 		"@types/node": "latest",
 		"@types/react": "latest",
 		"@types/react-dom": "latest",

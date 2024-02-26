@@ -21,3 +21,5 @@ export const WorkState = {
 	Canceled: 'Huỷ bỏ',
 	Done: 'Hoàn thành',
 };
+
+export const SupportLangs = ['en', 'vi'];

@@ -8,7 +8,14 @@ import { AccountSchema } from '@/yup-schema/account';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AlertCircle } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+
+import BgGradient from '../../../public/assets/images/auth/bg-gradient.png';
+import ComingSoonObj1 from '../../../public/assets/images/auth/coming-soon-object1.png';
+import ComingSoonObj2 from '../../../public/assets/images/auth/coming-soon-object2.png';
+import ComingSoonObj3 from '../../../public/assets/images/auth/coming-soon-object3.png';
+import PolygonObj from '../../../public/assets/images/auth/polygon-object.svg';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -33,32 +40,30 @@ const Login = () => {
 	return (
 		<div className="relative">
 			<div className="absolute inset-0">
-				<img
-					src="/assets/images/auth/bg-gradient.png"
-					alt="image"
-					className="h-full w-full object-cover"
-				/>
+				<div className="w-full h-full">
+					<Image src={BgGradient} alt="auth1" fill className="object-cover" />
+				</div>
 			</div>
 
-			<div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
-				<img
-					src="/assets/images/auth/coming-soon-object1.png"
-					alt="image"
+			<div className="relative flex min-h-screen items-center justify-center bg-[url(../public/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
+				<Image
+					src={ComingSoonObj1}
+					alt="coming-soon-obj1"
 					className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2"
 				/>
-				<img
-					src="/assets/images/auth/coming-soon-object2.png"
-					alt="image"
+				<Image
+					src={ComingSoonObj2}
+					alt="coming-soon-obj2"
 					className="absolute left-24 top-0 h-40 md:left-[30%]"
 				/>
-				<img
-					src="/assets/images/auth/coming-soon-object3.png"
-					alt="image"
+				<Image
+					src={ComingSoonObj3}
+					alt="coming-soon-obj3"
 					className="absolute right-0 top-0 h-[300px]"
 				/>
-				<img
-					src="/assets/images/auth/polygon-object.svg"
-					alt="image"
+				<Image
+					src={PolygonObj}
+					alt="polygon-obj"
 					className="absolute bottom-0 end-[28%]"
 				/>
 				<div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">

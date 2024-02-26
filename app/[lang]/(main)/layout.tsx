@@ -2,7 +2,7 @@ import Header from '@/components/ui/header';
 import { Sidebar } from '@/components/ui/sidebar/sidebar';
 import { getServerSession } from 'next-auth';
 import { ReactNode } from 'react';
-import authOptions from '../api/auth/[...nextauth]/options';
+import authOptions from '../../api/auth/[...nextauth]/options';
 
 const MainLayout = async ({
 	test,
