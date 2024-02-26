@@ -33,7 +33,7 @@ const ModalGiaoViec = <T,>(
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 			rest.onRefresh?.();
 		},
 	});
@@ -57,7 +57,7 @@ const ModalGiaoViec = <T,>(
 		<Modal {...rest} loading={isLoading}>
 			<GroupSelectNhanVien ref={refNv} />
 			<div className="items-center justify-end gap-4 flex mt-2">
-				<Button variant="outline" onClick={rest.onClose}>
+				<Button variant="outline" onClick={rest?.onClose}>
 					Đóng
 				</Button>
 				<Button onClick={handleAssign}>Xác nhận</Button>

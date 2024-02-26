@@ -32,7 +32,7 @@ const ModalPhanQuyen = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -100,7 +100,7 @@ const ModalPhanQuyen = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 			{rest.open ? <PhanQuyenDauViec ref={permissionRef} /> : null}
 
 			<div className="flex items-center justify-end gap-4 mt-4">
-				<Button type="button" onClick={rest.onClose} variant="outline">
+				<Button type="button" onClick={rest?.onClose} variant="outline">
 					Đóng
 				</Button>
 				<Button onClick={handleSubmit}>Xác nhận</Button>

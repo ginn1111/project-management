@@ -35,7 +35,7 @@ const ModalDanhGia = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 			toast.error(error?.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -64,7 +64,7 @@ const ModalDanhGia = (props: Omit<IModalProps<IWorkProject>, 'children'>) => {
 			/>
 
 			<div className="flex items-center justify-end gap-4 mt-4">
-				<Button onClick={rest.onClose} variant="outline">
+				<Button onClick={rest?.onClose} variant="outline">
 					Đóng
 				</Button>
 				<Button onClick={handleEvaluate}>Xác nhận</Button>

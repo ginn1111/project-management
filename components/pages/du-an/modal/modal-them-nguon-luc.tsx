@@ -25,7 +25,7 @@ const ModalThemNguonLuc = (
 			toast.error(error.response?.data as ReactNode);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -54,7 +54,7 @@ const ModalThemNguonLuc = (
 				scrollAreaProps={{ className: 'h-[65vh]' }}
 			/>
 			<div className="items-center justify-end gap-4 flex mt-2">
-				<Button variant="outline" onClick={rest.onClose}>
+				<Button variant="outline" onClick={rest?.onClose}>
 					Đóng
 				</Button>
 				<Button onClick={handleThemNL}>Xác nhận</Button>

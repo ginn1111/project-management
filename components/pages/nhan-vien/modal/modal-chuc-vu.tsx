@@ -34,7 +34,7 @@ const ModalChucVu = (
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -117,7 +117,7 @@ const ModalChucVu = (
 				/>
 
 				<div className="flex items-center justify-end gap-4 mt-auto">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

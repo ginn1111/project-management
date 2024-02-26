@@ -94,7 +94,7 @@ const ModalChiTietDauViec = (
 				) : null}
 
 				<div className="mt-2 flex items-center justify-end">
-					<Button variant="outline" onClick={rest.onClose}>
+					<Button variant="outline" onClick={rest?.onClose}>
 						Đóng
 					</Button>
 				</div>

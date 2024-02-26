@@ -28,7 +28,7 @@ const ModalThemChungChi = (
 			: CertificationServices.update,
 		onSuccess: () => {
 			toast.success('Thêm chứng chỉ thành công');
-			rest.onClose();
+			rest?.onClose?.();
 			onRefresh?.();
 		},
 	});
@@ -125,7 +125,7 @@ const ModalThemChungChi = (
 					<Textarea {...register('note')} placeholder="ghi chú" />
 				</div>
 				<div className="flex items-center justify-end gap-4 mt-4">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

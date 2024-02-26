@@ -35,7 +35,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 		onSuccess: () => {
 			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} nhân viên thành công`);
 			onRefresh?.();
-			rest.onClose();
+			rest?.onClose?.();
 		},
 		onError: (error) => {
 			toast.error((error as AxiosError).response?.data as string);
@@ -218,7 +218,7 @@ const ModalThemNhanVien = (props: IModalThemNhanVien<Partial<IEmployee>>) => {
 				</div>
 
 				<div className="flex items-center justify-end gap-4 mt-4">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

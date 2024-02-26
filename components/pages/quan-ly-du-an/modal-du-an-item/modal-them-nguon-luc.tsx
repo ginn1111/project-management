@@ -25,7 +25,7 @@ const ModalThemNguonLuc = (
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 			router.refresh();
 		},
 	});
@@ -59,7 +59,7 @@ const ModalThemNguonLuc = (
 				idProject={idProject}
 			/>
 			<div className="flex items-center justify-end gap-4 mt-4">
-				<Button onClick={rest.onClose} variant="outline">
+				<Button onClick={rest?.onClose} variant="outline">
 					Đóng
 				</Button>
 				<Button onClick={handleAddResource}>Xác nhận</Button>

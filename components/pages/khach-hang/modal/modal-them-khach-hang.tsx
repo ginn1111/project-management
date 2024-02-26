@@ -34,7 +34,7 @@ const ModalThemKhachHang = (props: IModalThemKhachHang<Partial<ICustomer>>) => {
 		onSuccess: () => {
 			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} khách hàng thành công`);
 			onRefresh?.();
-			rest.onClose();
+			rest?.onClose?.();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
@@ -204,7 +204,7 @@ const ModalThemKhachHang = (props: IModalThemKhachHang<Partial<ICustomer>>) => {
 				</div>
 
 				<div className="flex items-center justify-end gap-4 mt-4">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

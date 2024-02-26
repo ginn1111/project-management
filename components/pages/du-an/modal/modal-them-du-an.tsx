@@ -137,7 +137,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as ReactNode);
 		},
-		onSettled: () => rest.onClose(),
+		onSettled: () => rest?.onClose?.(),
 	});
 
 	const hasWorks = (data?.worksOfProject?.length ?? 0) > 0;
@@ -283,7 +283,7 @@ const ModalThemDuAn = (props: IModalThemDuAn) => {
 					<Textarea {...form.register('note')} placeholder="mô tả" rows={5} />
 				</div>
 				<div className="items-center justify-end gap-4 flex mt-2">
-					<Button type="button" variant="outline" onClick={rest.onClose}>
+					<Button type="button" variant="outline" onClick={rest?.onClose}>
 						Đóng
 					</Button>
 					<Button type="submit">Xác nhận</Button>

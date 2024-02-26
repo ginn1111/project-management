@@ -21,7 +21,7 @@ const ModalBaoCao = (props: IModalBaoCao) => {
 
 	const { mutate: createReport, isLoading } = useMutation({
 		mutationFn: ProjectServices.createReport,
-		onSettled: () => rest.onClose(),
+		onSettled: () => rest?.onClose?.(),
 		onSuccess: () => {
 			toast.success('Tạo báo cáo thành công');
 			rest.onRefresh?.();
@@ -53,7 +53,7 @@ const ModalBaoCao = (props: IModalBaoCao) => {
 					rows={15}
 				/>
 				<div className="items-center justify-end gap-4 flex mt-2">
-					<Button type="button" variant="outline" onClick={rest.onClose}>
+					<Button type="button" variant="outline" onClick={rest?.onClose}>
 						Đóng
 					</Button>
 					<Button disabled={!form.watch('content').trim()}>Xác nhận</Button>

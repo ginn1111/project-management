@@ -26,13 +26,13 @@ const ModalThemChucVu = (props: IModalThemChucVu<Partial<IPosition>>) => {
 		onSuccess: () => {
 			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} chức vụ thành công`);
 			onRefresh?.();
-			rest.onClose();
+			rest?.onClose?.();
 		},
 		onError: (error: AxiosError) => {
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -99,7 +99,7 @@ const ModalThemChucVu = (props: IModalThemChucVu<Partial<IPosition>>) => {
 				</div>
 
 				<div className="flex items-center justify-end gap-4 mt-4">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

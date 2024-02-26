@@ -24,7 +24,7 @@ const ModalThemPhongBan = (props: IModalThemPhongBan<Partial<IDepartment>>) => {
 		onSuccess: () => {
 			toast.success(`${!isEdit ? 'Thêm' : 'Cập nhật'} phòng ban thành công`);
 			onRefresh?.();
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -73,7 +73,7 @@ const ModalThemPhongBan = (props: IModalThemPhongBan<Partial<IDepartment>>) => {
 				</div>
 
 				<div className="flex items-center justify-end gap-4 mt-4">
-					<Button type="button" onClick={rest.onClose} variant="outline">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

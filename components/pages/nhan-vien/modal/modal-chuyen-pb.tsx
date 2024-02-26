@@ -38,7 +38,7 @@ const ModalChuyenPB = (
 			toast.error(error.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -129,7 +129,7 @@ const ModalChuyenPB = (
 				/>
 
 				<div className="flex items-center justify-end gap-4 mt-auto">
-					<Button onClick={rest.onClose} variant="outline">
+					<Button onClick={rest?.onClose} variant="outline">
 						Đóng
 					</Button>
 					<Button>Xác nhận</Button>

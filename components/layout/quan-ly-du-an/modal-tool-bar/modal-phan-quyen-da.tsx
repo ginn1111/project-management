@@ -56,7 +56,7 @@ const ModalPhanQuyenDA = <T,>(props: IModalPhanQuyenDA<T>) => {
 			toast.success(error?.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -139,7 +139,7 @@ const ModalPhanQuyenDA = <T,>(props: IModalPhanQuyenDA<T>) => {
 			</div>
 
 			<div className="items-center justify-end gap-4 flex mt-2">
-				<Button variant="outline" onClick={rest.onClose}>
+				<Button variant="outline" onClick={rest?.onClose}>
 					Đóng
 				</Button>
 				<Button onClick={handleSubmit}>Xác nhận</Button>

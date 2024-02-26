@@ -55,7 +55,7 @@ const ModalDieuPhoi = (props: Omit<IModalProps, 'children'>) => {
 			toast.error((error as AxiosError)?.response?.data as string);
 		},
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 	});
 
@@ -145,7 +145,7 @@ const ModalDieuPhoi = (props: Omit<IModalProps, 'children'>) => {
 					</div>
 				) : null}
 				<div className="items-center justify-end gap-4 flex mt-8">
-					<Button type="button" variant="outline" onClick={rest.onClose}>
+					<Button type="button" variant="outline" onClick={rest?.onClose}>
 						Đóng
 					</Button>
 					<Button

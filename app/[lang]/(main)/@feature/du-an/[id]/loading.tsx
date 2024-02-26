@@ -1,8 +1,8 @@
-import Loading from '@/components/ui/loading/loading-inline';
+import LoadingInline from '@/components/ui/loading/loading-inline';
 import React from 'react';
 
 const Loading = () => {
-	return <Loading />;
+	return <LoadingInline />;
 };
 
 export default Loading;

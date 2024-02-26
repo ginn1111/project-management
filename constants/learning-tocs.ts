@@ -15,5 +15,9 @@ const TOCS = [
 		title: 'I18N',
 		href: '/learning/i18n',
 	},
+	{
+		title: 'Caching',
+		href: '/learning/caching',
+	},
 ];
 export default TOCS;

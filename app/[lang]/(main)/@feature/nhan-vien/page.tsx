@@ -6,9 +6,6 @@ import { getList } from '@/lib/employee';
 import { getProvinces } from '@/lib/utils/address';
 import { getServerSession } from 'next-auth';
 
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
-
 const NhanVien = async ({ searchParams }: { searchParams: ISearchParams }) => {
 	const session = await getServerSession(authOptions);
 	const userInfo = session?.user?.info;

@@ -15,77 +15,77 @@ import { toast } from 'sonner';
 interface IModalThemTaiKhoan<T> extends Omit<IModalProps<T>, 'children'> {}
 
 const ModalThemTaiKhoan = (props: IModalThemTaiKhoan<Partial<IDepartment>>) => {
-  const { data, onRefresh, ...rest } = props;
+	const { data, onRefresh, ...rest } = props;
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: AccountServices.create,
-    onSuccess: () => {
-      toast.success('Thêm tài khoản thành công');
-      onRefresh?.();
-      rest.onClose();
-    },
-    onError: (error) => {
-      toast.error((error as AxiosError).response?.data as ReactNode);
-      rest.onClose();
-    },
-  });
+	const { mutate, isLoading } = useMutation({
+		mutationFn: AccountServices.create,
+		onSuccess: () => {
+			toast.success('Thêm tài khoản thành công');
+			onRefresh?.();
+			rest?.onClose?.();
+		},
+		onError: (error) => {
+			toast.error((error as AxiosError).response?.data as ReactNode);
+			rest?.onClose?.();
+		},
+	});
 
-  const { handleSubmit, register, getValues, reset } = useForm({
-    resolver: yupResolver(AccountSchema) as any,
-  });
+	const { handleSubmit, register, getValues, reset } = useForm({
+		resolver: yupResolver(AccountSchema) as any,
+	});
 
-  useEffect(() => {
-    if (!rest.open) {
-      reset();
-    }
-  }, [rest.open]);
+	useEffect(() => {
+		if (!rest.open) {
+			reset();
+		}
+	}, [rest.open]);
 
-  const handleSuccess = () => {
-    if (!data?.id) {
-      toast.error('Id nhân viên không tồn tại!');
-      return;
-    }
-    const payload = { ...getValues(), idEmployee: data?.id! };
-    mutate(payload);
-  };
+	const handleSuccess = () => {
+		if (!data?.id) {
+			toast.error('Id nhân viên không tồn tại!');
+			return;
+		}
+		const payload = { ...getValues(), idEmployee: data?.id! };
+		mutate(payload);
+	};
 
-  const handleError: SubmitErrorHandler<Partial<IDepartment>> = (errors) => {
-    const keys = Object.keys(errors) as (keyof IDepartment)[];
-    toast.error(errors[keys[0]]?.message as ReactNode);
-  };
+	const handleError: SubmitErrorHandler<Partial<IDepartment>> = (errors) => {
+		const keys = Object.keys(errors) as (keyof IDepartment)[];
+		toast.error(errors[keys[0]]?.message as ReactNode);
+	};
 
-  return (
-    <Modal {...rest} loading={isLoading}>
-      <form
-        className="space-y-4"
-        onSubmit={handleSubmit(handleSuccess, handleError)}
-      >
-        <div>
-          <Label required>Tài khoản</Label>
-          <Input {...register('username')} placeholder="tài khoản" />
-        </div>
-        <div>
-          <Label required>Mật khẩu</Label>
-          <Input
-            type="password"
-            {...register('password')}
-            placeholder="mật khẩu"
-          />
-        </div>
-        <div>
-          <Label>Ghi chú</Label>
-          <Textarea {...register('note')} placeholder="ghi chú" rows={5} />
-        </div>
+	return (
+		<Modal {...rest} loading={isLoading}>
+			<form
+				className="space-y-4"
+				onSubmit={handleSubmit(handleSuccess, handleError)}
+			>
+				<div>
+					<Label required>Tài khoản</Label>
+					<Input {...register('username')} placeholder="tài khoản" />
+				</div>
+				<div>
+					<Label required>Mật khẩu</Label>
+					<Input
+						type="password"
+						{...register('password')}
+						placeholder="mật khẩu"
+					/>
+				</div>
+				<div>
+					<Label>Ghi chú</Label>
+					<Textarea {...register('note')} placeholder="ghi chú" rows={5} />
+				</div>
 
-        <div className="flex items-center justify-end gap-4 mt-4">
-          <Button type="button" onClick={rest.onClose} variant="outline">
-            Đóng
-          </Button>
-          <Button>Xác nhận</Button>
-        </div>
-      </form>
-    </Modal>
-  );
+				<div className="flex items-center justify-end gap-4 mt-4">
+					<Button type="button" onClick={rest?.onClose} variant="outline">
+						Đóng
+					</Button>
+					<Button>Xác nhận</Button>
+				</div>
+			</form>
+		</Modal>
+	);
 };
 
 export default ModalThemTaiKhoan;

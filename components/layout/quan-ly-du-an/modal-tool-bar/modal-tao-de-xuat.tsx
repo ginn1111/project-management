@@ -24,7 +24,7 @@ const ModalTaoDeXuat = <T,>(props: IModalTaoDeXuat<T>) => {
 	const { mutate: createPropose, isLoading } = useMutation({
 		mutationFn: ProposeResourceServices.add,
 		onSettled: () => {
-			rest.onClose();
+			rest?.onClose?.();
 		},
 		onError: (error: AxiosError<ReactNode>) => {
 			toast.error(error.response?.data);
@@ -71,7 +71,7 @@ const ModalTaoDeXuat = <T,>(props: IModalTaoDeXuat<T>) => {
 			</div>
 
 			<div className="items-center justify-end gap-4 flex mt-2">
-				<Button variant="outline" onClick={rest.onClose}>
+				<Button variant="outline" onClick={rest?.onClose}>
 					Đóng
 				</Button>
 				<Button onClick={handleAddPropose}>Xác nhận</Button>

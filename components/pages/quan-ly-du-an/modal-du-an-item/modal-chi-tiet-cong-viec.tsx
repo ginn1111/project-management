@@ -98,7 +98,7 @@ const ModalChiTietCongViec = (
 			</div>
 
 			<div className="mt-2 flex items-center justify-between">
-				<Button className="ml-auto" variant="outline" onClick={rest.onClose}>
+				<Button className="ml-auto" variant="outline" onClick={rest?.onClose}>
 					Đóng
 				</Button>
 			</div>

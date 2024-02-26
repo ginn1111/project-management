@@ -11,7 +11,7 @@ const ModalChinhSuaQuyenDuAn = <T,>(
 		<Modal {...rest}>
 			<PhanQuyenDauViec className="h-[70vh]" />
 			<div className="flex items-center justify-end gap-4 mt-4">
-				<Button onClick={rest.onClose} variant="outline">
+				<Button onClick={rest?.onClose} variant="outline">
 					Đóng
 				</Button>
 				<Button>Xác nhận</Button>
